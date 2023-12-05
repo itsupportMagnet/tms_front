@@ -1,9 +1,11 @@
 <template>
- <h1>Hola</h1>
+<router-view name="sidebar">
+  <Home />
+ </router-view>
 </template>
 
 <script setup>
-
+  import Home from './views/Home.vue'
 </script>
 
 <style scoped>
