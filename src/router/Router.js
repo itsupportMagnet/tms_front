@@ -6,13 +6,13 @@ const routes = [
     path: '/home',
     name: 'Home',
     component: () => import('../views/Home.vue'),
-    sidebar: Sidebar
+    //  meta: { sidebar: Sidebar }
   },
   {
     path: '/about',
     name: 'About',
     component: () => import('../views/About.vue'),
-    sidebar: Sidebar
+    // meta: { sidebar: Sidebar }
   }
 ]
 

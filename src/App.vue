@@ -1,7 +1,5 @@
 <template>
-<router-view name="sidebar">
   <Home />
- </router-view>
 </template>
 
 <script setup>
