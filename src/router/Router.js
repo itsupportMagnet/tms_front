@@ -3,7 +3,7 @@ import Sidebar from '../components/Sidebar/Sidebar.vue';
 
 const routes = [
   {
-    path: '/home',
+    path: '/',
     name: 'Home',
     component: () => import('../views/Home.vue'),
     //  meta: { sidebar: Sidebar }
