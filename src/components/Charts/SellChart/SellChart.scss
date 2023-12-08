@@ -1,0 +1,12 @@
+@import '@/styles/mixin.scss';
+@import '@/styles/global.scss';
+
+.container{
+  // background-color: rgb(255, 97, 97);
+  padding: 20px;
+  border-radius: 25px;
+  
+  .title{
+    @include tertiaryTitle;
+  }
+}

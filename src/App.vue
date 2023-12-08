@@ -10,7 +10,12 @@ import Header from './components/Header/Header.vue';
 <template>
   <Sidebar />
   <Header :style="{'margin-left': collapsed ? '60px' : '200px', 'transition': '0.3s ease'}"/>
-  <div>
-    <RouterView :style="{'margin-left': collapsed ? '70px' : '210px', 'transition': '0.3s ease'}"/>
+  <div class="body">
+    <RouterView :style="{'margin-left': collapsed ? '60px' : '200px', 'transition': '0.3s ease'}"/>
   </div>
 </template>
+
+
+<style scoped>
+
+</style>

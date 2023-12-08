@@ -44,6 +44,16 @@ const isActive = computed(() => route.path === props.to);
 
   &.active{
     background-color: $active_link;
+    position: relative;
+
+    &::after{
+      content: '';
+      width: 7px;
+      height: 100%;
+      position: absolute;
+      right: 0;
+      background-color: $primary_hover;
+    }
   }
 
   .icon{
