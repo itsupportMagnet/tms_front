@@ -32,7 +32,7 @@ const isActive = computed(() => route.path === props.to);
   height: 1rem;
   color: #fff;
   text-decoration: none;
-  transition: all .3s;
+  transition: background-color .3s;
 
   &.link_collapsed{
     padding: 1.5rem 1.2rem;
