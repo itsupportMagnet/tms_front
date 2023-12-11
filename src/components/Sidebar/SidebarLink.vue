@@ -32,7 +32,7 @@ const isActive = computed(() => route.path === props.to);
   height: 1rem;
   color: #fff;
   text-decoration: none;
-  transition: all .3s;
+  transition: background-color .3s;
 
   &.link_collapsed{
     padding: 1.5rem 1.2rem;
@@ -44,6 +44,16 @@ const isActive = computed(() => route.path === props.to);
 
   &.active{
     background-color: $active_link;
+    position: relative;
+
+    &::after{
+      content: '';
+      width: 7px;
+      height: 100%;
+      position: absolute;
+      right: 0;
+      background-color: $primary_hover;
+    }
   }
 
   .icon{
