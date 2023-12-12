@@ -5,9 +5,9 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import GenericTable from '../components/Tables/GenericTable/GenericTable.vue';
-import { getApi } from '../services/apiServices'
-import { formatColumnName } from '../utils/utils'
+import GenericTable from '@/components/Tables/GenericTable/GenericTable.vue';
+import { getApi } from '@/services/apiServices'
+import { formatColumnName } from '@/helpers/helpers.js'
 
 const apiData = ref([])
 const slicedApiData = ref([])

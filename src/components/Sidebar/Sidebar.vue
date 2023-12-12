@@ -24,8 +24,8 @@
             :class="{ 'its-collapsed': collapsed }">New DO</SidebarLink>
         </div>
 
-        <span class="dropdown-link">
-          <SidebarLink @click="() => isPricingDropdownClicked = !isPricingDropdownClicked" to="" icon="bi bi-tag-fill">
+        <span class="dropdown-link" @click="() => isPricingDropdownClicked = !isPricingDropdownClicked">
+          <SidebarLink to="" icon="bi bi-tag-fill">
             Pricing</SidebarLink>
           <i :class="isPricingDropdownClicked ? 'bi bi-caret-up-fill' : 'bi bi-caret-down-fill'"></i>
         </span>
@@ -35,8 +35,8 @@
         </div>
 
 
-        <span class="dropdown-link">
-          <SidebarLink @click="() => isToolsDropdownClicked = !isToolsDropdownClicked" to="" icon="bi bi-calculator">
+        <span class="dropdown-link" @click="() => isToolsDropdownClicked = !isToolsDropdownClicked">
+          <SidebarLink to="" icon="bi bi-calculator">
             Pricing Tools
           </SidebarLink>
           <i :class="isToolsDropdownClicked ? 'bi bi-caret-up-fill' : 'bi bi-caret-down-fill'"></i>
@@ -125,6 +125,7 @@ const isToolsDropdownClicked = ref(false);
       justify-content: space-between;
       padding-right: 20px;
       transition: background-color .3s;
+      cursor: pointer;
 
       &:hover {
         background-color: $primary_hover;
