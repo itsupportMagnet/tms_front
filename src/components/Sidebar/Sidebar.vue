@@ -10,8 +10,8 @@
 
         <SidebarLink to="/" icon="bi bi-speedometer2">Dashboard</SidebarLink>
 
-        <span class="dropdown-link">
-          <SidebarLink @click="() => isShipmentsDropdownClicked = !isShipmentsDropdownClicked" to="" icon="bi bi-truck">
+        <span class="dropdown-link" @click="() => isShipmentsDropdownClicked = !isShipmentsDropdownClicked">
+          <SidebarLink  to="" icon="bi bi-truck">
             Shipments
           </SidebarLink>
           <i :class="isShipmentsDropdownClicked ? 'bi bi-caret-up-fill' : 'bi bi-caret-down-fill'"></i>
