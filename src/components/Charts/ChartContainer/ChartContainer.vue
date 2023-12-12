@@ -1,3 +1,23 @@
+<template>
+  <div class="">
+    <div class="col-12">
+      <h1 class="chart-title">Charts Dashboard</h1>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-6">
+          <BuyChart :totalBuy="totalBuy" />
+        </div>
+
+        <div class="col-6">
+          <SellChart :totalSell="totalSell" />
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script setup>
 import { watchEffect, ref } from 'vue';
 import { getApi } from '@/services/apiServices';
@@ -55,26 +75,6 @@ watchEffect(() => {
     .catch((error) => console.log(error))
 });
 </script>
-
-<template>
-  <div class="">
-    <div class="col-12">
-      <h1 class="chart-title">Charts Dashboard</h1>
-    </div>
-
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-6">
-          <BuyChart :totalBuy="totalBuy" />
-        </div>
-
-        <div class="col-6">
-          <SellChart :totalSell="totalSell" />
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
 
 <style>
 @import './ChartContainer.scss';

@@ -17,5 +17,9 @@ import Header from './components/Header/Header.vue';
 
 
 <style scoped>
-
+  .body{
+    background-color: #f9f9f9;
+    height: 93vh;
+    color: #383838;
+  }
 </style>

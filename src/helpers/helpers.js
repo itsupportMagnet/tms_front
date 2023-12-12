@@ -1,7 +1,11 @@
-export const formatColumnName = (columnName) => {
-  return columnName.replace(/([a-z])(?=[A-Z])|(?<=[a-z])([A-Z])/g, (match, lower, upper) => {
-    return lower ? `${lower} ` : upper;
-  }).replace(/(?:^|\b)([a-zA-Z])/g, (match, firstLetter) => {
-    return firstLetter.toUpperCase();
+import { createToast } from "mosha-vue-toastify";
+export const showToast = (message, type, bg = null) => {
+  createToast(message, {
+    position: "top-center",
+    toastBackgroundColor: bg, //
+    transition: "bounce", //
+    type,
+    showIcon: "true",
+    timeout: 3500,
   });
 };

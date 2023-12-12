@@ -18,7 +18,7 @@
         </span>
         <div class="dropdown" :class="{ 'active-dropdown': isShipmentsDropdownClicked }"
           v-show="isShipmentsDropdownClicked">
-          <SidebarLink to="/all-operation" icon="bi bi-list-task" class="dropdown__item"
+          <SidebarLink to="/all-operations" icon="bi bi-list-task" class="dropdown__item"
             :class="{ 'its-collapsed': collapsed }">All Operations</SidebarLink>
           <SidebarLink to="/new-do" icon="bi bi-file-pdf-fill" class="dropdown__item"
             :class="{ 'its-collapsed': collapsed }">New DO</SidebarLink>

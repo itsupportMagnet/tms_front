@@ -16,6 +16,11 @@ const routes = [
     path: '/florida-quotes',
     name: 'Florida-Quotes',
     component: () => import('../views/FloridaQuote.vue')
+  },
+  {
+    path: '/all-operations',
+    name: 'All Operations',
+    component: () => import('../views/AllOperations.vue')
   }
 ]
 
