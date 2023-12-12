@@ -20,7 +20,7 @@ onMounted(() => {
     .then((data) => {
       console.log(data),
         apiData.value = data,
-        slicedApiData.value = data.slice(1).map(row => {
+        slicedApiData.value = data.map(row => {
           const { id, ...rest } = row;
           return rest; //Funcion para cortar la columna id desde la vista
         })
