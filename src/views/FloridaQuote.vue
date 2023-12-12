@@ -1,6 +1,6 @@
 <template>
   <h1> Florida Quotes</h1>
-  <GenericTable :tableData="slicedApiData" :columnNames="slicedColumnNames" />
+  <GenericTable :tableData="slicedApiData" :columnNames="slicedColumnNames" :spinnerLoad="spinnerLoad" />
 </template>
 
 <script setup>
