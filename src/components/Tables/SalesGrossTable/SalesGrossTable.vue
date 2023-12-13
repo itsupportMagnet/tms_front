@@ -83,6 +83,7 @@
 </template>
 
 <script setup>
+const props = defineProps(['sales'])
 </script>
 
 <style scoped></style>
