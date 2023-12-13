@@ -32,9 +32,12 @@
       justify-content: end;
       gap: 5px;
 
-      label{
-        @include label;
-      }
+      &__box{
+        flex-basis: 10%;
+        label{
+          @include label;
+        }
+      }   
     }
   }
 
@@ -44,7 +47,7 @@
     .table-container {
       overflow: auto;
       // background-color: $tablesBackgroundColor;
-      height: 85vh;
+      height: 83vh;
       overflow-x: auto;
   
       &__table {
@@ -81,8 +84,10 @@
               overflow: hidden;
               text-overflow: ellipsis;
             }
-  
-            
+
+            input{
+              @include input;
+            }          
           }
   
           .actionButtons {
@@ -153,17 +158,29 @@ th:nth-child(3) {
   padding: 0 25px !important;
 }
 
+th:nth-child(4) {
+  padding: 0 25px !important;
+}
+
 th:nth-child(5) {
   padding: 0 40px !important;
+}
+
+th:nth-child(6) {
+  padding: 0 25px !important;
 }
 
 th:nth-child(13) {
   padding: 0 0px !important;
 }
+
 th:nth-child(14) {
   padding: 0 0px !important;
 }
 
+th:nth-child(26) {
+  padding: 0 25px !important;
+}
 
 .container-operation-pending {
   border: 1px black solid;

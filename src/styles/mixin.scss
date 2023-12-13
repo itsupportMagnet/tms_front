@@ -63,6 +63,7 @@
 }
 
 @mixin thead {
+  border-radius: 20px;
   position: sticky;
   top: 0;
   font-size: 12px;
@@ -99,6 +100,14 @@
   &:hover {
     transform: translateY(-2px);
   }
+}
+
+@mixin input {
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border-width: 1px;
+  width: 100%;
+  border: 1px solid $gray_200;
 }
 
 @mixin label {
