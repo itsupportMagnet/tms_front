@@ -1,0 +1,152 @@
+@import "../../../styles/global.scss";
+@import "../../../styles/mixin.scss";
+
+.searchSection {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 0;
+  width: 100%;
+
+  @media (min-width: 768px) {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+  }
+}
+
+.salesGrossContainer{
+  margin-top: 1.5rem;
+  background-color: #fff;
+  border-radius: 5px;
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+  padding: 1.5rem;
+}
+
+.row {
+  width: 101.5%;
+  padding: 0 0;
+  padding-top: 1rem;
+  justify-content: center;
+  
+
+  .table-container {
+    overflow: auto;
+    height: 58vh;
+    background-color: $tablesBackgroundColor;
+    overflow-x: auto;
+
+    // @media (min-width: 1400px) {
+    //   height: 60vh;
+    // }
+    
+    &__table {
+      border-width: 1px;
+      width: 100%;  //Al ser pocas columnas, lo estiramos con esto
+      z-index: 1;
+
+      // height: 10rem !important;
+      .table__header {
+        @include thead;
+
+      }
+
+    }
+
+    tbody {
+      text-align: center;
+    tr{
+      border-top: 1px solid rgb(206, 206, 206);
+      &:hover{
+        background-color: #ebebeb;
+      }
+      td {
+        height: 3.5rem;
+        padding: 0 5px;
+        font-size: 11px;
+        font-weight: 600;
+        vertical-align: middle;
+
+        span {
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          justify-content: center;
+        }
+
+        input{
+          height: 30px;
+          width: 80%;
+          min-width: 4rem;
+          border-radius: 4px;
+          border: 1px solid rgb(182, 182, 182);
+          text-align: center;
+        }
+        
+        select {
+          // background-color: #ffffff;
+          // border: none;
+          // height: 30px;
+          // min-width: 5rem;
+          @include select;
+        }
+
+        .btn-action {
+          padding: 0;
+          border: none;
+          background: inherit;
+          font-size: 15px;
+
+          &.btn-delete{
+            color: red
+          }
+        }
+      }
+
+      .select {
+        @include select;
+      }
+
+      .form-select-pending {
+        background-color: gray !important;
+        border: red;
+        color: white;
+        font-weight: bold;
+      }
+
+      .form-select-progress {
+        background-color: rgb(230, 230, 82) !important;
+        border: red;
+        color: white;
+        font-weight: bold;
+      }
+
+      .form-select-done {
+        background-color: green;
+        border: red;
+        color: white;
+        font-weight: bold;
+      }
+
+      .form-select-cancelled {
+        background-color: red;
+        border: red;
+        color: white;
+        font-weight: bold;
+      }
+
+      option {
+        background-color: white;
+        color: black;
+        width: 10px !important;
+      }
+    }
+
+      
+    }
+  }
+}
