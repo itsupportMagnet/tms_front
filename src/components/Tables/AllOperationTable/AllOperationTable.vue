@@ -260,14 +260,14 @@
       Add new operation +
     </AddButton> -->
       <div class="filter-container">
-        <div class="col-2">
+        <div class="filter-container__box">
           <strong>
             <label for="date" class="form-label">Sort By Date</label>
           </strong>
           <input type="date" class="form-control" v-model="inpt_date" @change="sortByDate" />
         </div>
 
-        <div class="col-2">
+        <div class="filter-container__box">
           <strong>
             <label class="form-label">Sort By Status</label>
           </strong>
@@ -280,7 +280,7 @@
           </select>
         </div>
 
-        <div class="col-2">
+        <div class="filter-container__box">
           <strong>
             <label class="form-label">Sort By Mode</label>
           </strong>
@@ -291,7 +291,7 @@
           </select>
         </div>
 
-        <div class="col-2">
+        <div class="filter-container__box">
           <strong>
             <label class="form-label">Sort By Carrier</label>
           </strong>
@@ -303,7 +303,7 @@
           </select>
         </div>
 
-        <div class="col-2">
+        <div class="filter-container__box">
           <strong>
             <label class="form-label">Sort By Container</label>
           </strong>
