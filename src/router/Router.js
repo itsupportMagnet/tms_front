@@ -26,6 +26,16 @@ const routes = [
     path: '/sale-gross',
     name: 'Sales Gross',
     component: () => import('../views/SalesGross.vue')
+  },
+  {
+    path: '/all-quotes',
+    name: 'All Quotes',
+    component: () => import('../views/AllQuotes.vue')
+  },
+  {
+    path: '/clients',
+    name: 'All Clients',
+    component: () => import('../views/Clients.vue')
   }
 ]
 

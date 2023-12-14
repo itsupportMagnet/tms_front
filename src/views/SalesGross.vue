@@ -1,79 +1,5 @@
 <template>
-  <div class="g-4">
-    <div class="d-flex">
-      <div class="animate__animated animate__flipInX">
-        <strong>
-          <label class="label">Sort By Provider</label>
-        </strong>
-        <select @change="sortByProvider" class="form-select">
-          <option selected value="All">All</option>
-          <option v-for="provider in providers" :value="provider.provider_name.split('').join('')" :key="provider">
-            {{ provider.provider_name }}
-          </option>
-        </select>
-      </div>
-
-      <div class="animate__animated animate__flipInX">
-        <strong>
-          <label class="label">Sort by Month</label>
-        </strong>
-        <select @change="sortByMonth" class="form-select">
-          <option selected value="All">All</option>
-          <option value="MAY">MAY</option>
-          <option value="JUNE">JUNE</option>
-          <option value="JULY">JULY</option>
-          <option value="AUGUST">AUGUST</option>
-          <option value="SEPTEMBER">SEPTEMBER</option>
-          <option value="OCTOBER">OCTOBER</option>
-          <option value="NOVEMBER">NOVEMBER</option>
-          <option value="DECEMBER">DECEMBER</option>
-        </select>
-      </div>
-
-      <div class="animate__animated animate__flipInX">
-        <strong>
-          <label class="label">Sort By Profit</label>
-        </strong>
-        <select class="form-select">
-          <option disabled hidden selected>All</option>
-          <option value="MOST">Most Profit</option>
-          <option value="LEAST">Least Profit</option>
-        </select>
-      </div>
-
-      <div class="animate__animated animate__flipInX">
-        <strong>
-          <label class="label">Sort By Customer</label>
-        </strong>
-        <select class="form-select">
-          <option selected value="All">All</option>
-          <option v-for="client in customers" :value="client.customer_name.split('').join('')" :key="client">
-            {{ client.customer_name }}
-          </option>
-        </select>
-      </div>
-    </div>
-    <div class="salesGrossContainer">
-      <div class="searchSection">
-        <div class="searchSection__container">
-          <!-- RELATIVE -->
-          <div class="searchSection__container--form">
-            <div class="searchSection__goBackIconContainer">
-              <svg class="searchSection__searchIconFrame" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                fill="none" viewBox="0 0 20 20">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-              </svg>
-            </div>
-            <input v-model="inpt_BookingBL" type="text" id="default-search"
-              class="searchSection__input searchSection__inputSearchID" placeholder="Search by Booking Bl" required />
-          </div>
-        </div>
-      </div>
-    </div>
-
     <SalesGrossTable :sales="sales" />
-  </div>
 </template>
 
 <script setup>
@@ -99,9 +25,9 @@ const filterOpt = ref({
 
 onMounted(async () => {
   loadSaleGross()
-  deleteOperationModalRef.value.addEventListener('hidden.bs.modal', () => {
-    loadSaleGross()
-  })
+  // deleteOperationModalRef.value.addEventListener('hidden.bs.modal', () => {
+  //   loadSaleGross()
+  // })
 })
 
 const loadSaleGross = async () => {
@@ -339,17 +265,5 @@ const statusOnChange = async (objSalesGross, e) => {
 </script>
 
 <style scoped>
-.searchSection {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  margin-top: 0;
-  width: 100%;
 
-  @media (min-width: 768px) {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-end;
-  }
-}
 </style>
