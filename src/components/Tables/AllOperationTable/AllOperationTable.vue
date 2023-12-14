@@ -9,7 +9,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <NewOperation :key="newOperationKey" ref="newOperationRef" />
+          <NewOperationForm :key="newOperationKey" ref="newOperationRef" />
         </div>
       </div>
     </div>
@@ -427,7 +427,7 @@
 import { onMounted, ref } from 'vue'
 import { getApi, postApi, deleteApi } from '@/services/apiServices'
 import { showToast } from '@/helpers/helpers.js'
-import NewOperation from '@/components/Forms/NewOperation/NewOperation.vue';
+import NewOperationForm from '@/components/Forms/NewOperationForm/NewOperationForm.vue';
 import PrimaryButton from '@/components/Buttons/PrimaryButton/PrimaryButton.vue'
 
 const operations = ref()

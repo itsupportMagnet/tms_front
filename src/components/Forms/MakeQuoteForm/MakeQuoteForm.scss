@@ -1,0 +1,316 @@
+@import "../../../styles/mixin.scss";
+@import "../../../styles/global.scss";
+
+.main {
+  padding: 0.75rem;
+  min-height: 100vh;
+  @media (min-width: 1024) {
+    padding: 1.25rem;
+  }
+
+  .form {
+    background-color: #fff;
+    border-radius: 5px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+    &__icon {
+      @include icon;
+    }
+    padding: 1.5rem;
+    @media (min-width: $breakpoint_md) {
+      padding: 2.5rem;
+    }
+    &__title {
+      @include title;
+    }
+    &__subtitle {
+      @include subtitle;
+    }
+    &__bussines {
+      margin-bottom: 1.5rem;
+      width: 100%;
+      &--labelBusiness {
+        @include label;
+      }
+      &--selectBusiness {
+        @include select;
+      }
+    }
+
+    .drayage {
+      margin-right: 0.75rem;
+
+      &__input {
+        @include input;
+      }
+      &__label {
+        @include label;
+      }
+
+      &__select {
+        @include select;
+        margin-top: 0.5rem;
+      }
+
+      &__business {
+        margin-bottom: 1.5rem;
+      }
+      &__flex {
+        display: flex;
+        flex-direction: column;
+        row-gap: 1rem;
+        margin-bottom: 1.5rem;
+
+        @media (min-width: 768px) {
+          flex-direction: row;
+          column-gap: 1rem;
+        }
+
+        &--pol {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+
+          @media (min-width: 768px) {
+            width: 50%;
+          }
+
+          .drayage__label {
+            @include label;
+          }
+
+          .drayage__labelCarrier {
+            margin-top: 1.5rem;
+          }
+
+          .drayage__select {
+            @include select;
+          }
+
+          .drayage__image {
+            margin-top: 1.25rem;
+            align-self: center;
+            border-radius: 0.25rem;
+          }
+        }
+
+        &--address {
+          display: flex;
+
+          flex-direction: column;
+          width: 100%;
+
+          @media (min-width: 768px) {
+            width: 50%;
+          }
+
+          .drayage__label {
+            @include label;
+          }
+
+          .drayage__select {
+            @include select;
+          }
+
+          .drayage__image {
+            margin-top: 1.25rem;
+            align-self: center;
+            border-radius: 0.25rem;
+          }
+        }
+      }
+
+      &__equipment {
+        margin-bottom: 1.5rem;
+        width: 100%;
+
+        &--label {
+          @include label;
+        }
+
+        &--select {
+          @include select;
+          margin-top: 0.5rem;
+        }
+      }
+
+      &__containerSizeAndType {
+        display: flex;
+        column-gap: 1rem;
+        margin-bottom: 1.5rem;
+
+        &--sectionInput {
+          width: 50%;
+
+          .drayage__label {
+            @include label;
+          }
+
+          .drayage__select {
+            @include select;
+          }
+        }
+      }
+
+      &__weightCommodity {
+        display: flex;
+        column-gap: 1rem;
+        margin-bottom: 1.5rem;
+
+        &--sectionInput {
+          width: 50%;
+
+          .drayage__label {
+            @include label;
+          }
+
+          .drayage__select {
+            @include select;
+          }
+
+          .otherCommodity_box {
+            margin-top: 1rem;
+          }
+
+          .drayage__bottom {
+            margin-bottom: 1.5rem;
+          }
+        }
+      }
+
+      &__heading {
+        margin: 2rem 0;
+        width: 100%;
+
+        &--subtitle {
+          font-size: 20px;
+          font-weight: 700;
+        }
+      }
+
+      &__hazardousBonded {
+        display: flex;
+        column-gap: 1rem;
+        margin-bottom: 1.5rem;
+
+        &--hazardous {
+          margin-right: 0.75rem;
+
+          width: 50%;
+
+          .drayage__bottom {
+            margin-bottom: 1.5rem;
+          }
+
+          .drayage__label {
+            @include label;
+          }
+
+          .drayage__labelHazard {
+            margin-top: 1.5rem;
+          }
+
+          .drayage__chckInput {
+            margin-right: 0.25rem;
+          }
+
+          .drayage__chckLabel {
+            margin-right: 0.75rem;
+          }
+        }
+
+        &--bonded {
+          .drayage__label {
+            @include label;
+          }
+
+          .drayage__chckInput {
+            margin-right: 0.25rem;
+          }
+
+          .drayage__chckLabel {
+            margin-right: 0.75rem;
+          }
+        }
+      }
+
+      &__loadType {
+        &--business {
+          margin-right: 0.75rem;
+          margin-bottom: 1.5rem;
+          width: 100%;
+
+          .drayage__label {
+            @include label;
+          }
+
+          .drayage__select {
+            @include select;
+          }
+        }
+      }
+
+      &__btn {
+        display: flex;
+        margin-bottom: 1, 5rem;
+        justify-content: center;
+
+        &--submit {
+          // @include submit;
+        }
+
+        &--buttonCancel {
+          // @include buttonCancel;
+        }
+      }
+
+      &__bottom {
+        margin-bottom: 1.5rem;
+      }
+
+      &__business {
+        margin-right: 0.75rem;
+        margin-bottom: 1.5rem;
+        width: 100%;
+
+        &--label {
+          @include label;
+        }
+
+        &--select {
+          @include select;
+        }
+      }
+
+      &__spin {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin-top: 1.5rem;
+      }
+    }
+  }
+}
+
+input {
+  border: 1px solid #ccc;
+}
+
+input:focus {
+  outline: none;
+  border: none;
+  border: 1px solid #1d4ed8;
+}
+
+.alert {
+  transition: opacity 1s ease;
+}
+
+option {
+  // @include option;
+}
+
+.hidden {
+  display: none;
+}
