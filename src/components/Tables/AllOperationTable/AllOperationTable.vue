@@ -8,9 +8,9 @@
           <h5 class="modal-title" id="exampleModalLabel">Add New Operation</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <!-- <div class="modal-body">
-          <NewOperationVue :key="newOperationKey" ref="newOperationRef" />
-        </div> -->
+        <div class="modal-body">
+          <NewOperation :key="newOperationKey" ref="newOperationRef" />
+        </div>
       </div>
     </div>
   </div>
@@ -256,9 +256,12 @@
 
   <div class="container-fluid">
     <div class="header">
-      <!-- <AddButton type="button" data-bs-toggle="modal" data-bs-target="#newOperation">
-      Add new operation +
-    </AddButton> -->
+      <div class="add-operation-btn">
+        <PrimaryButton type="button" data-bs-toggle="modal" data-bs-target="#newOperation">
+          Add new operation +
+        </PrimaryButton>
+      </div>
+
       <div class="filter-container">
         <div class="filter-container__box">
           <strong>
@@ -424,8 +427,8 @@
 import { onMounted, ref } from 'vue'
 import { getApi, postApi, deleteApi } from '@/services/apiServices'
 import { showToast } from '@/helpers/helpers.js'
-// import NewOperationVue from '../newOperation/NewOperation.vue';
-// import AddButton from '../../components/buttons/AddButton.vue';
+import NewOperation from '@/components/Forms/NewOperation/NewOperation.vue';
+import PrimaryButton from '@/components/Buttons/PrimaryButton/PrimaryButton.vue'
 
 const operations = ref()
 const operationsFromApi = ref([])
