@@ -73,86 +73,88 @@
             </div>
           </div>
         </div>
-      </div>
-      <div v-if="sales" class="table-responsive table-container">
-        <table class="table-container__table table-striped table-hover">
-          <thead class="table__header">
-            <tr class="table__row">
-              <th class="table__cell" scope="col">ID</th>
-              <th class="table__cell" scope="col">OPERATION ID</th>
-              <th class="table__cell" scope="col">BOOKING BL</th>
-              <th class="table__cell" scope="col">CONTAINER ID</th>
-              <th class="table__cell" scope="col">PROVIDER</th>
-              <th class="table__cell" scope="col">PROVIDER INVOICE</th>
-              <th class="table__cell" scope="col">STATUS</th>
-              <th class="table__cell" scope="col">BUY</th>
-              <th class="table__cell" scope="col">SELL</th>
-              <th class="table__cell" scope="col">PROFIT</th>
-              <th class="table__cell" scope="col">CUSTOMER</th>
-              <th class="table__cell" scope="col">INVOICE</th>
-              <th class="table__cell" scope="col">MONTH OF INVOICE</th>
-              <th class="table__cell" scope="col">ACTION</th>
-            </tr>
-          </thead>
-          <tbody class="tbody" v-if="!isSalesEmpty">
-            <tr v-for="(objSalesGross, rowIndex) in sales" :key="rowIndex">
-              <td v-for="(key, cellIndex) in Object.keys(objSalesGross).slice(0, 13)" :key="cellIndex">
-                <input v-if="key === 'provider_invoice'" v-model="objSalesGross[key]"
-                  @blur="(e) => inputBlurHandlerProvider(objSalesGross.id, e)" />
 
-                <select v-else-if="key === 'status'" v-model="objSalesGross[key]"
-                  @change="(e) => statusOnChange(objSalesGross, e)">
-                  <option value="0">NOT STATUS</option>
-                  <option value="1">PAID</option>
-                  <option value="2">PENDING TO PAY</option>
-                </select>
+        <div v-if="sales" class="table-responsive table-container">
+          <table class="table-container__table table-striped table-hover">
+            <thead class="table__header">
+              <tr class="table__row">
+                <th class="table__cell" scope="col">ID</th>
+                <th class="table__cell" scope="col">OPERATION ID</th>
+                <th class="table__cell" scope="col">BOOKING BL</th>
+                <th class="table__cell" scope="col">CONTAINER ID</th>
+                <th class="table__cell" scope="col">PROVIDER</th>
+                <th class="table__cell" scope="col">PROVIDER INVOICE</th>
+                <th class="table__cell" scope="col">STATUS</th>
+                <th class="table__cell" scope="col">BUY</th>
+                <th class="table__cell" scope="col">SELL</th>
+                <th class="table__cell" scope="col">PROFIT</th>
+                <th class="table__cell" scope="col">CUSTOMER</th>
+                <th class="table__cell" scope="col">INVOICE</th>
+                <th class="table__cell" scope="col">MONTH OF INVOICE</th>
+                <th class="table__cell" scope="col">ACTION</th>
+              </tr>
+            </thead>
+            <tbody class="tbody" v-if="!isSalesEmpty">
+              <tr v-for="(objSalesGross, rowIndex) in sales" :key="rowIndex">
+                <td v-for="(key, cellIndex) in Object.keys(objSalesGross).slice(0, 13)" :key="cellIndex">
+                  <input v-if="key === 'provider_invoice'" v-model="objSalesGross[key]"
+                    @blur="(e) => inputBlurHandlerProvider(objSalesGross.id, e)" />
 
-                <span v-else-if="cellIndex === 'status'">
-                  {{
-                    objSalesGross[key] === 1
-                    ? 'PAY'
-                    : objSalesGross[key] === 2
-                      ? 'PENDING TO PAY'
-                      : objSalesGross[key]
-                  }}
-                </span>
+                  <select v-else-if="key === 'status'" v-model="objSalesGross[key]"
+                    @change="(e) => statusOnChange(objSalesGross, e)">
+                    <option value="0">NOT STATUS</option>
+                    <option value="1">PAID</option>
+                    <option value="2">PENDING TO PAY</option>
+                  </select>
 
-                <input type="number" v-else-if="key === 'buy'" @blur="validateInputBuy(objSalesGross, key)"
-                  v-model="objSalesGross[key]" min="0" />
+                  <span v-else-if="cellIndex === 'status'">
+                    {{
+                      objSalesGross[key] === 1
+                      ? 'PAY'
+                      : objSalesGross[key] === 2
+                        ? 'PENDING TO PAY'
+                        : objSalesGross[key]
+                    }}
+                  </span>
 
-                <input type="number" v-else-if="key === 'sell'" @blur="validateInputSell(objSalesGross, key)"
-                  v-model="objSalesGross[key]" min="0" />
+                  <input type="number" v-else-if="key === 'buy'" @blur="validateInputBuy(objSalesGross, key)"
+                    v-model="objSalesGross[key]" min="0" />
 
-                <input v-else-if="key === 'profit'" v-model="objSalesGross[key]" disabled />
+                  <input type="number" v-else-if="key === 'sell'" @blur="validateInputSell(objSalesGross, key)"
+                    v-model="objSalesGross[key]" min="0" />
 
-                <input v-else-if="key === 'invoice'" v-model="objSalesGross[key]"
-                  @blur="(e) => inputBlurHandlerCustomerInvoice(objSalesGross.id, e)" />
+                  <input v-else-if="key === 'profit'" v-model="objSalesGross[key]" disabled />
 
-                <span v-else>
-                  {{ objSalesGross[key] }}
-                </span>
-              </td>
+                  <input v-else-if="key === 'invoice'" v-model="objSalesGross[key]"
+                    @blur="(e) => inputBlurHandlerCustomerInvoice(objSalesGross.id, e)" />
 
-              <td>
-                <button class="btn-action btn-delete" data-bs-toggle="modal" data-bs-target="#deleteOperationModal"
-                  @click="sendIdOperation(objSalesGross)">
-                  <i class="bi bi-x-square-fill icon-red"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
+                  <span v-else>
+                    {{ objSalesGross[key] }}
+                  </span>
+                </td>
 
-        </table>
-        <div v-if="isSalesEmpty" class="sectionSales__saleEmpty" role="alert">
-          <span class="sr-only">Info</span>
-          <div>
-            <i class="bi bi-exclamation-triangle"></i>
-            <span class="font-medium"> Nothing was found!</span> Try using
-            different options.
+                <td>
+                  <button class="btn-action btn-delete" data-bs-toggle="modal" data-bs-target="#deleteOperationModal"
+                    @click="sendIdOperation(objSalesGross)">
+                    <i class="bi bi-x-square-fill icon-red"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+
+          </table>
+          <div v-if="isSalesEmpty" class="sectionSales__saleEmpty" role="alert">
+            <span class="sr-only">Info</span>
+            <div>
+              <i class="bi bi-exclamation-triangle"></i>
+              <span class="font-medium"> Nothing was found!</span> Try using
+              different options.
+            </div>
           </div>
         </div>
       </div>
     </div>
+
 
     <!-- Delete Modal -->
     <div ref="deleteOperationModalRef" class="modal fade" id="deleteOperationModal" tabindex="-1"
@@ -513,5 +515,5 @@ const statusOnChange = async (objSalesGross, e) => {
 </script>
 
 <style lang="scss" scoped>
-@import './SalesGrossTable.scss'
+@import './SalesGrossTable.scss';
 </style>
