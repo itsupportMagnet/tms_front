@@ -56,7 +56,7 @@
         </div>
 
         <SidebarLink to="/clients" icon="bi bi-people-fill">Clients</SidebarLink>
-        <SidebarLink to="/providers" icon="bi bi-truck-flatbed">Providers</SidebarLink>
+        <SidebarLink to="/carriers" icon="bi bi-truck-flatbed">Carriers</SidebarLink>
         <SidebarLink to="/sale-gross" icon="bi bi-cash-stack">Sales Gross</SidebarLink>
       </div>
     </div>

@@ -33,9 +33,19 @@ const routes = [
     component: () => import('../views/Clients.vue')
   },
   {
+    path: '/carriers',
+    name: 'Carriers',
+    component: () => import('../views/AllCarriers.vue')
+  },
+  {
     path: '/florida-quotes',
     name: 'Florida-Quotes',
     component: () => import('../views/FloridaQuote.vue')
+  },
+  {
+    path: '/new-do',
+    name: 'New DO',
+    component: () => import('../views/NewDo.vue')
   },
 ]
 
