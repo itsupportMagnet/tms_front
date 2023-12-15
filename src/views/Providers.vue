@@ -1,5 +1,5 @@
 <template>
-<div></div>
+<div>asdf</div>
 </template>
 
 <script setup>

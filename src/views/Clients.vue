@@ -1,5 +1,6 @@
 <template>
 <ClientsTable />
+<p>Texto para rellenar el push</p>
 </template>
 
 <script setup>
