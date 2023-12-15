@@ -1,0 +1,97 @@
+<template>
+  <div class="btn">
+    <i class="bi bi-send-fill send" aria-hidden="true"></i>
+    <i class="bi bi-send-fill send2" aria-hidden="true"></i>
+    <p>send</p>
+  </div>
+</template>
+
+<styles scoped lang="scss">
+@import '../../../styles/global.scss';
+
+.btn {
+  position: relative;
+  width: 200px;
+  background-color: transparent;
+  border: 3px solid $primary;
+  border-radius: 10px;
+  cursor: pointer;
+  overflow: hidden;
+
+  /* Style the p tag */
+  p {
+    text-transform: uppercase;
+    text-align: center;
+    color: $primary;
+    font-weight: 900;
+    font-size: 20px;
+    // margin-left: 30px;
+    transition: all 0.5s ease;
+    margin-left: 38px; 
+    margin-bottom: 0;
+  }
+
+  /* Style the first icon with class send */
+  .send {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 40px;
+    color: $primary;
+    transition: all 0.5s ease;
+  }
+
+  /* Style the second icon with class send2 */
+  .send2 {
+    position: absolute;
+    top: 80px;
+    left: 40px;
+    color: $primary;
+    transition: all 0.5s ease;
+  }
+
+  /* Hover effects */
+  &:hover {
+    background: $primary;
+    transition: all 0.1s ease;
+  }
+
+  &:hover p {
+    transition: all 0.5s ease;
+    animation: move .6s linear .6s forwards;
+    color: #fff;
+  }
+
+  &:hover .send {
+    top: -50px;
+    transition: all 0.5s ease;
+    color: #fff;
+  }
+
+  &:hover .send2 {
+    top: 11px;
+    transition: all 0.5s ease;
+    animation: sending .6s linear .6s forwards;
+    color: #fff;
+  }
+
+  /* CSS3 animation keyframes */
+  @keyframes sending {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translate(40px, -60px);
+    }
+  }
+
+  @keyframes move {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-18px);
+    }
+  }
+}
+</styles>
