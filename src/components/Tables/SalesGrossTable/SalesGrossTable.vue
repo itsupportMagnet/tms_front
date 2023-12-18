@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="g-4">
+
       <div class="filter-container">
         <div class="d-flex">
           <div class="animate__animated animate__flipInX filter-container__box">
@@ -174,7 +174,6 @@
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script setup>

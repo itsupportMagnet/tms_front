@@ -11,7 +11,7 @@
         <SidebarLink to="/" icon="bi bi-speedometer2">Dashboard</SidebarLink>
 
         <span class="dropdown-link" @click="() => isShipmentsDropdownClicked = !isShipmentsDropdownClicked">
-          <SidebarLink  to="" icon="bi bi-truck">
+          <SidebarLink to="" icon="bi bi-truck">
             Shipments
           </SidebarLink>
           <i :class="isShipmentsDropdownClicked ? 'bi bi-caret-up-fill' : 'bi bi-caret-down-fill'"></i>
@@ -92,9 +92,9 @@ const isToolsDropdownClicked = ref(false);
   left: 0;
   bottom: 0;
   transition: width 0.3s ease;
-  box-shadow: 3px -1px 5px 0px rgba(0,0,0,0.75);
--webkit-box-shadow: 3px -1px 5px 0px rgba(0,0,0,0.75);
--moz-box-shadow: 3px -1px 5px 0px rgba(0,0,0,0.75);
+  box-shadow: 3px -1px 5px 0px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 3px -1px 5px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 3px -1px 5px 0px rgba(0, 0, 0, 0.75);
 
   figure {
     display: flex;
