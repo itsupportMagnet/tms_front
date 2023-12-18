@@ -5,3 +5,7 @@ export const formatColumnName = (columnName) => {
     return firstLetter.toUpperCase();
   });
 };
+
+export const formatColumnNameCarriers = (columnName) => {
+  return columnName.replace(/_/g, ' ').toUpperCase();
+}

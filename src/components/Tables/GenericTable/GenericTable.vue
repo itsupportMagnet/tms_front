@@ -11,7 +11,19 @@
           </thead>
           <tbody class="genericTBody">
             <tr v-for="row in tableData" :key="row.id">
-              <td v-for="(value, key) in row" :key="key"> {{ value }}</td>
+              <td v-for="(item, key) in Object.values(row)" :key="key">
+                <select v-if="Array.isArray(item) && item.length > 1" class="form-select">
+                  <option v-for="(value, subIndex) in item" :key="subIndex" :value="value">
+                    {{ value }}
+                  </option>
+                </select>
+                <template v-else-if="Array.isArray(item) && item.length == 1">
+                  {{ item[0] }}
+                </template>
+                <template v-else>
+                  {{ item }}
+                </template>
+              </td>
             </tr>
           </tbody>
         </table>
