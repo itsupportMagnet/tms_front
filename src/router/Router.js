@@ -47,6 +47,21 @@ const routes = [
     name: 'New DO',
     component: () => import('../views/NewDo.vue')
   },
+  {
+    path: '/add-quote-fee',
+    name: 'Add Quote Fee',
+    component: () => import('../views/AddQuoteFee.vue')
+  },
+  {
+    path: '/edit-quote-fee',
+    name: 'Edit Quote Fee',
+    component: () => import('../views/EditQuoteFee.vue')
+  },
+  {
+    path: '/send-quote',
+    name: 'Send Quote',
+    component: () => import('../views/SendQuote.vue')
+  }
 ]
 
 const router = createRouter({
