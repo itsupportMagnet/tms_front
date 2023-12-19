@@ -9,7 +9,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <AddClient />
+          <AddClientsForm />
         </div>
       </div>
     </div>
@@ -86,6 +86,7 @@ import { ref, onMounted } from 'vue'
 import { getApi } from '../../../services/apiServices';
 import Spinner from '../../Spinner/Spinner.vue';
 import PrimaryButton from '../../../components/Buttons/PrimaryButton/PrimaryButton.vue'
+import AddClientsForm from '../../Forms/AddClientsForm/AddClientsForm.vue';
 
 onMounted(async () => {
   newClientModal.value.addEventListener('hidden.bs.modal', () => {

@@ -1,10 +1,10 @@
 <template>
   <div class="container-fluid mainContainer">
-    <div class="row">
-      <div class="tableContainer">
-        <div v-if="spinnerLoad" class="d-flex justify-content-center my-3">
-          <Spinner />
-        </div>
+    <div v-if="spinnerLoad" class="d-flex justify-content-center my-3">
+      <Spinner />
+    </div>
+    <div v-else class="card">
+      <div class="card__tableContainer">
         <table class="genericTable table table-hover">
           <thead class="table-header">
             <th scope="col" v-for="(columnName, index) in columnNames" :key="index"> {{ columnName }}</th>

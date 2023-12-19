@@ -3,7 +3,21 @@
 
 .mainContainer {
   background-color: rgb(249, 250, 251);
-  padding: 2rem 0;
+
+  .card {
+    display: flex;
+    margin-top: 1.5rem;
+    flex-direction: column;
+    width: 100%;
+
+    &__tableContainer {
+      overflow: auto;
+      padding: 0.8rem;
+      min-width: 100%;
+      height: 100%;
+      margin-right: 20rem;
+    }
+  }
 
   .tableContainer {
     overflow: auto;
@@ -11,29 +25,29 @@
     min-width: 100%;
     height: 85vh;
   }
-  
+
   .genericTable {
     border-radius: 50px;
-  
+
     .border {
       height: 1px;
       padding: 0px;
       color: black;
     }
-  
+
     .table-header {
       @include thead;
     }
-  
+
     .genericTBody {
       tr {
         background-color: white !important;
         border-top: 1px solid rgb(206, 206, 206) !important;
-  
+
         &:hover {
           background-color: #ebebeb !important;
         }
-  
+
         td {
           height: 3rem;
           padding: 0px 8px;
@@ -42,7 +56,7 @@
           text-align: center;
           vertical-align: middle;
           font-size: 10px;
-  
+
           span {
             display: -webkit-box;
             -webkit-box-orient: vertical;
@@ -55,4 +69,3 @@
     }
   }
 }
-

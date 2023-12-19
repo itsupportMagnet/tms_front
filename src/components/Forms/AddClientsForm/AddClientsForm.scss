@@ -1,0 +1,46 @@
+@import '../../../styles/global.scss';
+@import '../../../styles/mixin.scss';
+
+.container-fluid {
+  background-color: #fff;
+  padding: 2rem;
+  border: 1px solid #d2d2d5;
+  border-radius: 5px;
+  @media (min-width: 1920px){
+    margin-bottom: 24rem;
+  }
+}
+
+.row {
+  margin-bottom: 1.5rem;
+
+  .btnAdd {
+    display: flex;
+    align-content: center;
+    padding: 0px 13px;
+    background-color: $primary;
+    border: none;
+    font-size: 1.8rem;
+    color: $whiteColor;
+    border-radius: 50px;
+
+    &:hover {
+      background-color: #0732ab;
+    }
+  }
+
+  .btnBox {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  .btnSubmit_box {
+
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    
+  }
+
+}
