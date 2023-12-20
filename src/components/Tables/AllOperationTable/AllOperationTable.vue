@@ -219,6 +219,7 @@
     </div>
   </div>
 
+
   <div class="container-fluid">
     <div class="header">
       <div class="add-operation-btn">
@@ -286,104 +287,106 @@
     </div>
 
     <div class="table-container">
-      <CRow class="row">
-        <div v-if="operationsFromApi" class="table-responsive table-container">
-          <table v-if="operations" class="table-container__table">
-            <thead class="table__header">
-              <tr class="table__row">
-                <th class="table__cell" scope="col">ID</th>
-                <th class="table__cell" scope="col">Operation Date</th>
-                <th class="table__cell" scope="col">Operation Status</th>
-                <th class="table__cell" scope="col">Container ID</th>
-                <th class="table__cell" scope="col">Container Status</th>
-                <th class="table__cell" scope="col">Booking /BL</th>
-                <th class="table__cell" scope="col">Customer</th>
-                <th class="table__cell" scope="col">Provider</th>
-                <th class="table__cell" scope="col">Warehouse Location</th>
-                <th class="table__cell" scope="col">Terminal</th>
-                <th class="table__cell" scope="col">Port</th>
-                <th class="table__cell" scope="col">Empty Location</th>
-                <th class="table__cell" scope="col">Full Location</th>
-                <th class="table__cell" scope="col">Container Size</th>
-                <th class="table__cell" scope="col">Container Type</th>
-                <th class="table__cell" scope="col">Equipment</th>
-                <th class="table__cell" scope="col">Weight</th>
-                <th class="table__cell" scope="col">SS Line</th>
-                <th class="table__cell" scope="col">Hazardous</th>
-                <th class="table__cell" scope="col">Bonded</th>
-                <th class="table__cell" scope="col">Cargo Cut</th>
-                <th class="table__cell" scope="col">Commodity</th>
-                <th class="table__cell" scope="col">City</th>
-                <th class="table__cell" scope="col">State</th>
-                <th class="table__cell" scope="col">Mode Of Operation</th>
-                <th class="table__cell" scope="col">Quote ID</th>
-                <th class="table__cell" scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody class="tbody">
-              <tr v-for="(objOperation, rowIndex) in operations" :key="rowIndex">
-                <td v-for="(key, cellIndex) in Object.keys(objOperation).slice(0, 26)" :key="cellIndex">
-                  <span v-if="key == 'operationDate'">
-                    {{ americanFormatDate(objOperation[key]) }}
-                  </span>
-                  <select class="select" v-else-if="key === 'status'" v-model="objOperation[key]"
-                    @change="(e) => statusOnChange(objOperation, e)" :class="rowClass(objOperation[key])">
-                    <option value="1">PENDING</option>
-                    <option value="2">IN PROCESS</option>
-                    <option value="3">DONE</option>
-                    <option value="4">CANCELLED</option>
-                  </select>
-                  <input type="text" v-else-if="key == 'quoteID'" v-model="objOperation[key]"
-                    class="allOperations__inptBookingBl" @change="changeQuoteId(objOperation[key], objOperation)" />
-                  <select class="select" v-else-if="key === 'containerStatus'" v-model="objOperation[key]" @change="(e) =>
-                    containerStatusOnChange(objOperation, e)
-                    ">
-                    <option v-for="cargoStatus in containerStatus" :key="cargoStatus.id" :value="cargoStatus.status"
-                      :selected="cargoStatus.status === objOperation.containerStatus
-                        ">
-                      {{ cargoStatus.status }}
-                    </option>
-                  </select>
-                  <input class="allOperations__inptBookingBl" aria-label="Default input example"
-                    v-else-if="key === 'bookingBl'" v-model="objOperation[key]" @blur="(e) =>
-                      inputBlurHandlerBooking(objOperation.idOperation, e)
-                      " />
-                  <input class="allOperations__inptContainerId" aria-label="Default input example"
-                    v-else-if="key === 'containerId'" v-model="objOperation[key]" @blur="(e) =>
-                      inputBlurHandlerContainer(objOperation.idOperation, e)
-                      " />
-                  <!-- <input v-else-if="key == 'weight'" type="number" class="allOperations__inptBookingBl"
+      <Card>
+        <div class="table-row">
+          <div v-if="operationsFromApi" class="table-responsive table-container">
+            <table v-if="operations" class="table-container__table">
+              <thead class="table__header">
+                <tr class="table__row">
+                  <th class="table__cell" scope="col">ID</th>
+                  <th class="table__cell" scope="col">Operation Date</th>
+                  <th class="table__cell" scope="col">Operation Status</th>
+                  <th class="table__cell" scope="col">Container ID</th>
+                  <th class="table__cell" scope="col">Container Status</th>
+                  <th class="table__cell" scope="col">Booking /BL</th>
+                  <th class="table__cell" scope="col">Customer</th>
+                  <th class="table__cell" scope="col">Provider</th>
+                  <th class="table__cell" scope="col">Warehouse Location</th>
+                  <th class="table__cell" scope="col">Terminal</th>
+                  <th class="table__cell" scope="col">Port</th>
+                  <th class="table__cell" scope="col">Empty Location</th>
+                  <th class="table__cell" scope="col">Full Location</th>
+                  <th class="table__cell" scope="col">Container Size</th>
+                  <th class="table__cell" scope="col">Container Type</th>
+                  <th class="table__cell" scope="col">Equipment</th>
+                  <th class="table__cell" scope="col">Weight</th>
+                  <th class="table__cell" scope="col">SS Line</th>
+                  <th class="table__cell" scope="col">Hazardous</th>
+                  <th class="table__cell" scope="col">Bonded</th>
+                  <th class="table__cell" scope="col">Cargo Cut</th>
+                  <th class="table__cell" scope="col">Commodity</th>
+                  <th class="table__cell" scope="col">City</th>
+                  <th class="table__cell" scope="col">State</th>
+                  <th class="table__cell" scope="col">Mode Of Operation</th>
+                  <th class="table__cell" scope="col">Quote ID</th>
+                  <th class="table__cell" scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody class="tbody">
+                <tr v-for="(objOperation, rowIndex) in operations" :key="rowIndex">
+                  <td v-for="(key, cellIndex) in Object.keys(objOperation).slice(0, 26)" :key="cellIndex">
+                    <span v-if="key == 'operationDate'">
+                      {{ americanFormatDate(objOperation[key]) }}
+                    </span>
+                    <select class="select" v-else-if="key === 'status'" v-model="objOperation[key]"
+                      @change="(e) => statusOnChange(objOperation, e)" :class="rowClass(objOperation[key])">
+                      <option value="1">PENDING</option>
+                      <option value="2">IN PROCESS</option>
+                      <option value="3">DONE</option>
+                      <option value="4">CANCELLED</option>
+                    </select>
+                    <input type="text" v-else-if="key == 'quoteID'" v-model="objOperation[key]"
+                      class="allOperations__inptBookingBl" @change="changeQuoteId(objOperation[key], objOperation)" />
+                    <select class="select" v-else-if="key === 'containerStatus'" v-model="objOperation[key]" @change="(e) =>
+                      containerStatusOnChange(objOperation, e)
+                      ">
+                      <option v-for="cargoStatus in containerStatus" :key="cargoStatus.id" :value="cargoStatus.status"
+                        :selected="cargoStatus.status === objOperation.containerStatus
+                          ">
+                        {{ cargoStatus.status }}
+                      </option>
+                    </select>
+                    <input class="allOperations__inptBookingBl" aria-label="Default input example"
+                      v-else-if="key === 'bookingBl'" v-model="objOperation[key]" @blur="(e) =>
+                        inputBlurHandlerBooking(objOperation.idOperation, e)
+                        " />
+                    <input class="allOperations__inptContainerId" aria-label="Default input example"
+                      v-else-if="key === 'containerId'" v-model="objOperation[key]" @blur="(e) =>
+                        inputBlurHandlerContainer(objOperation.idOperation, e)
+                        " />
+                    <!-- <input v-else-if="key == 'weight'" type="number" class="allOperations__inptBookingBl"
                     v-model="objOperation[key]" @blur="(e) => inputBlurHandlerWeight(objOperation.idOperation, e)" /> -->
-                  <span v-else>
-                    {{ objOperation[key] }}
-                  </span>
-                </td>
-                <td class="actionButtons">
-                  <button type="button" class="btn-action" data-bs-toggle="modal" data-bs-target="#updateOperation"
-                    @click="sendIdOperation(objOperation.idOperation)"><i class="bi bi-pencil-square icon-blue"></i>
-                  </button>
-                  <button class="btn-action" data-bs-toggle="modal" data-bs-target="#deleteOperationModal"
-                    @click="showDialog(objOperation.idOperation)">
-                    <i class="bi bi-x-square-fill icon-red"></i>
-                  </button>
-                  <button type="button" class="btn btnNotes" data-bs-toggle="modal" data-bs-target="#note"
-                    data-bs-whatever="@mdo" @click="handleBtnNote(objOperation, e)">
-                    <i class="bi bi-journal-bookmark"></i>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                    <span v-else>
+                      {{ objOperation[key] }}
+                    </span>
+                  </td>
+                  <td class="actionButtons">
+                    <button type="button" class="btn-action" data-bs-toggle="modal" data-bs-target="#updateOperation"
+                      @click="sendIdOperation(objOperation.idOperation)"><i class="bi bi-pencil-square icon-blue"></i>
+                    </button>
+                    <button class="btn-action" data-bs-toggle="modal" data-bs-target="#deleteOperationModal"
+                      @click="showDialog(objOperation.idOperation)">
+                      <i class="bi bi-x-square-fill icon-red"></i>
+                    </button>
+                    <button type="button" class="btn btnNotes" data-bs-toggle="modal" data-bs-target="#note"
+                      data-bs-whatever="@mdo" @click="handleBtnNote(objOperation, e)">
+                      <i class="bi bi-journal-bookmark"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
 
-          <div v-else>
-            <div class="text-center my-3">
-              <div class="spinner-grow" style="width: 3rem; height: 3rem" role="status">
-                <span class="visually-hidden">Loading...</span>
+            <div v-else>
+              <div class="text-center my-3">
+                <div class="spinner-grow" style="width: 3rem; height: 3rem" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </CRow>
+      </Card>
     </div>
   </div>
 </template>
@@ -393,7 +396,8 @@ import { onMounted, ref, watch } from 'vue'
 import { getApi, postApi, deleteApi } from '@/services/apiServices'
 import { showToast } from '@/helpers/helpers.js'
 import NewOperationForm from '@/components/Forms/NewOperationForm/NewOperationForm.vue';
-import PrimaryButton from '@/components/Buttons/PrimaryButton/PrimaryButton.vue'
+import PrimaryButton from '@/components/Buttons/PrimaryButton/PrimaryButton.vue';
+import Card from '../../Card/Card.vue';
 
 const operations = ref()
 const operationsFromApi = ref([])
