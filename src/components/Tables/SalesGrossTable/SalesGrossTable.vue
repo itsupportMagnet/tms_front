@@ -194,7 +194,7 @@ import { getApi, postApi } from '../../../services/apiServices'
 // const confirmDelete = async () => {
 //   const sale_id = saleId.value;
 
-//   deleteApi(`${process.env.API}/delete/delete-sale/${sale_id}`)
+//   deleteApi(`${import.meta.env.VITE_APP_API}/delete/delete-sale/${sale_id}`)
 //     .then(() => {
 //       showToast('Sale Deleted Successfully', 'success', 'green')
 //     })
@@ -214,7 +214,7 @@ import { getApi, postApi } from '../../../services/apiServices'
 //       buySalesGross: objSalesGross[key],
 //     }
 
-//     postApi(`${process.env.API}/post/updateBuySalesGross`, updateBuy)
+//     postApi(`${import.meta.env.VITE_APP_API}/post/updateBuySalesGross`, updateBuy)
 //       .then()
 //       .catch((error) => console.log(error))
 
@@ -224,7 +224,7 @@ import { getApi, postApi } from '../../../services/apiServices'
 //       idSalesGross: objSalesGross.id,
 //       profitSalesGross: objSalesGross.profit
 //     }
-//     postApi(`${process.env.API}/post/updateProfitSalesGross`, updateProfit)
+//     postApi(`${import.meta.env.VITE_APP_API}/post/updateProfitSalesGross`, updateProfit)
 //       .then()
 //       .catch((error) => console.log(error))
 //   }
@@ -239,7 +239,7 @@ import { getApi, postApi } from '../../../services/apiServices'
 //       idSalesGross: objSalesGross.id,
 //       sellSalesGross: objSalesGross[key]
 //     }
-//     postApi(`${process.env.API}/post/updateSellSalesGross`, updateSell)
+//     postApi(`${import.meta.env.VITE_APP_API}/post/updateSellSalesGross`, updateSell)
 //       .then()
 //       .catch((error) => console.log(error))
 //   }
@@ -248,7 +248,7 @@ import { getApi, postApi } from '../../../services/apiServices'
 //     idSalesGross: objSalesGross.id,
 //     profitSalesGross: objSalesGross.profit
 //   }
-//   postApi(`${process.env.API}/post/updateProfitSalesGross`, updateProfit)
+//   postApi(`${import.meta.env.VITE_APP_API}/post/updateProfitSalesGross`, updateProfit)
 //     .then()
 //     .catch((error) => console.log(error))
 // }
@@ -279,23 +279,24 @@ onMounted(async () => {
 })
 
 const loadSaleGross = async () => {
-  try {
-    const [
+  try{
+    const[
       providersData,
       salesGrossData,
       customersData,
     ] = await Promise.all([
-      getApi(`${import.meta.env.VITE_APP_API}/get/providers`),
-      getApi(`${import.meta.env.VITE_APP_API}/get/salesGross`),
-      getApi(`${import.meta.env.VITE_APP_API}/get/clients`),
-    ])
+    getApi(`${import.meta.env.VITE_APP_API}/get/providers`),
+    getApi(`${import.meta.env.VITE_APP_API}/get/salesGross`),
+    getApi(`${import.meta.env.VITE_APP_API}/get/clients`),
+    ]);
 
     salesFromApi.value = salesGrossData.reverse();
     customers.value = customersData;
     sales.value = salesFromApi.value;
     isLoad.value = false;
     providers.value = providersData;
-  } catch (error) {
+
+  }catch(error){
     console.log(error)
   }
 }
@@ -310,7 +311,7 @@ const confirmDelete = async () => {
   deleteApi(`${import.meta.env.VITE_APP_API}/delete/delete-sale/${sale_id}`)
     .then(() => {
       showToast('Sale Deleted Successfully', 'success', 'green')
-    })
+  })
     .catch(error => {
       console.log(error);
       showToast('Contact IT', 'danger', 'red')
@@ -507,8 +508,6 @@ const statusOnChange = async (objSalesGross, e) => {
     .then()
     .catch((error) => console.log(error))
 }
-
-
 
 </script>
 

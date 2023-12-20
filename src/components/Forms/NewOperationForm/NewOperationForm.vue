@@ -522,8 +522,8 @@ watch(
     getApi(`${import.meta.env.VITE_APP_API}/get/getOperation/${props.idOperation}`)
       .then((data) => {
         operation.value = data[0]
-        if (operation.value.hazardous !== 'No') {
-          chckHazardous.value = 'Yes'
+        if (operation.value.hazardous !== 'NO') {
+          chckHazardous.value = 'YES'
           isHazardous.value = true
           slctHazardous.value = operation.value.hazardous
         } else {
