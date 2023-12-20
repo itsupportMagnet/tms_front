@@ -36,7 +36,7 @@
       </div>
     </div>
     <div class="g-4">
-      <div class="card">
+      <Card>
         <div>
           <div class="section">
             <div v-if="isLoad" class="d-flex justify-content-center my-3">
@@ -76,7 +76,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </Card>
     </div>
   </div>
 </template>
@@ -87,6 +87,7 @@ import { getApi } from '../../../services/apiServices';
 import Spinner from '../../Spinner/Spinner.vue';
 import PrimaryButton from '../../../components/Buttons/PrimaryButton/PrimaryButton.vue'
 import AddClientsForm from '../../Forms/AddClientsForm/AddClientsForm.vue';
+import Card from '../../Card/Card.vue';
 
 onMounted(async () => {
   newClientModal.value.addEventListener('hidden.bs.modal', () => {

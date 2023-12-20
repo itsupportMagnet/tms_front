@@ -1,6 +1,6 @@
 <template>
- <!-- SEARCH -->
- <div class="searchSection">
+  <!-- SEARCH -->
+  <div class="searchSection">
     <div class="searchSection__container d-flex column-gap-2">
       <!-- RELATIVE -->
       <div class="searchSection__container--form">
@@ -61,7 +61,7 @@
   </div>
 
   <main>
-    <div class="allQuotes">
+    <Card>
       <div class="sectionQuotes">
         <div class="sectionQuotes__tableContainer" v-bind="tableContainer">
           <table v-bind="tablet" v-if="quotesFromApi" class="sectionQuotes__tableContainer--table">
@@ -121,13 +121,14 @@
           </div>
         </div>
       </div>
-    </div>
+    </Card>
   </main>
 </template>
 
 <script setup>
 import { onMounted, ref, watch } from 'vue'
 import { getApi, postApi } from '../../../services/apiServices'
+import Card from '../../Card/Card.vue';
 
 const isQuotesEmpty = ref(false)
 const quotes = ref()

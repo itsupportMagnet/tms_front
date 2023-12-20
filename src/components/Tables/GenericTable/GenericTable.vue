@@ -3,7 +3,7 @@
     <div v-if="spinnerLoad" class="d-flex justify-content-center my-3">
       <Spinner />
     </div>
-    <div v-else class="card">
+    <Card>
       <div class="card__tableContainer">
         <table class="genericTable table table-hover">
           <thead class="table-header">
@@ -28,13 +28,14 @@
           </tbody>
         </table>
       </div>
-    </div>
+    </Card>
   </div>
 </template>
 
 <script setup>
 import { ref, defineProps } from 'vue'
 import Spinner from '../../Spinner/Spinner.vue';
+import Card from '../../Card/Card.vue';
 const props = defineProps(['tableData', 'columnNames', 'spinnerLoad'])
 </script>
 
