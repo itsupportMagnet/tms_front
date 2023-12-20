@@ -365,14 +365,13 @@ const handleSubmit = async (e) => {
     loadType: slctLoadType.value,
     isExport: isExport.value,
     quoteStatus: slctQuoteStatus.value,
-    cordinator: localStorage.getItem('userName')
+    cordinator:  'Testeando'        //localStorage.getItem('userName')
   }
 
   postApi(`${import.meta.env.VITE_APP_API}/createQuote`, quoteInfo)
     .then((data) => {
       if (data.message === 'ok') {
         isLoading2.value = false
-        router.push({ path: '/pricingtool/allQuotes' })
         showToast('The quote has been created successfully', 'success', 'green')
       }
     })
