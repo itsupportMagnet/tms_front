@@ -24,42 +24,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <!-- <NewOperationVue :idOperation="idOperationValue" /> -->
-          <div class="accesories-modal">
-            <div :if="accesorials">
-              <div class="carriersFee__tableContainer--carrirerFee">
-                <div class="carrier_title">
-                  <p>Provider Accesorials</p>
-                </div>
-                <div class="carrierAccesorialsContainer">
-                  <div class="carrierAccesorialsContainer__col" v-for="item in accesorials" :key="item.id">
-                    <label>
-                      <input type="checkbox" :value="item.accesorial" @change="accesorialOnChange"
-                        v-model="accesorialSelected[item.accesorial]" />
-                      {{ item.accesorial }}
-                    </label>
-                    <input v-if="accesorialSelected[item.accesorial]" class="accesorialValue" type="number"
-                      v-model="carrierAccesorialValues[item.accesorial]" @input="accesorialValuesOnChange" />
-                  </div>
-                </div>
-              </div>
-              <!-- MAGNET FEE -->
-              <div class="carriersFee__tableContainer--magnetFee">
-                <div class="magnet_title">
-                  <p>Magnet Accesorials</p>
-                </div>
-                <div class="magnetAccesorialsContainer">
-                  <div class="magnetAccesorialsContainer__col" v-for="(value, name, index) in accesorialSelected"
-                    :key="index">
-                    <label v-if="value">
-                      {{ name }}
-                      <input v-model="magnetAccesorialValues[name]" type="number" />
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <NewOperationForm :idOperation="idOperationValue" />
         </div>
       </div>
     </div>
@@ -424,7 +389,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { getApi, postApi, deleteApi } from '@/services/apiServices'
 import { showToast } from '@/helpers/helpers.js'
 import NewOperationForm from '@/components/Forms/NewOperationForm/NewOperationForm.vue';
@@ -458,6 +423,7 @@ let newOperationKey = ref(0)
 let newDoneModalKey = ref(0)
 const isAccesorialModal1 = ref(true)
 const isAccesorialModal2 = ref(false)
+const isOpenQuote = ref(false)
 const openQuoteInfo = ref();
 const closedQuoteInfo = ref();
 const salesGrossInfo = ref();
@@ -465,6 +431,8 @@ const accesorialSelected = ref({});
 const carrierAccesorialValues = ref({});
 const magnetAccesorialValues = ref({});
 const totalAccesorialValues = ref({})
+const closedQuoteBuyChassis = ref();
+const closedQuoteSellChassis = ref();
 const filterObj = ref({
   date: '',
   status: '',
@@ -472,6 +440,17 @@ const filterObj = ref({
   carrier: '',
   containerStatus: ''
 })
+
+watch(accesorialSelected.value, () => {
+  console.log("Cambio")
+  Object.entries(accesorialSelected.value).forEach(([key, value]) => {
+    if (!value) {
+      delete carrierAccesorialValues.value[key]
+      delete magnetAccesorialValues.value[key]
+    }
+  })
+});
+
 
 onMounted(async () => {
   loadAllOperations();
@@ -513,6 +492,15 @@ onMounted(async () => {
     carrierAccesorialValues.value = {};
     magnetAccesorialValues.value = {};
     totalAccesorialValues.value = {};
+
+    watch(accesorialSelected.value, () => {
+      Object.entries(accesorialSelected.value).forEach(([key, value]) => {
+        if (!value) {
+          delete carrierAccesorialValues.value[key]
+          delete magnetAccesorialValues.value[key]
+        }
+      })
+    });
   })
 })
 
@@ -611,6 +599,7 @@ const filterContainerStatus = operation => {
 
 const sendIdOperation = (id) => {
   idOperationValue.value = id
+  console.log("id :" + id)
 }
 
 const americanFormatDate = (dateString) => {
@@ -767,7 +756,7 @@ const copyHtmlBtnContainerStatus = () => {
   }
 }
 
-function getMonthName(monthNumber) {
+const getMonthName = (monthNumber) => {
   const months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY",
     "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"]
   return months[monthNumber]
@@ -799,6 +788,7 @@ const feedingOperationTableModal = (objOperation, e) => {
       const selectedIdOpenQuote = {
         id: objOperation.quoteID
       }
+      isOpenQuote.value = false
 
       getApi(`${import.meta.env.VITE_APP_API}/get/get-normal-quote/${selectedIdOpenQuote.id}`)
         .then((data) => {
@@ -835,10 +825,12 @@ const feedingOperationTableModal = (objOperation, e) => {
         id: objOperation.quoteID
       }
 
+      isOpenQuote.value = true
       getApi(`${import.meta.env.VITE_APP_API}/get/get-florida-quote/${selectedClosedQuote.id}`)
-        .then((data) => (
+        .then((data) => {
           closedQuoteInfo.value = data
-        ))
+
+        })
         .catch((error) => console.log(error))
 
       modalInfo.value = {
@@ -908,7 +900,7 @@ const closeAccesorialModal = () => {
 }
 
 const deleteOperation = async (idOperation) => {
-  deleteApi(`${import.meta.env.VITE_APP_API}/deleteOperation/${idOperation}`)
+  deleteApi(`${import.meta.env.VITE_APP_API}/delete/deleteOperation/${idOperation}`)
     .then(() => {
       loadAllOperations()
       showToast('Operation deleted succesfully', 'success', 'green')
@@ -919,7 +911,7 @@ const deleteOperation = async (idOperation) => {
     })
 }
 
-function resetNewOperation() {
+const resetNewOperation = () => {
   newOperationKey.value++;
 }
 
@@ -932,22 +924,23 @@ const confirmDelete = async () => {
 }
 
 const handleContinueClickBtn = async () => {
-  const currentDate = new Date()
-  loadAllOperations()
+  const currentDate = new Date();
+
+  loadAllOperations();
   if (idQuoteModal.value.includes('MGT')) {
     sumAccesorialValues()
     const customerDrayageNumber = parseFloat(openQuoteInfo.value.magnetFee)
     const carrierDrayageNumber = parseFloat(openQuoteInfo.value.carrierFee)
     const carrierChassisNumber = parseFloat(openQuoteInfo.value.carrierChassis)
     const magnetChassisNumber = parseFloat(openQuoteInfo.value.magnetChassis)
-    const totalAccesorialCharges = calculateTotalAccesorialCharges(totalAccesorialValues.value)
+    const totalAccesorialCharges = calculateTotalAccesorialCharges(magnetAccesorialValues.value)
     const totalCarrierCharges = sumCarrierAccesorialValues();
     const totalMagnetCharges = sumMagnetAccesorialValues();
-    const totalChassisCharges = carrierChassisNumber + magnetChassisNumber
+    const totalChassisCharges = magnetChassisNumber
     const buyCalculatedNumber = carrierDrayageNumber + totalCarrierCharges + carrierChassisNumber
     const sellCalculatedNumber = customerDrayageNumber + totalMagnetCharges + magnetChassisNumber
     const profitCalculatedNumber = sellCalculatedNumber - buyCalculatedNumber
-    modalInfo.value.totalCharges = `Drayage: $${openQuoteInfo.value.totalFee} + Chassis: $${totalChassisCharges} + ${printTotalCharges(totalAccesorialValues.value)}`
+    modalInfo.value.totalCharges = `Drayage: $${openQuoteInfo.value.magnetFee} + Chassis: $${totalChassisCharges} ${printTotalCharges(magnetAccesorialValues.value)}`
     modalInfo.value.totalAmount = `$${customerDrayageNumber + totalAccesorialCharges + totalChassisCharges}`
 
     const toSalesGrossFromNormalQuotes = {
@@ -960,6 +953,10 @@ const handleContinueClickBtn = async () => {
       sell: sellCalculatedNumber,
       profit: profitCalculatedNumber,
       date: getMonthName(currentDate.getMonth()),
+      carrierAccesorials: JSON.stringify(carrierAccesorialValues.value),
+      magnetAccesorials: JSON.stringify(magnetAccesorialValues.value),
+      buyChassis: carrierChassisNumber,
+      sellChassis: magnetChassisNumber
     }
 
     if (salesGrossInfo.value.some(item => item.operation_id === modalInfo.value['ID Operation'])) {
@@ -973,17 +970,26 @@ const handleContinueClickBtn = async () => {
     }
 
   } else {
-    sumAccesorialValues()
+    if (!closedQuoteBuyChassis.value || closedQuoteBuyChassis.value === '0') {
+      showToast('Please Add Buy Chassis Value', 'danger', 'red')
+      return
+    }
+    if (!closedQuoteSellChassis.value || closedQuoteSellChassis.value === '0') {
+      showToast('Please add Sell Chassis Value', 'danger', 'red')
+      return
+    }
+    sumAccesorialValues();
     const customerDrayageNumber = convertToNumber(closedQuoteInfo.value.customerDrayage)
     const carrierDrayageNumber = convertToNumber(closedQuoteInfo.value.carrierDrayage)
-    const totalAccesorialCharges = calculateTotalAccesorialCharges(totalAccesorialValues.value)
+    const closedChassisNumber = convertToNumber(closedQuoteSellChassis.value)
+    const totalAccesorialCharges = calculateTotalAccesorialCharges(magnetAccesorialValues.value)
     const totalCarrierCharges = sumCarrierAccesorialValues();
     const totalMagnetCharges = sumMagnetAccesorialValues();
-    const buyCalculatedNumber = carrierDrayageNumber + totalCarrierCharges
-    const sellCalculatedNumber = customerDrayageNumber + totalMagnetCharges
+    const buyCalculatedNumber = carrierDrayageNumber + totalCarrierCharges + convertToNumber(closedQuoteBuyChassis.value)
+    const sellCalculatedNumber = customerDrayageNumber + totalMagnetCharges + convertToNumber(closedQuoteSellChassis.value)
     const profitCalculatedNumber = sellCalculatedNumber - buyCalculatedNumber
-    modalInfo.value.totalCharges = `Drayage: ${closedQuoteInfo.value.customerDrayage} + ${printTotalCharges(totalAccesorialValues.value)}`
-    modalInfo.value.totalAmount = `$${customerDrayageNumber + totalAccesorialCharges}`
+    modalInfo.value.totalCharges = `Drayage: ${closedQuoteInfo.value.customerDrayage} + Chassis: $${closedQuoteSellChassis.value} ${printTotalCharges(magnetAccesorialValues.value)}`
+    modalInfo.value.totalAmount = `$${customerDrayageNumber + totalAccesorialCharges + closedChassisNumber}`
     const toSalesGrossFromFloridaQuotes = {
       operationId: modalInfo.value['ID Operation'],
       bookingBl: modalInfo.value['Booking/BL'],
@@ -994,6 +1000,10 @@ const handleContinueClickBtn = async () => {
       sell: sellCalculatedNumber,
       profit: profitCalculatedNumber,
       date: getMonthName(currentDate.getMonth()),
+      carrierAccesorials: JSON.stringify(carrierAccesorialValues.value),
+      magnetAccesorials: JSON.stringify(magnetAccesorialValues.value),
+      buyChassis: closedQuoteBuyChassis.value,
+      sellChassis: closedQuoteSellChassis.value
     }
 
     if (salesGrossInfo.value.some(item => item.operation_id === modalInfo.value['ID Operation'])) {
@@ -1033,13 +1043,22 @@ const sumMagnetAccesorialValues = () => {
 }
 
 const sumAccesorialValues = () => {
-  for (const key in carrierAccesorialValues.value) {
-    if (Object.prototype.hasOwnProperty.call(carrierAccesorialValues.value, key)) {
-      let sum = carrierAccesorialValues.value[key] || 0;
-      if (magnetAccesorialValues.value[key]) {
-        sum += magnetAccesorialValues.value[key]
-      }
-      totalAccesorialValues.value[key] = sum;
+  // for (const key in carrierAccesorialValues.value) {
+  //   if (Object.prototype.hasOwnProperty.call(carrierAccesorialValues.value, key)) {
+  //     let sum = carrierAccesorialValues.value[key] || 0;
+  //     if (magnetAccesorialValues.value[key]) {
+  //       sum += magnetAccesorialValues.value[key] || 0;
+  //     }
+  //     totalAccesorialValues.value[key] = sum;
+  //   }
+  // }
+  // return totalAccesorialValues;
+  // Dejo la funcion en caso de volver a utilizarla a futuro, esta suma los valores de buy y sell
+
+  for (const key in magnetAccesorialValues.value) {
+    console.log(key);
+    if (Object.prototype.hasOwnProperty.call(magnetAccesorialValues.value, key)) {
+      totalAccesorialValues.value[key] = magnetAccesorialValues.value[key] || 0
     }
   }
   return totalAccesorialValues;
@@ -1048,9 +1067,9 @@ const sumAccesorialValues = () => {
 const printTotalCharges = (accesorialList) => {
   let formattedString = '';
   Object.entries(accesorialList).forEach(([key, value]) => {
-    formattedString += `${key} = $${value}, `;
+    formattedString += `+ ${key} = $${value} `;
   });
-  formattedString = formattedString.slice(0, -2)
+
   return formattedString;
 }
 
