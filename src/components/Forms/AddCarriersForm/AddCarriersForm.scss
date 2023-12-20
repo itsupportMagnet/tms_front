@@ -1,0 +1,88 @@
+@import '../../../styles/global.scss';
+@import '../../../styles/mixin.scss';
+
+.container-fluid {
+    background-color: #fff;
+    padding: 2rem;
+    border: 1px solid #d2d2d5;
+    border-radius: 5px;
+    @media (min-width:1920px){
+      margin-bottom: 12rem;
+    }
+  }
+  
+  .row {
+    margin-bottom: 1.5rem;
+  
+    .btnAdd {
+      display: flex;
+      align-content: center;
+      padding: 0px 13px;
+      background-color: $primary;
+      border: none;
+      font-size: 1.8rem;
+      color: $whiteColor;
+      border-radius: 50px;
+  
+      &:hover {
+        background-color: #0732ab;
+      }
+    }
+  
+    .btnBox {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+  
+    .btnSubmit_box {
+      margin-top: 2rem;
+      display: flex;
+      justify-content: center;
+      .btnSubmit {
+        background: $primary;
+        color: #fff;
+        border: none;
+        position: relative;
+        height: 40px;
+        font-size: 1.2rem;
+        padding: 0 3rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 250ms ease all;
+        outline: none;
+        border-radius: 5px;
+  
+        &:hover {
+          background: #fff;
+          color: $primary;
+        }
+  
+        &:before,
+        &:after {
+          content: '';
+          position: absolute;
+          top: 0;
+          right: 0;
+          height: 2px;
+          width: 0;
+          background: $primary;
+          transition: 400ms ease all;
+        }
+  
+        &:after {
+          right: inherit;
+          top: inherit;
+          left: 0;
+          bottom: 0;
+        }
+  
+        &:hover:before,
+        &:hover:after {
+          width: 100%;
+          transition: 800ms ease all;
+        }
+      }
+    }
+  
+  }

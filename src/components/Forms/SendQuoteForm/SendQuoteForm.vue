@@ -1,7 +1,7 @@
 <template>
 <main class="main">
     <div class="d-flex justify-content-center toast1" v-if="showError">
-      <ToastCoreUI :title="showMessage" :color="showColor" />
+      <!-- <ToastCoreUI :title="showMessage" :color="showColor" /> -->
     </div>
 
     <div class="container main-container sendQuote">
@@ -21,7 +21,7 @@
         <div id="to-convert">
           <header class="quoteContainer__header">
             <div style="display: flex; justify-content: center" class="quoteContainer__header--imgContanier">
-              <img width="150" src="../../../public/magnet-logo.png" alt="logo" />
+              <img width="150" src="../../../../public/logo-black.png" alt="logo" />
             </div>
             <div style="
                 margin-top: 40px;
@@ -93,7 +93,7 @@
               </div>
 
               <div class="locationSection">
-                <img class="locationSection--img" style="width: 120px" src="../../../public/magnet-truck.png"
+                <img class="locationSection--img" style="width: 120px" src="../../../../public/magnet-truck.png"
                   alt="magnet truck" />
                 <h3 class="mt-2 locationsDetails__box--text" style="
                     font-size: 1.1rem;
@@ -603,6 +603,282 @@
 </template>
 
 <script setup>
+
+import { ref, onMounted } from 'vue'
+import Spin from '../../Spinner/Spinner.vue';
+import 'mosha-vue-toastify/dist/style.css'
+import { showToast } from '@/helpers/helpers.js'
+import { getApi } from '../../../services/apiServices';
+import ButtonSubmit from '../../../components/Buttons/ButtonSubmit/ButtonSubmit.vue'
+import html2pdf from 'html2pdf.js'
+
+const inptId = ref('')
+const quote = ref('')
+const allAccesorials = ref('')
+const clientEmailsList = ref([])
+const userName = ref(localStorage.getItem('userName'))
+const customer = ref('')
+const miles = ref(0)
+const inptChassisType = ref('Chassis')
+const drayageQuantity = ref(1)
+const chassisQuantity = ref(1)
+// const inptSubjectEmail = ref('');
+const totalDrayage = ref()
+const totalChassis = ref()
+const totalDrayageToSend = ref()
+const totalChassisToSend = ref()
+const totalAccesorials = ref({})
+const totalFeeToSent = ref()
+const isLoading1 = ref(false)
+const isLoading2 = ref(false)
+const hasError = ref(false)
+// const isAnyEmailEmpty = ref(false);
+const showError = ref(false)
+const showMessage = ref('')
+const showColor = ref('')
+const customers = ref('')
+// const slctCustomerEmails = ref('')
+const pdfContent = ref(null)
+
+onMounted(async () => {
+  getApi(`${import.meta.env.VITE_APP_API}/get/clients`)
+    .then((data) => {
+      customers.value = data
+    })
+    .catch((error) => console.log(error))
+})
+
+const handleIdSubmit = async (e) => {
+  showError.value = false
+  e.preventDefault()
+  isLoading1.value = true
+
+  if (inptId.value.trim() === '') {
+    isLoading1.value = false
+    showToast("Input quote's in blank", 'danger', 'red')
+    hasError.value = true
+    return
+  }
+
+  const idValue = inptId.value.toUpperCase()
+  
+  getApi(`${import.meta.env.VITE_APP_API}/get/quotes-fees/${idValue}`)
+    .then((data) => {
+      if (Object.keys(data).length === 0) {
+        isLoading1.value = false
+        showToast("There's no fee on this quote", 'danger', 'red')
+        return
+      }
+      getApi(`${import.meta.env.VITE_APP_API}/get/accesorials`)
+        .then((data) => (allAccesorials.value = data))
+        .catch((error) => console.log(error))
+      isLoading1.value = false
+      
+      quote.value = getCheapestFee(data)
+
+      // totalChassis.value = (
+      //   parseFloat(quote.value.magnetChassis) +
+      //   parseFloat(quote.value.carrierChassis)
+      // ).toFixed(2)
+
+
+      totalDrayage.value = parseFloat(quote.value.magnetFee).toFixed(2);
+      totalChassis.value = parseFloat(quote.value.magnetChassis).toFixed(2);
+      
+      totalDrayageToSend.value = parseFloat(quote.value.magnetFee).toFixed(2)
+      totalChassisToSend.value = parseFloat(quote.value.magnetChassis).toFixed(2)
+      // totalChassisToSend.value = (
+      //   parseFloat(quote.value.magnetChassis) +
+      //   parseFloat(quote.value.carrierChassis)
+      // ).toFixed(2)
+
+      totalFeeToSent.value = (
+        parseFloat(totalDrayageToSend.value) +
+        parseFloat(totalChassisToSend.value)
+      ).toFixed(2)
+
+      totalAccesorials.value = quote.value.magnetAccesorials
+
+      // for (const item in quote.value.carrierAccesorials) {
+      //   if (quote.value.carrierAccesorials.hasOwnProperty(item)) {
+      //     totalAccesorials.value[item] =
+      //       (quote.value.carrierAccesorials[item] || 0) +
+      //       (quote.value.magnetAccesorials[item] || 0)
+      //   }
+      // }
+    })
+    .catch((error) => {
+      console.log(error)
+      showToast(
+        'Something went wrong, please, contact somebody from IT departament',
+        'danger',
+        'red',
+      )
+    })
+}
+
+const customerOnChange = (e) => {
+  const customerEmails = customers.value.filter(
+    (i) => i.customer_name === e.target.value,
+  )
+  clientEmailsList.value = customerEmails[0].customer_email
+}
+
+const drayageQuantityOnChange = () => {
+  totalDrayageToSend.value = (
+    parseFloat(totalDrayage.value) * drayageQuantity.value
+  ).toFixed(2)
+  totalFeeToSent.value = (
+    parseFloat(totalDrayageToSend.value) + parseFloat(totalChassisToSend.value)
+  ).toFixed(2)
+}
+
+const chassisQuantityOnChange = () => {
+  totalChassisToSend.value = (
+    parseFloat(totalChassis.value) * chassisQuantity.value
+  ).toFixed(2)
+  totalFeeToSent.value = (
+    parseFloat(totalDrayageToSend.value) + parseFloat(totalChassisToSend.value)
+  ).toFixed(2)
+}
+
+const getCheapestFee = (carriersArray) => {
+  if (carriersArray.length === 0)
+    return null
+  const lowestFee = carriersArray.reduce((el, acc) => {
+    return el.carrierFee > acc.carrierFee ? acc : el
+  })
+  return lowestFee
+}
+
+// const addEmailInput = () => {
+//   const inptBox = document.querySelector('.emailInputContainer__box')
+//   const inpt = document.createElement('input')
+//   inpt.classList.add('inptEmail', 'mb-2', 'py-2')
+//   inpt.placeholder = 'example@domine.com'
+//   inptBox.appendChild(inpt)
+// }
+
+// const readAllEmails = () => {
+//   isAnyEmailEmpty.value = false
+//   const inputElements = document.querySelectorAll('.inptEmail')
+
+//   inputElements.forEach((i) => {
+//     if (!i.value) {
+//       isAnyEmailEmpty.value = true
+//       return
+//     }
+
+//     clientEmailsList.value.push(i.value)
+//   })
+// }
+
+// const sendQuoteFee = async () => {
+//   if (checkEmptyInputs()) {
+//     quote.value.userName = userName.value
+//     quote.value.miles = miles.value
+//     quote.value.drayageQuantity = drayageQuantity.value
+//     quote.value.drayageUnitPrice = quote.value.totalFee
+//     quote.value.drayageTotalConcept = totalDrayageToSend.value
+//     quote.value.chassisType = inptChassisType.value
+//     quote.value.chassisQuantity = chassisQuantity.value
+//     quote.value.chassisUnitPrice = totalChassis.value
+//     quote.value.chassisTotalConcept = totalChassisToSend.value
+//     quote.value.totalFeeToSend = totalFeeToSent.value
+//     quote.value.accesorialsWithFee = totalAccesorials.value
+//     quote.value.accesorialsList = allAccesorials.value
+//     // quote.value.emailSubject = inptSubjectEmail.value;
+//     quote.value.client = customer.value
+//     quote.value.clientEmailsList = slctCustomerEmails.value
+//     delete quote.value.totalFee
+//     const newQuoteInfo = JSON.parse(JSON.stringify(quote.value))
+
+//     postApi(`${import.meta.env.VITE_APP_API}/post/send-fee`, newQuoteInfo)
+//       .then((data) => {
+//         if (data.message === 'ok') {
+//           isLoading2.value = false
+//           window.location.href =
+//             'http://www.magnetlogisticscorp.com/quote-sent/'
+//         } else {
+//           isLoading2.value = false
+//           showToast(
+//             'Something went wrong, please, contact somebody from IT departament',
+//             'danger',
+//             'red',
+//           )
+//         }
+//       })
+//       .catch((error) => {
+//         console.log(error)
+//       })
+//   }
+// }
+
+const checkEmptyInputs = () => {
+  showError.value = false
+  isLoading2.value = true
+  // readAllEmails()
+  // const numberRegex = /^[1-9]+$/;
+
+  if (!userName.value || !miles.value) {
+    showToast('Please, fill out all the inputs', 'danger', 'red')
+    isLoading2.value = false
+    return false
+  }
+
+  isLoading2.value = false
+  return true
+
+  // if (!numberRegex.test(miles.value) || miles.value === 0) {
+
+  //   showToast("Please, enter whole numbers", "danger", "red")
+  //   isLoading2.value = false;
+  //   return;
+  // }
+
+  // if (isAnyEmailEmpty.value) {
+  //   showToast("Please, write down all the email clients", "danger", "red")
+  //   isLoading2.value = false
+  //   return
+  // }
+}
+
+const generatePdf = () => {
+  if (checkEmptyInputs()) {
+    const elementToConvert = document.getElementById('to-convert')
+    const options = {
+      margin: 10,
+      filename: 'New-quotation.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: 'avoid-all' },
+    }
+    options.jsPDF.format = [210, 600]
+    html2pdf().from(elementToConvert).set(options).save()
+  }
+}
+
+const getTodaysDate = () => {
+  const actualDate = new Date()
+  const mon = String(actualDate.getMonth() + 1).padStart(2, '0')
+  const day = String(actualDate.getDate()).padStart(2, '0')
+  const year = actualDate.getFullYear()
+  return `${mon}/${day}/${year}`
+}
+
+const getDateOneMonthLater = (date) => {
+  const parts = date.split('/')
+  const month = parseInt(parts[0])
+  const day = parseInt(parts[1])
+  const year = parseInt(parts[2])
+  const currentDate = new Date(year, month - 1, day)
+  currentDate.setMonth(currentDate.getMonth() + 1)
+  const newMonth = String(currentDate.getMonth() + 1).padStart(2, '0')
+  const newDay = String(currentDate.getDate()).padStart(2, '0')
+  const newYear = currentDate.getFullYear()
+  return `${newMonth}/${newDay}/${newYear}`
+}
 
 </script>
 

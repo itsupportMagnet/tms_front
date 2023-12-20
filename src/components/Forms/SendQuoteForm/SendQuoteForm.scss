@@ -1,0 +1,503 @@
+@import '../../../styles/global.scss';
+@import '../../../styles/mixin.scss';
+
+.mosha__toast__content__text {
+    font-size: 20px;
+  }
+  
+  .main{
+    padding : 20px;
+    @media (min-width: 1200px){
+      margin-bottom: 30rem !important;
+    }
+    @media (min-width: 1920px){
+      margin-bottom: 28rem !important;
+    }
+  }
+  
+  .main-container {
+    background-color: #fff;
+    border-radius: 5px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+  }
+  
+  .sendQuote {
+    
+    padding: 0.75rem;
+  
+    @media (min-width: $breakpoint_md) {
+      padding: 1.5rem 2.5rem;
+    }
+  
+    &__iconGoBack {
+      @include icon;
+    }
+  
+    &__title {
+      @include title;
+    }
+  
+    &__subtitle {
+      @include subtitle;
+    }
+  
+    &__form {
+      
+  
+      &--labelId {
+        @include label;
+      }
+  
+      &--inputId {
+        @include input;
+      }
+  
+      &--btnSubmit {
+        margin-top: 0.75rem;
+      }
+  
+      &--spinner {
+        display: flex;
+        justify-content: space-between;
+        margin: 2.5rem 0;
+      }
+    }
+  
+    .quoteContainer {
+      padding: 0.75rem;
+      margin-top: 1.25rem;
+      border-width: 4px;
+      border-color: #000000;
+      border-style: solid;
+  
+      &__header {
+        &--imgContanier {
+          display: flex;
+          justify-content: center;
+        }
+  
+        &--headerInfo {
+          margin-top: 3rem;
+          font-size: 0.875rem;
+          line-height: 1.25rem;
+  
+          p:not(:last-child) {
+            margin-bottom: 0.75rem;
+          }
+  
+          input {
+            @include input;
+            padding-left: 0.25rem;
+            margin-left: 0.5rem;
+            width: 66.666667%;
+  
+            @media (min-width: 768px) {
+              width: 30%;
+            }
+          }
+  
+          .customer-section {
+            display: flex;
+            align-items: center;
+  
+            .select {
+              background-color: $whiteColor;
+              border: none;
+              border: 1px solid #b8b8b8;
+              border-radius: 5px;
+              padding: 10px;
+              margin-left: 5px;
+            }
+          }
+  
+  
+          @media (min-width: 768px) {
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+            padding-left: 1.25rem;
+            padding-right: 1.25rem;
+          }
+        }
+      }
+  
+      &__main {
+        // margin-top: 2rem;
+  
+        &--locationsDetails {
+          display: flex;
+          padding: 1.5rem 0;
+          flex-direction: column;
+          gap: 2.5rem;
+          justify-content: space-evenly;
+          align-items: center;
+          border-width: 4px;
+          border-color: #9ca3af;
+          text-align: center;
+  
+          @media (min-width: 768px) {
+            flex-direction: row;
+            gap: 0;
+            font-size: 1.25rem !important;
+            line-height: 1.75rem;
+          }
+  
+          .locationsDetails__box {
+            // flex-basis: 33.33%;
+  
+            &--icon {
+              font-size: 2.25rem;
+              line-height: 2.5rem;
+            }
+  
+            &--text {
+              // font-size: 1.3rem;
+              // margin-top: 0.75rem;
+              // text-align: center;
+            }
+          }
+  
+          .locationSection {
+            display: flex;
+            flex-basis: 33.333333%;
+            flex-direction: column;
+            align-items: center;
+  
+            &--img {
+              // width: 9rem;
+  
+              @media (min-width: 768px) {
+                width: 10rem;
+              }
+            }
+  
+            .inptMiles {
+              text-align: center;
+              @include input;
+            }
+          }
+        }
+  
+        &--shipmentDetails {
+          // margin-top: 2.5rem;
+  
+          .cardTitle {
+            padding: 0.25rem;
+            font-size: 1.125rem;
+            line-height: 1.75rem;
+            text-align: center;
+            background-color: $primary;
+            color: white;
+            border: 1px solid white;
+  
+            @media (min-width: 768px) {
+              font-size: 1.5rem;
+              line-height: 2rem;
+            }
+          }
+  
+          .sendTable {
+            width: 100%;
+            // margin-top: 2.5rem;
+  
+            .sendTr:not(:first-child) {
+              padding-top: 10px;
+            }
+  
+            .sendTr {
+              .sendTh {
+                // background-color: $primary;
+                // width: 15%;
+                // padding: 5px 10px 5px 0;
+                // text-align: center;
+                // color: white;
+                // border: 1px solid white;
+              }
+  
+              .sendTd {
+                // padding-left: 7px;
+                // font-weight: 500;
+                // border: 1px solid rgb(189, 189, 189);
+              }
+            }
+          }
+        }
+  
+        &--priceDetails {
+          // margin-top: 2.5rem;
+  
+          .cartTitle {
+            // padding: 0.25rem;
+            // font-size: 1.125rem;
+            // line-height: 1.75rem;
+            // text-align: center;
+            // background-color: $primary;
+            // color: white;
+            // border: 1px solid white;
+  
+            // @media (min-width: 768px) {
+            //   font-size: 1.5rem;
+            //   line-height: 2rem;
+            // }
+          }
+  
+  
+  
+          .priceTable {
+            // margin-top: 2.5rem;
+            // width: 100%;
+            // text-align: center;
+  
+            tr {
+              display: flex;
+              font-size: 0.875rem;
+              line-height: 1.25rem;
+  
+              td {
+                flex-basis: 33.33%;
+  
+                input {
+                  text-align: center;
+                  border-radius: 0.25rem;
+                }
+              }
+  
+              @media (min-width: 768px) {
+                font-size: 1.125rem;
+                line-height: 1.75rem;
+              }
+            }
+  
+            .trHead {
+              // gap: 0.5rem;
+              // font-weight: 600;
+            }
+  
+            .drayageConcept {
+              // margin-top: 0.25rem;
+  
+              input {
+                width: 75%;
+                text-align: center;
+  
+  
+                @media (min-width: 768px) {
+                  width: 50%;
+                }
+  
+              }
+            }
+  
+            .chassisConcept {
+              // margin-top: 0.5rem;
+  
+              .tdChassis {
+                input {
+                  width: 100%;
+                }
+  
+                @media (min-width: 768px) {
+                  input {
+                    width: 40%;
+                  }
+                }
+  
+  
+              }
+  
+              input {
+                width: 75%;
+                text-align: center;
+  
+  
+                @media (min-width: 768px) {
+                  width: 50%;
+                }
+  
+  
+              }
+            }
+          }
+  
+          .totalPriceContainer {
+            // display: flex;
+            // align-items: center;
+            // margin-top: 4rem;
+            // gap: 1.25rem;
+            // justify-content: flex-end;
+            // width: 100%;
+            // font-size: 1.25rem;
+            // line-height: 1.75rem;
+  
+            .totalPriceTitle {
+              // font-size: 1.7rem;
+              // font-weight: 600;
+            }
+  
+  
+            .totalPrice {
+              // border-top: solid 6px;
+              // border-color: #9CA3AF;
+              // width: 18rem;
+              // font-weight: 600;
+              // text-align: center;
+            }
+  
+          }
+        }
+  
+        &--mayApplyDetails {
+          // margin-top: 2.5rem;
+  
+          .cartTitle {
+            // padding: 0.25rem;
+            // font-size: 1.125rem;
+            // line-height: 1.75rem;
+            // text-align: center;
+            // background-color: $primary;
+            // color: white;
+            // border: 1px solid white;
+  
+            // @media (min-width: 768px) {
+            //   font-size: 1.5rem;
+            //   line-height: 2rem;
+            // }
+          }
+  
+          .accesorialContainer {
+            // display: flex;
+            // flex-wrap: wrap;
+            // margin-top: 1rem;
+            // justify-content: space-evenly;
+  
+            &__accesorialColumn {
+              // margin-top: 1rem;
+              // text-align: center;
+              // flex-basis: 25%;
+              // font-size: 1.2rem;
+              // font-weight: 600;
+            }
+          }
+  
+          .noValueAccesorialsList {
+            // margin-top: 2.5rem;
+            // text-align: center;
+            // display: flex;
+            // flex-wrap: wrap;
+            // justify-content: center;
+            // column-gap: .5rem;
+  
+            // p {
+            //   width: 50%;
+            // }
+  
+            // @media (min-width: 768px) {
+            //   p {
+            //     margin-top: 0.5rem;
+            //     flex-basis: 20%;
+            //   }
+            // }
+          }
+        }
+  
+        &--remarksDetails {
+          // margin-top: 2.5rem;
+  
+          .cardTitle {
+            // padding: 0.25rem;
+            // font-size: 1.125rem;
+            // line-height: 1.75rem;
+            // text-align: center;
+            // background-color: $primary;
+            // color: white;
+  
+            // @media (min-width: 768px) {
+            //   font-size: 1.5rem;
+            //   line-height: 2rem;
+            // }
+          }
+  
+          .cardDescription {
+            // margin-top: 2.5rem;
+          }
+        }
+      }
+    }
+  
+    .emailInputContainer {
+      display: flex;
+      flex-direction: column;
+  
+      &__box {
+        display: flex;
+        margin-top: 1.25rem;
+        flex-direction: column;
+  
+        label {
+          @include label;
+        }
+  
+        label:not(:first-child) {
+          margin-top: 1rem;
+        }
+  
+        input {
+          @include input;
+        }
+      }
+  
+  
+      .btnAddEmail {
+        margin: 20px auto 20px auto;
+        padding: 1px 15px;
+        border-radius: 40px;
+        border: none;
+        color: #fff;
+        font-size: 2rem;
+        width: fit-content;
+        height: fit-content;
+        background-color: $primaryBtnColor;
+  
+        &:hover {
+          background-color: #3477e4;
+        }
+      }
+  
+      .customerSlct-container{
+        margin-top: .8rem;
+        .slct_customerEmails{
+          width: 100%;
+        }
+      }
+      
+  
+      .btnSubmit {
+        margin-top: 1rem;
+        padding: 0.5rem 2rem;
+        border: none;
+        border-radius: 0.375rem;
+        border-width: 2px;
+        border-color: #10b981;
+        font-weight: 500;
+        color: #ffffff;
+        background-color: #10b981;
+        cursor: pointer;
+  
+        &:hover {
+          border-color: #059669;
+          color: #ffffff;
+          background-color: #059669;
+        }
+      }
+    }
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  .toast1 {
+    top: 0;
+    margin-bottom: 2rem;
+  }
