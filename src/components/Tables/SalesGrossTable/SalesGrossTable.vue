@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="main">
       <div class="filter-container">
         <div class="d-flex">
           <div class="animate__animated animate__flipInX filter-container__box">
