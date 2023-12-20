@@ -42,17 +42,21 @@
 
         <!-- First Modal Before Continue Button -->
         <div class="modal-body" v-if="isAccesorialModal1">
+
           <div class="accesories-modal">
             <div :if="accesorials">
               <div class="carriersFee__tableContainer--carrirerFee">
                 <div class="carrier_title">
                   <p>Buy Accesorials</p>
                 </div>
+                <div class="chassisInputContainer" v-if="isOpenQuote">
+                  <label class="chassisInputContainer__label">Buy Chassis:</label>
+                  <input v-model="closedQuoteBuyChassis" type="Number" placeholder="Add Buy Chassis Value" />
+                </div>
                 <div class="carrierAccesorialsContainer">
                   <div class="carrierAccesorialsContainer__col" v-for="item in accesorials" :key="item.id">
                     <label>
-                      <input type="checkbox" :value="item.accesorial" @change="accesorialOnChange"
-                        v-model="accesorialSelected[item.accesorial]" />
+                      <input type="checkbox" :value="item.accesorial" v-model="accesorialSelected[item.accesorial]" />
                       {{ item.accesorial }}
                     </label>
                     <input v-if="accesorialSelected[item.accesorial]" class="accesorialValue" type="number"
@@ -64,6 +68,10 @@
               <div class="carriersFee__tableContainer--magnetFee">
                 <div class="magnet_title">
                   <p>Sell Accesorials</p>
+                </div>
+                <div class="chassisInputContainer" v-if="isOpenQuote">
+                  <label class="chassisInputContainer__label">Sell Chassis:</label>
+                  <input v-model="closedQuoteSellChassis" type="Number" placeholder="Add Sell Chassis Value" />
                 </div>
                 <div class="magnetAccesorialsContainer">
                   <div class="magnetAccesorialsContainer__col" v-for="(value, name, index) in accesorialSelected"
@@ -80,7 +88,6 @@
         </div>
 
         <!-- Second Modal After Continue Button -->
-
         <div class="modal-body modal-done-status" v-if="isAccesorialModal2">
           <table v-if="modalInfo">
             <tr v-for="(item, index) in modalInfo" style="border: 1px solid #000" :key="index">
@@ -1092,4 +1099,5 @@ const calculateTotalAccesorialCharges = (accesorialList) => {
 
 <style lang="scss" scoped>
 @import './AllOperations.scss';
+@import '../../Forms/AddQuoteFeeForm/AddQuoteFeeForm.scss'
 </style>
