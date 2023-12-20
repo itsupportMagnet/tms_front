@@ -1,5 +1,5 @@
 <template>
-<div class="container-fluid">
+  <div class="container-fluid">
     <div class="row">
       <div class="col-4">
         <label for="carrierId" class="form-label">ID</label>
@@ -175,6 +175,28 @@ const handleSubmit = () => {
   const regexZipcode = /(^\d{5}$)|(^\d{5}-\d{4}$)/; //Regex de Zipcode USA
   const emailRegex = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/
 
+  if (
+    !inptName.value ||
+    !inptMc.value ||
+    !inptDot.value ||
+    !inptW2.value ||
+    !inptAddress.value ||
+    !inptZipcode.value ||
+    !slctState.value ||
+    !inptDoct.value ||
+    !slctBline.value ||
+    !inptCarrierType.value
+  ) {
+    showToast('Please, fill out all the inputs', 'danger', 'red');
+    return
+  }
+
+  if (!regexZipcode.test(inptZipcode.value.trim())) {
+    showToast('Please enter a US valid Zipcode', 'danger', 'red')
+    isValidZipcode.value = false;
+    return
+  }
+
   phoneInpts.forEach(i => {
     if (!i.value) {
       showToast('Please, fill out Carrier Phone', 'danger', 'red');
@@ -194,7 +216,7 @@ const handleSubmit = () => {
       return;
     }
 
-    if(!emailRegex.test(i.value.trim())){
+    if (!emailRegex.test(i.value.trim())) {
       isValidEmail.value = false
       return
     }
@@ -204,33 +226,11 @@ const handleSubmit = () => {
 
   })
 
-  if(!isValidEmail.value){
+  if (!isValidEmail.value) {
     showToast("Please use a valid Email", "danger", "red")
     return
   }
 
-  if (
-    !inptName.value ||
-    !inptMc.value ||
-    !inptDot.value ||
-    !inptW2.value ||
-    !inptAddress.value ||
-    !inptZipcode.value ||
-    !slctState.value ||
-    !inptDoct.value ||
-    !slctBline.value ||
-    !inptCarrierType.value
-  ) {
-    showToast('Please, fill out all the inputs', 'danger', 'red');
-    return
-  }
-
-  if (!regexZipcode.test(inptZipcode.value.trim())) {
-    showToast('Please enter a valid Zipcode', 'danger', 'red')
-    isValidZipcode.value = false;
-    return
-  }
-  
   const carrierObjt = {
     carrierId: getIdUltimate.value,
     name: inptName.value.toUpperCase(),

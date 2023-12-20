@@ -1,5 +1,5 @@
 <template>
-  <div ref="newOperationModal" class="modal fade" id="newCarrier" tabindex="-1" aria-labelledby="exampleModalLabel"
+  <div ref="newCarrierModal" class="modal fade" id="newCarrier" tabindex="-1" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
@@ -22,7 +22,7 @@
 
 <script setup>
 import GenericTable from '../components/Tables/GenericTable/GenericTable.vue'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { getApi } from '@/services/apiServices'
 import { formatColumnNameCarriers } from '@/utils/utils.js'
 import PrimaryButton from '../components/Buttons/PrimaryButton/Primarybutton.vue';
@@ -35,13 +35,30 @@ const slicedCarriers = ref([])
 const carriersFromApi = ref()
 const formattedColumnNames = ref([])
 const isLoad = ref(true)
+const newCarrierModal = ref(null)
 
-getApi(`${import.meta.env.VITE_APP_API}/get/carriers`)
-  .then((data) => {
-    carriersFromApi.value = data,
+
+onMounted(async () => {
+  loadAllCarriers();
+  newCarrierModal.value.addEventListener('hidden.bs.modal', () => {
+    loadAllCarriers();
+  });
+})
+
+const loadAllCarriers = async () => {
+  try {
+    const [
+      carriersData
+    ] = await Promise.all([
+      getApi(`${import.meta.env.VITE_APP_API}/get/carriers`)
+    ]);
+    carriersFromApi.value = carriersData,
       carriers.value = carriersFromApi.value,
-      slicedCarriers.value = data.map(({ line_of_business, ...rest }) => rest);
+      slicedCarriers.value = carriersData.map(({ line_of_business, ...rest }) => rest);
     formattedColumnNames.value = Object.keys(slicedCarriers.value[0]).map(formatColumnNameCarriers)
-  })
-  .catch((error) => console.log(error))
+
+  } catch (error) {
+    console.log(error)
+  }
+}
 </script>
