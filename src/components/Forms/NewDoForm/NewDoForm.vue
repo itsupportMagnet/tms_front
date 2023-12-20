@@ -1,227 +1,244 @@
 <template>
-  <CContainer style="width: 42rem;">
-    <CCard style="width: 42rem;">
-      <CCardBody>
-        <div id="to-convert">
-          <div style="display: flex; justify-content: center;">
-            <div style="width: 20rem; height: 32rem !important;border: 2px solid black;">
-              <div style="display: flex; justify-content: center;">
-                <img src="/logo-black.png" height="100" alt="Magnet Logistics Logo" />
-              </div>
+  <div style="width: 100%; padding-top: 40px;">
+    <div style="width: 70%; margin: 0 auto;">
 
-              <div style="height: 8rem; text-align: center;">
-                <div>
-                  <h5 style="
+      <div id="to-convert">
+        <div style="display: flex; justify-content: center;">
+          <div style="width: 100%; height: 30rem !important;border: 1px solid black; font-size: 15px;">
+            <div style="display: flex; justify-content: center;">
+              <img src="/logo-black.png" height="100" alt="Magnet Logistics Logo" />
+            </div>
+
+            <div style="text-align: center;">
+              <div>
+                <h5 style="
                   background: #3c78d8;
                   color: white;
-                  padding: 1rem 1rem;
+                  padding: .5rem 1rem;
                   margin: 0;
                   text-align: center;
                   justify-content: space-between;
-                  border: 2px solid black;
-
+                  border-top: 1px solid black;
+                  font-size: 15px;
                 ">
-                    CONSIGNEE
-                  </h5>
-                </div>
-                <div style="
+                  CONSIGNEE
+                </h5>
+              </div>
+              <div style="
                   height: 4.5rem;
                 ">
-                  <input type="text" id="consignee" placeholder="Write down the answer here..." v-model="inptConsignee"
-                    style="width: 100%; 
+                <input type="text" id="consignee" placeholder="Write down the answer here..." v-model="inptConsignee"
+                  style="width: 100%; 
                   text-align: center;
                   align-items: center;
                   height: 4.5rem;
                   padding-right: 2px;
                   border-radius: 0;
-                  border: 2px solid black;" />
-                </div>
+                  border-style: none;
+                  border-top: 1px solid black;
+                  border-bottom: 1px solid black;"
+                  />
               </div>
+            </div>
 
-              <div style="height: 9rem; text-align: center;">
-                <div>
-                  <h5 style="
-                  background: #3c78d8;
-                  color: white;
-                  padding: 1rem 1rem;
-                  margin: 0;
-                  border: 2px solid black;
-                  text-align: center;
-                ">
-                    EMPTY PICK UP / RETURN
-                  </h5>
-                </div>
-                <div style="
-
-                  height: 4.5rem;
-                ">
-                  <input type="text" id="emptyPickUp" placeholder="Write down the answer here..."
-                    v-model="inptEmptyPickUp" style="width: 100%; 
-                  text-align: center;
-                  height: 4.5rem;
-                  border: 2px solid black;
-                  border-radius: 0;
-                  border: none;" />
-                </div>
-              </div>
-
-              <div style="height: 8rem; text-align: center;">
+            <div style=" text-align: center;">
+              <div>
                 <h5 style="
                   background: #3c78d8;
                   color: white;
-                  padding: 1rem 0rem;
-                  border: 2px solid black;
+                  padding: .5rem 1rem;
                   margin: 0;
-
-                ">
-                  FULL PICK UP / RETURN
-                </h5>
-                <div style="
-                  border: 2px solid black; height: 100%;              
-                ">
-                  <input type="text" id="fullPickUp" placeholder="Write down the answer here..." v-model="inptFullPickUp"
-                    style="
+                  border-bottom: 1px solid black;
                   text-align: center;
-                  height: 4rem;
+                  font-size: 15px;
+                ">
+                  EMPTY PICK UP / RETURN
+                </h5>
+              </div>
+              <div>
+                <input type="text" id="emptyPickUp" placeholder="Write down the answer here..." v-model="inptEmptyPickUp"
+                  style="width: 100%; 
+                  text-align: center;
+                  height: 4.5rem;
+                  border: 1px solid black;
+                  border-radius: 0;
+                  border: none;" />
+              </div>
+            </div>
+
+            <div style="text-align: center; height: 34%;">
+              <h5 style="
+                  background: #3c78d8;
+                  color: white;
+                  padding: .5rem 0rem;
+                  border-top: 1px solid black;
+                  margin: 0;
+                  font-size: 15px;
+                ">
+                FULL PICK UP / RETURN
+              </h5>
+              <div style="
+                  border-top: 1px solid black;
+                  height: 100%;                       
+                ">
+                <input type="text" id="fullPickUp" placeholder="Write down the answer here..." v-model="inptFullPickUp"
+                  style="
+                  text-align: center;
+                  height: 100%;
                   width: 100%;
                   margin: 0;
                   border: 0;
                   " />
-                </div>
               </div>
             </div>
+          </div>
 
 
-            <!-- TERMINADO -->
-            <div style="width: 20rem; justify-content: center; !important; border: 2px solid black">
+          <!-- TERMINADO -->
+          <div style="width: 100%; justify-content: center; !important; border-top: 1px solid black; border-right: 1px solid black">
+            <div>
               <div>
-                <div>
-                  <h5 style="
+                <h5 style="
                     background: #3c78d8;
                     color: white;
-                    padding: 0 10px;
-                    margin: 0;
-                    border: 2px solid black;
+                    padding: .5rem 1rem;
+                    margin: 0;                 
                     text-align: center;
-                    estoyaca
+                    font-size: 15px;
+                    border-bottom: 1px solid black;
                   ">
-                    BULL OF LANDING
-                  </h5>
-                  <div>
-                    <tr style="border: 2px solid black">
-                      <th style="
+                  BULL OF LANDING
+                </h5>
+                <div>
+                  <tr style="width: 100%; display: flex;">
+                    <th style="
                         background-color: rgb(238, 232, 232);
                         color: black;
-                        border: 2px solid black;
+                        /* border: 1px solid black; */
                         text-align: center;
                         align-items: center;
-                        width: 7rem;
+                        flex-basis: 50%;
+                        display: flex;
+                        justify-content: center;
                       ">
-                        BOL ID
-                      </th>
-                      <td style="
-                        border: 2px solid black;
+                      BOL ID
+                    </th>
+                    <td style="
+                        border-left: 1px solid black;
+                        flex-basis: 50%;
                       ">
-                        <input type="text" v-model="inptBolNumber" @blur="(e) => inputBlurHandlerId(e)" style="width: 13rem;  
+                      <input type="text" v-model="inptBolNumber" @blur="(e) => inputBlurHandlerId(e)" 
+                      style="
+                      width: 100%;
                       height: 6.1rem; 
                       text-align: center; 
                       border: none;" />
-                      </td>
-                    </tr>
-                    <tr style="border: 2px solid black">
-                      <th style="
-                        
+                    </td>
+                  </tr>
+
+                  <tr style="display: flex; width: 100%;">
+                    <th style="                      
                         background-color: rgb(238, 232, 232);
                         color: black;
-                        border: 2px solid black;
+                        border-top: 1px solid black;
                         text-align: center;
-                        
+                        flex-basis: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
                       ">
-                        DATE
-                      </th>
-                      <td style="
-                        border: 2px solid black;
-                        width: 13rem;
+                      DATE
+                    </th>
+                    <td style="
+                        border-top: 1px solid black;
+                        border-left: 1px solid black;
+                        flex-basis: 50%;
                       ">
-                        <input type="date" v-model="inptDate"
-                          style="width: 13rem;  height: 3rem; text-align: center; border: none;" />
-                      </td>
-                    </tr>
-                    <div>
-                      <h5 style="
+                      <input type="date" v-model="inptDate"
+                        style=" height: 3rem; text-align: center; border: none; width: 100%;" />
+                    </td>
+                  </tr>
+                  <div>
+                    <h5 style="
                         background: #3c78d8;
                         color: white;
                         margin: 0;
-                        border: 2px solid black;
+                        border-top: 1px solid black;
                         text-align: center;
+                        padding: .5rem 1rem;
+                        font-size: 15px;
                       ">
-                        CARRIER
-                      </h5>
-                      <div style="border: 2px solid black">
-                        <select id="slct_Provider" v-model="slctProvider" selected style="
+                      CARRIER
+                    </h5>
+                    <div style="border-top: 1px solid black">
+                      <select id="slct_Provider" v-model="slctProvider" selected style="
                         text-align: center;
                         height: 100%;
                         width: 100%;
                         margin: 0;
                         border: 0;
-                        background-color: #ffffff;
+                        background-color: #f6f6f6;
                         ">
-                          <option value="">Select a provider</option>
-                          <option v-for="item in providers" :key="item.id">
-                            {{ item.provider_name }}
-                          </option>
-                        </select>
-                      </div>
-                      <div>
-                        <h5 style="
+                        <option value="">Select a provider</option>
+                        <option v-for="item in providers" :key="item.id">
+                          {{ item.provider_name }}
+                        </option>
+                      </select>
+                    </div>
+                    <div>
+                      <h5 style="
                           background: #3c78d8;
                           color: white;
                           margin: 0;
-                          border: 2px solid black;
+                          border-top: 1px solid black;
                           text-align: center;
+                          font-size: 15px;
+                          padding: .5rem 1rem;
                         ">
-                          REFERENCES
-                        </h5>
-                        <tr style="border: 2px solid black">
-                          <th style="
+                        REFERENCES
+                      </h5>
+                      <tr>
+                        <th style="
                             padding: 7px ;
                             background-color: rgb(238, 232, 232);
                             color: black;
-                            border: 2px solid black;
+                            border-top: 1px solid black;
                             text-align: center;
                           ">
-                            BOOKING
-                          </th>
-                          <td style="
-                            border: 2px solid black;
-                            width: 100%;
-                            
+                          BOOKING
+                        </th>
+                        <td style="
+                            border-top: 1px solid black;
+                            border-left: 1px solid black;
+                            width: 100%;   
+                            background-color: #fff;                       
                           ">
-                            <input type="number" placeholder="Add Booking/BL" v-model="inptBooking" style="
+                          <input type="number" placeholder="Add Booking/BL" v-model="inptBooking" style="
                             text-align: center;
                             height: 100%;
                             width: 100%;
-                            margin: 0;
                             border: 0;
                             " />
-                          </td>
-                        </tr>
+                        </td>
+                      </tr>
 
-                        <tr style="border: 2px solid black">
-                          <th style="
+                      <tr style="border: 1px solid black">
+                        <th style="
                             padding: 7px ;
                             background-color: rgb(238, 232, 232);
                             color: black;
-                            border: 2px solid black;
+                            border-top: 1px solid black;
                             text-align: center;
                           ">
-                            CONTAINER
-                          </th>
-                          <td style="
-                            border: 2px solid black;
+                          CONTAINER
+                        </th>
+                        <td style="
+                            border-top: 1px solid black;
+                            border-left: 1px solid black;
                             width: 100%;
+                            background-color: #fff;  
                           ">
-                            <select style="
+                          <select style="
                             text-align: center;
                             height: 100%;
                             width: 100%;
@@ -229,45 +246,48 @@
                             margin: 0;
                             border: 0;
                             " aria-label="Default select example" id="slct_container" v-model="slctContainer"
-                              :class="rowBG(slctContainer)">
-                              <option selected disabled value="">
-                                Select a status
-                              </option>
-                              <option value="1">PENDING</option>
-                              <option value="2">IN PROCESS</option>
-                              <option value="3">DONE</option>
-                              <option value="4">CANCELED</option>
-                              <option value="5">INVOICE</option>
-                            </select>
-                          </td>
-                        </tr>
-                      </div>
-                      <div>
-                        <h5 style="
+                            :class="rowBG(slctContainer)">
+                            <option selected disabled value="">
+                              Select a status
+                            </option>
+                            <option value="1">PENDING</option>
+                            <option value="2">IN PROCESS</option>
+                            <option value="3">DONE</option>
+                            <option value="4">CANCELED</option>
+                            <option value="5">INVOICE</option>
+                          </select>
+                        </td>
+                      </tr>
+                    </div>
+                    <div>
+                      <h5 style="
                           background: #3c78d8;
                           color: white;
-                          padding: 0 10px;
+                          padding: .5rem 1rem;
                           margin: 0;
-                          border: 2px solid black;
+                          border-top: 1px solid black;
                           text-align: center;
+                          font-size: 15px;
                         ">
-                          ADDITIONAL REFERENCES
-                        </h5>
-                        <tr style="border: 2px solid black">
-                          <th style="
+                        ADDITIONAL REFERENCES
+                      </h5>
+                      <tr style="border: 1px solid black">
+                        <th style="
                             padding: 7px ;
                             background-color: rgb(238, 232, 232);
                             color: black;
-                            border: 2px solid black;
+                            border-top: 1px solid black;
                             text-align: center;
                           ">
-                            SSL
-                          </th>
-                          <td style="
-                            border: 2px solid black;
+                          SSL
+                        </th>
+                        <td style="
+                            border-top: 1px solid black;
+                            border-left: 1px solid black;
                             width: 100%;
+                            background-color: #fff;  
                           ">
-                            <select v-model="slct_ssl" style="
+                          <select v-model="slct_ssl" style="
                             text-align: center;
                             height: 100%;
                             width: 100%;
@@ -275,36 +295,37 @@
                             margin: 0;
                             border: 0;
                             ">
-                              <option selected disabled value="">
-                                Select SSLINE
-                              </option>
-                              <option>CMA</option>
-                              <option>EVERGREEN</option>
-                              <option>HAPAG</option>
-                              <option>MAERSK</option>
-                              <option>MSC</option>
-                              <option>SEABOARD</option>
-                              <option>SEALAND</option>
-                              <option>ZIM</option>
-                            </select>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th style="
+                            <option selected disabled value="">
+                              Select SSLINE
+                            </option>
+                            <option>CMA</option>
+                            <option>EVERGREEN</option>
+                            <option>HAPAG</option>
+                            <option>MAERSK</option>
+                            <option>MSC</option>
+                            <option>SEABOARD</option>
+                            <option>SEALAND</option>
+                            <option>ZIM</option>
+                          </select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th style="
                             padding: 7px ;
                             background-color: rgb(238, 232, 232);
                             color: black;
-                            border: 2px solid black;
+                            border-top: 1px solid black;
                             text-align: center;
                           ">
-                            PORT/RAILS
-                          </th>
-                          <td style="
-                            border: 2px solid black;
+                          PORT/RAILS
+                        </th>
+                        <td style="
+                            border-top: 1px solid black;
+                            border-left: 1px solid black;
                             width: 100%;
-
+                            background-color: #fff;  
                           ">
-                            <select id="ports" v-model="slctPort" style="
+                          <select id="ports" v-model="slctPort" style="
                             text-align: center;
                             height: 100%;
                             width: 100%;
@@ -312,30 +333,32 @@
                             margin: 0;
                             border: 0;
                             ">
-                              <option selected disabled value="">
-                                Select a port
-                              </option>
-                              <option v-for="item in ports" :key="item.id">
-                                {{ item.port_name }}
-                              </option>
-                            </select>
-                          </td>
-                        </tr>
-                        <tr style="border: 2px solid black">
-                          <th style="
+                            <option selected disabled value="">
+                              Select a port
+                            </option>
+                            <option v-for="item in ports" :key="item.id">
+                              {{ item.port_name }}
+                            </option>
+                          </select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th style="
                             padding: 7px ;
                             background-color: rgb(238, 232, 232);
                             color: black;
-                            border: 2px solid black;
+                            border-top: 1px solid black;
                             text-align: center;
                           ">
-                            B.LINE
-                          </th>
-                          <td style="
-                            border: 2px solid black;
+                          B.LINE
+                        </th>
+                        <td style="
+                            border-top: 1px solid black;
+                            border-left: 1px solid black;
                             width: 100%;
+                            background-color: #fff;  
                           ">
-                            <select style="
+                          <select style="
                             text-align: center;
                             height: 100%;
                             width: 100%;
@@ -344,66 +367,68 @@
                             border: 0;
                             
                             " aria-label="Default select example" id="slctService" v-model="slctService">
-                              <option selected disabled value="">
-                                Select a status
-                              </option>
-                              <option value="DRAYAGE">DRAYAGE</option>
-                              <option value="FTL">FTL</option>
-                            </select>
-                          </td>
-                        </tr>
-                      </div>
+                            <option selected disabled value="">
+                              Select a status
+                            </option>
+                            <option value="DRAYAGE">DRAYAGE</option>
+                            <option value="FTL">FTL</option>
+                          </select>
+                        </td>
+                      </tr>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
 
-          <div style="display: flex; justify-content: center;">
-            <div style="width: 40rem; justify-content: center;">
-              <h5 style="
+        <div style="width: 100%; display: flex; justify-content: center;">
+          <div style="width: 100%; justify-content: center;">
+            <h5 style="
               background: #3c78d8;
               color: white;
-              padding: 0 10px;
+              padding: .5rem 1rem;
               margin: 0;
-              border: 2px solid black;
+              border: 1px solid black;
               text-align: center;
+              font-size: 15px;
             ">
-                NOTES SPECIALS INSTRUCTIONS
-              </h5>
-              <div style="border: 2px solid black; height: 5rem; justify-content: center;">
-                <input id="specialNote" cols="100" style="
+              NOTES SPECIALS INSTRUCTIONS
+            </h5>
+            <div style="border-left: 1px solid black; border-right: 1px solid black; height: 5rem; justify-content: center;">
+              <input id="specialNote" cols="100" style="
               text-align: center;
               height: 100%;
               width: 100%;
               margin: 0;
               border: 0;
               " v-model="specialNote" />
-              </div>
-              <div style="justify-content: center;">
-                <h5 style="
+            </div>
+            <div style="justify-content: center;">
+              <h5 style="
                 background: #3c78d8;
                 color: white;
-                padding: 0 10px;
+                padding: .5rem 1rem;
                 margin: 0;
-                border: 2px solid black;
+                border: 1px solid black;
                 text-align: center;
+                font-size: 15px;
               ">
-                  INFORMATION
-                </h5>
+                INFORMATION
+              </h5>
 
-                <tr style="border: 2px solid black">
-                  <th style="
+              <tr >
+                <th style="
                   background-color: rgb(238, 232, 232);
                   color: black;
-                  border: 2px solid black;
+                  border-left: 1px solid black;
                   text-align: center;
                 ">
-                    COMMODITY
-                  </th>
-                  <td style="border: 2px solid black; width: 50%">
-                    <input type="text" id="inptCommodity" placeholder="Add Commodity" v-model="inptCommodity" style="
+                  COMMODITY
+                </th>
+                <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                  <input type="text" id="inptCommodity" placeholder="Add Commodity" v-model="inptCommodity" style="
                   text-align: center;
                   height: 100%;
                   width: 100%;
@@ -412,90 +437,89 @@
                   justify-content: center;
                   
                   " />
-                  </td>
-                </tr>
+                </td>
+              </tr>
 
-                <tr style="border: 2px solid black">
-                  <th style="
+              <tr style="border: 1px solid black">
+                <th style="
                   padding: 6px 50px;
                   text-align: center;
                   background-color: rgb(238, 232, 232);
                   color: black;
-                  border: 2px solid black;
-                  
-                  
+                  border-top: 1px solid black;
+                  border-left: 1px solid black;
                 ">
-                    CONTAINER INFO
-                  </th>
-                  <td style="border: 2px solid black; width: 20rem; justify-content: center;">
-                    <input type="text" id="inptContainerInfo" v-model="inptContainerInfo" placeholder="Add Container Info"
-                      style="
+                  CONTAINER INFO
+                </th>
+                <td style="border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; width: 100%; justify-content: center;">
+                  <input type="text" id="inptContainerInfo" v-model="inptContainerInfo" placeholder="Add Container Info"
+                    style="
                   text-align: center;
                   height: 100%;
                   width: 100%;
                   margin: 0;
                   border: 0;
                   " />
-                  </td>
-                </tr>
-                <!-- END ATTRIBUTE -->
-                <div style="display: flex; width: 40rem; justify-content: center;">
-                  <h6 style="
+                </td>
+              </tr>
+              <!-- END ATTRIBUTE -->
+              <div style="display: flex; width: 100%; justify-content: center;">
+                <h6 style="
                   width: 50%;
-                  border: 2px solid black;
+                  border-top: 1px solid black;
                   background: #3c78d8;
                   color: white;
-                  padding: 0 10px;
+                  padding: .5rem 1rem;
                   margin: 0;
-                  border: 2px solid black;
                   text-align: center;
+                  font-size: 15px;
                 ">
-                    SHIPPER SIGNATURE / RETURN
-                  </h6>
+                  SHIPPER SIGNATURE / RETURN
+                </h6>
 
-                  <h6 style="
+                <h6 style="
                   width: 50%;
-                  border: 2px solid black;
+                  border: 1px solid black;
                   background: #3c78d8;
                   color: white;
-                  padding: 0 10px;
+                  padding: .5rem 1rem;
                   margin: 0;
-                  border: 2px solid black;
+                  border: 1px solid black;
                   text-align: center;
+                  font-size: 15px;
                 ">
-                    CARRIER SIGNATURE / RETURN
-                  </h6>
-                </div>
-                <div style="display: flex; width: 40rem; height: 5rem; justify-content: center;">
-                  <div style="width: 20rem ; border: 2px solid black">
-                    <input type="text" v-model="inptShipperSignature" style="
+                  CARRIER SIGNATURE / RETURN
+                </h6>
+              </div>
+              <div style="display: flex; width: 100%; height: 5rem; justify-content: center;">
+                <div style="width: 50%; border: 1px solid black">
+                  <input type="text" v-model="inptShipperSignature" style="
                   text-align: center;
                   height: 100%;
                   width: 100%;
                   margin: 0;
                   border: 0;
                   ">
-                  </div>
-                  <div style="width: 20rem;border:2px solid black;">
-                    <input type="text" id="inptCarrierSignature" v-model="inptCarrierSignature" style="
+                </div>
+                <div style="width: 50%; border-right:1px solid black; border-bottom:1px solid black; border-left:1px solid black; border-bottom:1px solid black;">
+                  <input type="text" id="inptCarrierSignature" v-model="inptCarrierSignature" style="
                             text-align: center;
                             height: 100%;
                             width: 100%;
                             margin: 0;
                             border: 0;
                             ">
-                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="d-flex justify-content-center">
-          <Button class="btn btn-success text-white my-3 fs-5" @click.prevent="handleSubmit">CREATE PDF</Button>
-        </div>
-      </CCardBody>
-    </CCard>
-  </CContainer>
+      </div>
+      <div class="d-flex justify-content-center">
+        <Button class="btn btn-success text-white my-3 fs-5" @click.prevent="handleSubmit">CREATE PDF</Button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
