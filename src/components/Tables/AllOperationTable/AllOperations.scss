@@ -48,9 +48,9 @@
     }
   }
 
-  .row {
+  .table-row {
     overflow-x: auto;
-  
+    
     .table-container {
       overflow: auto;
       // background-color: $tablesBackgroundColor;
@@ -64,7 +64,7 @@
         z-index: 1;
   
         .table__header {
-          @include thead;
+          @include thead;        
         }
       }
   
