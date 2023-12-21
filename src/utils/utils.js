@@ -3,7 +3,7 @@ export const formatColumnName = (columnName) => {
     return lower ? `${lower} ` : upper;
   }).replace(/(?:^|\b)([a-zA-Z])/g, (match, firstLetter) => {
     return firstLetter.toUpperCase();
-  });
+  }).toUpperCase();
 };
 
 export const formatColumnNameCarriers = (columnName) => {

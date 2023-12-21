@@ -301,32 +301,32 @@
               <thead class="table__header">
                 <tr class="table__row">
                   <th class="table__cell" scope="col">ID</th>
-                  <th class="table__cell" scope="col">Operation Date</th>
-                  <th class="table__cell" scope="col">Operation Status</th>
-                  <th class="table__cell" scope="col">Container ID</th>
-                  <th class="table__cell" scope="col">Container Status</th>
-                  <th class="table__cell" scope="col">Booking /BL</th>
-                  <th class="table__cell" scope="col">Customer</th>
-                  <th class="table__cell" scope="col">Provider</th>
-                  <th class="table__cell" scope="col">Warehouse Location</th>
-                  <th class="table__cell" scope="col">Terminal</th>
-                  <th class="table__cell" scope="col">Port</th>
-                  <th class="table__cell" scope="col">Empty Location</th>
-                  <th class="table__cell" scope="col">Full Location</th>
-                  <th class="table__cell" scope="col">Container Size</th>
-                  <th class="table__cell" scope="col">Container Type</th>
-                  <th class="table__cell" scope="col">Equipment</th>
-                  <th class="table__cell" scope="col">Weight</th>
-                  <th class="table__cell" scope="col">SS Line</th>
-                  <th class="table__cell" scope="col">Hazardous</th>
-                  <th class="table__cell" scope="col">Bonded</th>
-                  <th class="table__cell" scope="col">Cargo Cut</th>
-                  <th class="table__cell" scope="col">Commodity</th>
-                  <th class="table__cell" scope="col">City</th>
-                  <th class="table__cell" scope="col">State</th>
-                  <th class="table__cell" scope="col">Mode Of Operation</th>
-                  <th class="table__cell" scope="col">Quote ID</th>
-                  <th class="table__cell" scope="col">Action</th>
+                  <th class="table__cell" scope="col">OPERATION DATE</th>
+                  <th class="table__cell" scope="col">OPERATION STATUS</th>
+                  <th class="table__cell" scope="col">CONTAINER ID</th>
+                  <th class="table__cell" scope="col">CONTAINER STATUS</th>
+                  <th class="table__cell" scope="col">BOOKING /BL</th>
+                  <th class="table__cell" scope="col">CUSTOMER</th>
+                  <th class="table__cell" scope="col">PROVIDER</th>
+                  <th class="table__cell" scope="col">WAREHOUSE LOCATION</th>
+                  <th class="table__cell" scope="col">TERMINAL</th>
+                  <th class="table__cell" scope="col">PORT</th>
+                  <th class="table__cell" scope="col">EMPTY LOCATION</th>
+                  <th class="table__cell" scope="col">FULL LOCATION</th>
+                  <th class="table__cell" scope="col">CONTAINER SIZE</th>
+                  <th class="table__cell" scope="col">CONTAINER TYPE</th>
+                  <th class="table__cell" scope="col">EQUIPMENT</th>
+                  <th class="table__cell" scope="col">WEIGHT</th>
+                  <th class="table__cell" scope="col">SS LINE</th>
+                  <th class="table__cell" scope="col">HAZARDOUS</th>
+                  <th class="table__cell" scope="col">BONDED</th>
+                  <th class="table__cell" scope="col">CARGO CUT</th>
+                  <th class="table__cell" scope="col">COMMODITY</th>
+                  <th class="table__cell" scope="col">CITY</th>
+                  <th class="table__cell" scope="col">STATE</th>
+                  <th class="table__cell" scope="col">MODE OF OPERATION</th>
+                  <th class="table__cell" scope="col">QUOTE ID</th>
+                  <th class="table__cell" scope="col">ACTION</th>
                 </tr>
               </thead>
               <tbody class="tbody">

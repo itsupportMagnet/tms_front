@@ -51,7 +51,7 @@
 
             th {
               padding: .3rem .3rem;
-              font-size: 15px;
+              font-size: 12px;
             }
 
             div:nth-child(10) {
@@ -70,15 +70,15 @@
               }
 
               td {
-                height: 4rem;
-                padding: 0 10px;
-                font-size: 12px;
+                height: 3.5rem;
+                padding: 0 5px;
+                font-size: 10.5px;
                 font-weight: 600;
 
                 span {
                   display: -webkit-box;
                   -webkit-box-orient: vertical;
-                  -webkit-line-clamp: 3;
+                  -webkit-line-clamp: 2;
                   overflow: hidden;
                   text-overflow: ellipsis;
                 }
