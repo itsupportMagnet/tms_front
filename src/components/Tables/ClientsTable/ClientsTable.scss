@@ -91,6 +91,33 @@
               }
             }
 
+            .actionButtons {
+              display: flex;
+              align-items: center;
+              justify-content: space-evenly;
+              .btn-action {
+                padding: 0px;
+                border: none;
+                background: inherit;
+                font-size: 15px;
+              }
+    
+              .btnNotes {
+                padding: 0;
+                color: rgb(199, 172, 0);
+              }
+            }
+
+            .icon-blue {
+              color: blue;
+              border: none;
+            }
+            
+            .icon-red {
+              color: red;
+              border: none;
+            }
+
           }
         }
       }
