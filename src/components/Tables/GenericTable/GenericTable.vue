@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid mainContainer">
+  <div class="mainContainer">
     <div v-if="spinnerLoad" class="d-flex justify-content-center my-3">
       <Spinner />
     </div>
