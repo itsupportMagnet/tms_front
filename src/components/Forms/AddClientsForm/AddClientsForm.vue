@@ -44,7 +44,9 @@
         <div class="inptBox inptPhoneBox">
           <label for="customerPhone" class="form-label">Customer Phone</label>
           <div v-if="isUpdateForm">
-            
+            <input v-for="(value, index) in phoneNumbers" :key="index" v-model="phoneNumbers[index]" type="text"
+              class="form-control" placeholder="Write down phone here" />
+
           </div>
           <div v-else>
             <input type="text" class="form-control" id="customerPhone" placeholder="Write down the answer here...">
@@ -59,7 +61,14 @@
       <div class="col-6">
         <div class="inptBox inptEmailBox">
           <label for="customerEmail" class="form-label">Customer Email</label>
-          <input type="text" class="form-control" id="customerEmail" placeholder="Write down the answer here...">
+          <div v-if="isUpdateForm">
+            <input v-for="(value, index) in custmoreEmails" :key="index" v-model="custmoreEmails[index]" type="text"
+              class="form-control" placehodler="Write down email here" />
+          </div>
+          <div v-else>
+            <input type="text" class="form-control" id="customerEmail" placeholder="Write down the answer here...">
+          </div>
+
         </div>
 
         <div class="btnBox">
@@ -80,7 +89,7 @@
 
 <script setup>
 
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, defineExpose } from 'vue';
 import { getApi, postApi } from '../../../services/apiServices';
 import { showToast } from '@/helpers/helpers.js'
 import ButtonSubmit from '../../Buttons/ButtonSubmit/ButtonSubmit.vue';
@@ -140,38 +149,6 @@ const handleSubmit = () => {
   const emailInpts = customerEmailBox.querySelectorAll('input');
   const emailRegex = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/
 
-  phoneInpts.forEach(i => {
-    if (!i.value) {
-      showToast('Please, fill out Customer Phone', 'danger', 'red');
-      phoneNumbers.value = [];
-      alertPhoneShown.value = true;
-      return;
-    }
-    phoneNumbers.value.push(i.value);
-    alertPhoneShown.value = false;
-  })
-
-  emailInpts.forEach(i => {
-    if (!i.value) {
-      showToast('Please, fill out Customer Email', 'danger', 'red');
-      custmoreEmails.value = [];
-      alertEmailShown.value = true
-      return;
-    }
-    if (!emailRegex.test(i.value.trim())) {
-      isValidEmail.value = false
-      return
-    }
-    custmoreEmails.value.push(i.value);
-    alertEmailShown.value = false;
-    isValidEmail.value = true
-  })
-
-  if (!isValidEmail.value) {
-    showToast("Please use a valid Email", "danger", "red")
-    return
-  }
-
   if (!inptName.value || !inptAddress.value || !inptContact.value || !slctBusinessLine.value || !slctCustomerType.value) {
     showToast('Please, fill out all the inputs', 'danger', 'red');
     return
@@ -182,10 +159,11 @@ const handleSubmit = () => {
       customerId: getIdUltimate.value,
       name: inptName.value,
       address: inptAddress.value,
+      contact: inptContact.value,
       businessLine: slctBusinessLine.value,
       customerType: slctCustomerType.value,
-      phoneNumbers: phoneNumbers.value,
-      customerEmails: custmoreEmails.value
+      phoneNumbers: JSON.stringify(phoneNumbers.value),
+      customerEmails: JSON.stringify(custmoreEmails.value)
     }
 
     postApi(`${import.meta.env.VITE_APP_API}/post/updateClient`, clientUpdate)
@@ -198,6 +176,39 @@ const handleSubmit = () => {
         console.log(error)
       })
   } else {
+
+    phoneInpts.forEach(i => {
+      if (!i.value) {
+        showToast('Please, fill out Customer Phone', 'danger', 'red');
+        phoneNumbers.value = [];
+        alertPhoneShown.value = true;
+        return;
+      }
+      phoneNumbers.value.push(i.value);
+      alertPhoneShown.value = false;
+    })
+
+    emailInpts.forEach(i => {
+      if (!i.value) {
+        showToast('Please, fill out Customer Email', 'danger', 'red');
+        custmoreEmails.value = [];
+        alertEmailShown.value = true
+        return;
+      }
+      if (!emailRegex.test(i.value.trim())) {
+        isValidEmail.value = false
+        return
+      }
+      custmoreEmails.value.push(i.value);
+      alertEmailShown.value = false;
+      isValidEmail.value = true
+    })
+
+    if (!isValidEmail.value) {
+      showToast("Please use a valid Email", "danger", "red")
+      return
+    }
+
     const clientObjt = {
       customerId: getIdUltimate.value,
       name: inptName.value,
@@ -221,9 +232,6 @@ const handleSubmit = () => {
         showToast('Contact IT', 'danger', 'red')
       })
   }
-
-
-
 }
 
 const cleanFormFields = () => {
@@ -255,6 +263,8 @@ watch(
   () => props.idClient,
   async () => {
     nameButton.value = 'Update'
+    isUpdateForm.value = true;
+    console.log(isUpdateForm.value)
     getApi(`${import.meta.env.VITE_APP_API}/get/clientsById/${props.idClient}`)
       .then((data) => {
         clientUpdateInfo.value = data[0]
