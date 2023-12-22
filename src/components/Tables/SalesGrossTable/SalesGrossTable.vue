@@ -1,79 +1,79 @@
 <template>
   <div class="main">
-      <div class="filter-container">
-        <div class="d-flex">
-          <div class="animate__animated animate__flipInX filter-container__box">
-            <strong>
-              <label class="label">Sort By Provider</label>
-            </strong>
-            <select @change="sortByProvider" class="form-select">
-              <option selected value="All">All</option>
-              <option v-for="provider in providers" :value="provider.provider_name.split('').join('')" :key="provider">
-                {{ provider.provider_name }}
-              </option>
-            </select>
-          </div>
+    <div class="filter-container">
+      <div class="filter-container__box">
+        <div class="animate__animated animate__flipInX filter-box">
+          <strong>
+            <label class="label">Sort By Provider</label>
+          </strong>
+          <select @change="sortByProvider" class="form-select">
+            <option selected value="All">All</option>
+            <option v-for="provider in providers" :value="provider.provider_name.split('').join('')" :key="provider">
+              {{ provider.provider_name }}
+            </option>
+          </select>
+        </div>
 
-          <div class="animate__animated animate__flipInX filter-container__box">
-            <strong>
-              <label class="label">Sort by Month</label>
-            </strong>
-            <select @change="sortByMonth" class="form-select">
-              <option selected value="All">All</option>
-              <option value="MAY">MAY</option>
-              <option value="JUNE">JUNE</option>
-              <option value="JULY">JULY</option>
-              <option value="AUGUST">AUGUST</option>
-              <option value="SEPTEMBER">SEPTEMBER</option>
-              <option value="OCTOBER">OCTOBER</option>
-              <option value="NOVEMBER">NOVEMBER</option>
-              <option value="DECEMBER">DECEMBER</option>
-            </select>
-          </div>
+        <div class="animate__animated animate__flipInX filter-box">
+          <strong>
+            <label class="label">Sort by Month</label>
+          </strong>
+          <select @change="sortByMonth" class="form-select">
+            <option selected value="All">All</option>
+            <option value="MAY">MAY</option>
+            <option value="JUNE">JUNE</option>
+            <option value="JULY">JULY</option>
+            <option value="AUGUST">AUGUST</option>
+            <option value="SEPTEMBER">SEPTEMBER</option>
+            <option value="OCTOBER">OCTOBER</option>
+            <option value="NOVEMBER">NOVEMBER</option>
+            <option value="DECEMBER">DECEMBER</option>
+          </select>
+        </div>
 
-          <div class="animate__animated animate__flipInX filter-container__box">
-            <strong>
-              <label class="label">Sort By Profit</label>
-            </strong>
-            <select @change="sortByProfit" class="form-select">
-              <option disabled hidden selected>All</option>
-              <option value="MOST">Most Profit</option>
-              <option value="LEAST">Least Profit</option>
-            </select>
-          </div>
+        <div class="animate__animated animate__flipInX filter-box">
+          <strong>
+            <label class="label">Sort By Profit</label>
+          </strong>
+          <select @change="sortByProfit" class="form-select">
+            <option disabled hidden selected>All</option>
+            <option value="MOST">Most Profit</option>
+            <option value="LEAST">Least Profit</option>
+          </select>
+        </div>
 
-          <div class="animate__animated animate__flipInX filter-container__box">
-            <strong>
-              <label class="label">Sort By Customer</label>
-            </strong>
-            <select @change="sortByCustomer" class="form-select">
-              <option selected value="All">All</option>
-              <option v-for="client in customers" :value="client.customer_name.split('').join('')" :key="client">
-                {{ client.customer_name }}
-              </option>
-            </select>
-          </div>
+        <div class="animate__animated animate__flipInX filter-box">
+          <strong>
+            <label class="label">Sort By Customer</label>
+          </strong>
+          <select @change="sortByCustomer" class="form-select">
+            <option selected value="All">All</option>
+            <option v-for="client in customers" :value="client.customer_name.split('').join('')" :key="client">
+              {{ client.customer_name }}
+            </option>
+          </select>
         </div>
       </div>
-      <div class="salesGrossContainer">
-        <div class="searchSection">
-          <div class="searchSection__container">
-            <!-- RELATIVE -->
-            <div class="searchSection__container--form">
-              <div class="searchSection__goBackIconContainer">
-                <svg class="searchSection__searchIconFrame" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                  fill="none" viewBox="0 0 20 20">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                </svg>
-              </div>
-              <input v-model="inpt_BookingBL" type="text" id="default-search"
-                class="searchSection__input searchSection__inputSearchID" placeholder="Search by Booking Bl" required />
+    </div>
+
+    <Card>
+      <div class="main-section">
+        <div class="search-section">
+          <div class="search-box">
+            <div class="search-icon">
+              <svg class="search-icon__frame" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 20 20">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+              </svg>
             </div>
+            <input v-model="inpt_BookingBL" type="text" id="default-search" class="input-search-id"
+              placeholder="Search by Booking Bl" required />
           </div>
         </div>
 
-        <div v-if="sales" class="table-responsive table-container">
+
+        <div v-if="sales" class="table-container">
           <table class="table-container__table table-striped table-hover">
             <thead class="table__header">
               <tr class="table__row">
@@ -152,32 +152,34 @@
           </div>
         </div>
       </div>
-    </div>
+    </Card>
+  </div>
 
 
-    <!-- Delete Modal -->
-    <div ref="deleteOperationModalRef" class="modal fade" id="deleteOperationModal" tabindex="-1"
-      aria-labelledby="deleteOperationModal" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Confirm Action</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            Are you sure you want to delete the sale?
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="confirmDelete">Confirm</button>
-          </div>
+  <!-- Delete Modal -->
+  <div ref="deleteOperationModalRef" class="modal fade" id="deleteOperationModal" tabindex="-1"
+    aria-labelledby="deleteOperationModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Confirm Action</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to delete the sale?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="confirmDelete">Confirm</button>
         </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import { getApi, postApi } from '../../../services/apiServices'
+import Card from '../../Card/Card.vue'
 // const props = defineProps(['sales'])
 // import { loadSaleGross } from '../../../views/SalesGross.vue'
 
@@ -279,15 +281,15 @@ onMounted(async () => {
 })
 
 const loadSaleGross = async () => {
-  try{
-    const[
+  try {
+    const [
       providersData,
       salesGrossData,
       customersData,
     ] = await Promise.all([
-    getApi(`${import.meta.env.VITE_APP_API}/get/providers`),
-    getApi(`${import.meta.env.VITE_APP_API}/get/salesGross`),
-    getApi(`${import.meta.env.VITE_APP_API}/get/clients`),
+      getApi(`${import.meta.env.VITE_APP_API}/get/providers`),
+      getApi(`${import.meta.env.VITE_APP_API}/get/salesGross`),
+      getApi(`${import.meta.env.VITE_APP_API}/get/clients`),
     ]);
 
     salesFromApi.value = salesGrossData.reverse();
@@ -296,7 +298,7 @@ const loadSaleGross = async () => {
     isLoad.value = false;
     providers.value = providersData;
 
-  }catch(error){
+  } catch (error) {
     console.log(error)
   }
 }
@@ -311,7 +313,7 @@ const confirmDelete = async () => {
   deleteApi(`${import.meta.env.VITE_APP_API}/delete/delete-sale/${sale_id}`)
     .then(() => {
       showToast('Sale Deleted Successfully', 'success', 'green')
-  })
+    })
     .catch(error => {
       console.log(error);
       showToast('Contact IT', 'danger', 'red')

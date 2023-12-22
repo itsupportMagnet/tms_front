@@ -1,5 +1,5 @@
 <template>
-  <!-- Modal newOperation -->
+  <!-- Modal newClients -->
   <div ref="newClientModal" class="modal fade" id="newClient" tabindex="-1" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -10,6 +10,43 @@
         </div>
         <div class="modal-body">
           <AddClientsForm />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal updateClients -->
+
+  <div ref="updateClientModal" class="modal fade" id="updateClientModal" taboindex="-1"
+    aria-labelledby="updateClientModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="updateClientModalTitle">Update Client</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <AddClientsForm :idClient="ClientIdToUpdate"  />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal deleteClients -->
+
+  <div ref="deleteClientModal" class="modal fade" id="deleteClientModal" tabindex="-1" aria-labelledby="deleteClientModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteClientModalLabel">Confirm Delete Client</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to perform this action?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" @click="confirmDeleteClient"
+            data-bs-dismiss="modal">Confirm</button>
         </div>
       </div>
     </div>
@@ -53,6 +90,7 @@
                     <th scope="col">EMAIL</th>
                     <th scope="col">CONTACT</th>
                     <th scope="col">TYPE</th>
+                    <th scope="col">ACTION</th>
                   </tr>
                 </thead>
                 <tbody class="tbody" v-if="slicedClients">
@@ -70,6 +108,15 @@
                         {{ item }}
                       </template>
                     </td>
+                    <td class="actionButtons">
+                      <button type="button" class="btn-action" data-bs-toggle="modal" data-bs-target="#updateClientModal" @click="showUpdateClientModal(client.id_Client)">
+                        <i class="bi bi-pencil-square icon-blue"></i>
+                      </button>
+                      <button class="btn-action" data-bs-toggle="modal" data-bs-target="#deleteClientModal"
+                        @click="showDeleteModal(client.id_Client)">
+                        <i class="bi bi-x-square-fill icon-red"></i>
+                      </button>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -83,53 +130,57 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getApi } from '../../../services/apiServices';
+import { deleteApi, getApi } from '../../../services/apiServices';
 import Spinner from '../../Spinner/Spinner.vue';
 import PrimaryButton from '../../../components/Buttons/PrimaryButton/PrimaryButton.vue'
 import AddClientsForm from '../../Forms/AddClientsForm/AddClientsForm.vue';
 import Card from '../../Card/Card.vue';
+import { showToast } from '../../../helpers/helpers';
 
 onMounted(async () => {
+  loadAllClients()
   newClientModal.value.addEventListener('hidden.bs.modal', () => {
-    getApi(`${import.meta.env.VITE_APP_API}/get/clients`)
-      .then((data) => {
-        clientsFromApi.value = data
-        clients.value = clientsFromApi.value
-        isLoad.value = false
-        slicedClients.value = data.map(row => {
-          // eslint-disable-next-line no-unused-vars
-          const { business_line, ...rest } = row;
-          return rest
-        })
-        clientsFromApi.value = slicedClients.value
-      })
-      .catch((error) => console.log(error))
+    loadAllClients()
+  })
+  deleteClientModal.value.addEventListener('hidden.bs.modal', () => {
+    loadAllClients()
   })
 })
 
 const newClientModal = ref(null)
+const deleteClientModal = ref(null)
 const clients = ref()
 const clientsFromApi = ref()
 const slicedClients = ref([])
 const isLoad = ref(true)
 const isClientEmpty = ref(false)
+const ClientIdToUpdate = ref()
+const ClientIdToDelete = ref(null)
 const filterOpt = ref({
   srtClient: '',
 })
 
-getApi(`${import.meta.env.VITE_APP_API}/get/clients`)
-  .then((data) => {
-    clientsFromApi.value = data
+const loadAllClients = async () => {
+  try{
+    const[
+      clientsData
+    ] = await Promise.all([
+    getApi(`${import.meta.env.VITE_APP_API}/get/clients`)
+    ]);
+    clientsFromApi.value = clientsData
     clients.value = clientsFromApi.value
     isLoad.value = false
-    slicedClients.value = data.map(row => {
-      // eslint-disable-next-line no-unused-vars
+    slicedClients.value = clientsData.map(row => {
       const { business_line, ...rest } = row;
       return rest
     })
     clientsFromApi.value = slicedClients.value
-  })
-  .catch((error) => console.log(error))
+    console.log(slicedClients.value)
+
+  }catch(error){
+    console.log(error)
+  }
+}
 
 const sortByCustomer = (e) => {
   if (isClientEmpty.value) {
@@ -159,6 +210,31 @@ const filterOpsClients = (client) => {
     return client.customer_name === filterOpt.value.srtClient
   }
   return client
+}
+
+const showUpdateClientModal =  (idClient) => {
+  ClientIdToUpdate.value = idClient;
+  console.log(ClientIdToUpdate.value)
+}
+
+const showDeleteModal = (idClient) => {
+  ClientIdToDelete.value = idClient;
+  console.log(ClientIdToDelete.value)
+}
+
+const deleteClient = async(idClient) => {
+  deleteApi(`${import.meta.env.VITE_APP_API}/delete/deleteClient/${idClient}`)
+  .then(() => {
+    showToast('Client Deleted Succesfully', 'success', 'green')
+  })
+  .catch(error => {
+    console.log(error)
+    showToast('Error Please Contact IT', 'danger', 'red')
+  })
+}
+
+const confirmDeleteClient = async () => {
+  await deleteClient(ClientIdToDelete.value)
 }
 </script>
 

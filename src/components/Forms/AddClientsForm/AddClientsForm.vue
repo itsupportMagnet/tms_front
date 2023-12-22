@@ -43,7 +43,12 @@
       <div class="col-6">
         <div class="inptBox inptPhoneBox">
           <label for="customerPhone" class="form-label">Customer Phone</label>
-          <input type="text" class="form-control" id="customerPhone" placeholder="Write down the answer here...">
+          <div v-if="isUpdateForm">
+            
+          </div>
+          <div v-else>
+            <input type="text" class="form-control" id="customerPhone" placeholder="Write down the answer here...">
+          </div>
         </div>
         <div class="btnBox ">
           <button class="btnAdd" @click="addPhoneInpt">
@@ -67,7 +72,7 @@
 
     <div class="row">
       <div class="col btnSubmit_box">
-        <ButtonSubmit @click="handleSubmit" name="Submit" />
+        <ButtonSubmit @click="handleSubmit" :name="nameButton" />
       </div>
     </div>
   </div>
@@ -75,11 +80,12 @@
 
 <script setup>
 
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { getApi, postApi } from '../../../services/apiServices';
 import { showToast } from '@/helpers/helpers.js'
 import ButtonSubmit from '../../Buttons/ButtonSubmit/ButtonSubmit.vue';
 
+const props = defineProps(['idClient'])
 const customers = ref();
 const inptName = ref('');
 const inptAddress = ref('');
@@ -91,8 +97,11 @@ const custmoreEmails = ref([]);
 const isValidEmail = ref(false);
 const alertPhoneShown = ref(false);
 const alertEmailShown = ref(false);
+const isUpdateForm = ref(false);
+let nameButton = ref('Submit')
 let getAllId = ref([])
 let getIdUltimate = ref();
+let clientUpdateInfo = ref();
 
 onMounted(async () => {
   getApi(`${import.meta.env.VITE_APP_API}/get/clients`)
@@ -149,7 +158,7 @@ const handleSubmit = () => {
       alertEmailShown.value = true
       return;
     }
-    if(!emailRegex.test(i.value.trim())){
+    if (!emailRegex.test(i.value.trim())) {
       isValidEmail.value = false
       return
     }
@@ -158,7 +167,7 @@ const handleSubmit = () => {
     isValidEmail.value = true
   })
 
-  if(!isValidEmail.value){
+  if (!isValidEmail.value) {
     showToast("Please use a valid Email", "danger", "red")
     return
   }
@@ -168,28 +177,53 @@ const handleSubmit = () => {
     return
   }
 
-  const clientObjt = {
-    customerId: getIdUltimate.value,
-    name: inptName.value,
-    address: inptAddress.value,
-    contact: inptContact.value,
-    businessLine: slctBusinessLine.value,
-    customerType: slctCustomerType.value,
-    phoneNumbers: phoneNumbers.value,
-    customerEmails: custmoreEmails.value
+  if (nameButton.value === "Update") {
+    const clientUpdate = {
+      customerId: getIdUltimate.value,
+      name: inptName.value,
+      address: inptAddress.value,
+      businessLine: slctBusinessLine.value,
+      customerType: slctCustomerType.value,
+      phoneNumbers: phoneNumbers.value,
+      customerEmails: custmoreEmails.value
+    }
+
+    postApi(`${import.meta.env.VITE_APP_API}/post/updateClient`, clientUpdate)
+      .then((data) => {
+        if (data.message == 'ok') {
+          showToast('Client Information Updated', 'success', 'green')
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  } else {
+    const clientObjt = {
+      customerId: getIdUltimate.value,
+      name: inptName.value,
+      address: inptAddress.value,
+      contact: inptContact.value,
+      businessLine: slctBusinessLine.value,
+      customerType: slctCustomerType.value,
+      phoneNumbers: phoneNumbers.value,
+      customerEmails: custmoreEmails.value
+    }
+
+    postApi(`${import.meta.env.VITE_APP_API}/post/addClient`, clientObjt)
+      .then(data => {
+        if (data.message === 'ok') {
+          showToast('Client Saved Successfully', 'success', 'green')
+          getIdUltimate.value += 1
+          cleanFormFields();
+        }
+      }).catch(error => {
+        console.log(error);
+        showToast('Contact IT', 'danger', 'red')
+      })
   }
 
-  postApi(`${import.meta.env.VITE_APP_API}/post/addClient`, clientObjt)
-    .then(data => {
-      if (data.message === 'ok') {
-        showToast('Client Saved Successfully', 'success', 'green')
-        getIdUltimate.value += 1
-        cleanFormFields();
-      }
-    }).catch(error => {
-      console.log(error);
-      showToast('Contact IT', 'danger', 'red')
-    })
+
+
 }
 
 const cleanFormFields = () => {
@@ -214,6 +248,29 @@ const cleanFormFields = () => {
   phoneNumbers.value = [];
   custmoreEmails.value = [];
 }
+
+// Update utilizando watch para recibir el prop
+
+watch(
+  () => props.idClient,
+  async () => {
+    nameButton.value = 'Update'
+    getApi(`${import.meta.env.VITE_APP_API}/get/clientsById/${props.idClient}`)
+      .then((data) => {
+        clientUpdateInfo.value = data[0]
+        getIdUltimate.value = clientUpdateInfo.value.id_Client //Fijarse que no exista error
+        inptName.value = clientUpdateInfo.value.customer_name
+        inptAddress.value = clientUpdateInfo.value.address
+        inptContact.value = clientUpdateInfo.value.customer_contact
+        slctBusinessLine.value = 'DRAYAGE'
+        slctCustomerType.value = clientUpdateInfo.value.customer_type
+        phoneNumbers.value = clientUpdateInfo.value.customer_phone
+        custmoreEmails.value = clientUpdateInfo.value.customer_email
+        //Pendiente realizar update de estos campos.
+      })
+      .catch((error) => console.log(error))
+  }
+)
 
 </script>
 

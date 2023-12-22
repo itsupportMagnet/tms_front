@@ -213,11 +213,7 @@
       .sectionQuotes__thead {
         @include thead;
 
-        th {
-          font-size: 11px;
-          padding: .3rem .3rem;
-
-        }
+      
 
         th:nth-child(8) {
           width: 50px !important;

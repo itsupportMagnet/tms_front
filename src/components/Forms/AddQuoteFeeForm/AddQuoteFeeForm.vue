@@ -161,51 +161,9 @@ const inptNotes = ref();
 const totalFee = ref(0);
 const isLoading = ref(false);
 const isLoading2 = ref(false);
-const accesorialSelected = ref({
-  'Yard Storage': true,
-  'Pre Pull': true,
-  'Tolls': true,
-  'Chassis Split': true,
-  'Drop and Pick': true,
-  'Triaxle': true,
-  'Waiting Time': true,
-  'Port/Rail Congestion': true,
-  'Stop Off': true,
-  'Layover': true,
-  'Dry Run': true,
-  'OverWeight': true,
-  'Reefer Surcharge': true
-});
-const carrierAccesorialValues = ref({
-  'Yard Storage': 50,
-  'Pre Pull': 170,
-  'Tolls': 130,
-  'Chassis Split': 170,
-  'Drop and Pick': 350,
-  'Triaxle': 160,
-  'Waiting Time': 100,
-  'Port/Rail Congestion': 120,
-  'Stop Off': 170,
-  'Layover': 300,
-  'Dry Run': 150,
-  'OverWeight': 300,
-  'Reefer Surcharge': 250
-});
-const magnetAccesorialValues = ref({
-  'Yard Storage': 0,
-  'Pre Pull': 0,
-  'Tolls': 0,
-  'Chassis Split': 0,
-  'Drop and Pick': 0,
-  'Triaxle': 0,
-  'Waiting Time': 0,
-  'Port/Rail Congestion': 0,
-  'Stop Off': 0,
-  'Layover': 0,
-  'Dry Run': 0,
-  'OverWeight': 0,
-  'Reefer Surcharge': 0
-});
+const accesorialSelected = ref({});
+const carrierAccesorialValues = ref({});
+const magnetAccesorialValues = ref({});
 
 const handleIdSubmit = async (e) => {
   e.preventDefault();
