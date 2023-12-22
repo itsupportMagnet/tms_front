@@ -26,7 +26,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <AddClientsForm :idClient="idClientValue" />
+          <AddClientsForm :idClient="ClientIdToUpdate"  />
         </div>
       </div>
     </div>
@@ -154,7 +154,7 @@ const clientsFromApi = ref()
 const slicedClients = ref([])
 const isLoad = ref(true)
 const isClientEmpty = ref(false)
-const ClientIdToUpdate = ref(null)
+const ClientIdToUpdate = ref()
 const ClientIdToDelete = ref(null)
 const filterOpt = ref({
   srtClient: '',
