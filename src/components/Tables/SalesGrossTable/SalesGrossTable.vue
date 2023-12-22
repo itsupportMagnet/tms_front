@@ -73,27 +73,27 @@
         </div>
 
 
-        <div v-if="sales" class="table-container">
-          <table class="table-container__table table-striped table-hover">
-            <thead class="table__header">
-              <tr class="table__row">
-                <th class="table__cell" scope="col">ID</th>
-                <th class="table__cell" scope="col">OPERATION ID</th>
-                <th class="table__cell" scope="col">BOOKING BL</th>
-                <th class="table__cell" scope="col">CONTAINER ID</th>
-                <th class="table__cell" scope="col">PROVIDER</th>
-                <th class="table__cell" scope="col">PROVIDER INVOICE</th>
-                <th class="table__cell" scope="col">STATUS</th>
-                <th class="table__cell" scope="col">BUY</th>
-                <th class="table__cell" scope="col">SELL</th>
-                <th class="table__cell" scope="col">PROFIT</th>
-                <th class="table__cell" scope="col">CUSTOMER</th>
-                <th class="table__cell" scope="col">INVOICE</th>
-                <th class="table__cell" scope="col">MONTH OF INVOICE</th>
-                <th class="table__cell" scope="col">ACTION</th>
+        <!-- <div v-if="sales" class="table-container">
+          <table class="main-table table-striped table-hover">
+            <thead class="table-header">
+              <tr>
+                <th>ID</th>
+                <th>OPERATION ID</th>
+                <th>BOOKING BL</th>
+                <th>CONTAINER ID</th>
+                <th>PROVIDER</th>
+                <th>PROVIDER INVOICE</th>
+                <th>STATUS</th>
+                <th>BUY</th>
+                <th>SELL</th>
+                <th>PROFIT</th>
+                <th>CUSTOMER</th>
+                <th>INVOICE</th>
+                <th>MONTH OF INVOICE</th>
+                <th>ACTION</th>
               </tr>
             </thead>
-            <tbody class="tbody" v-if="!isSalesEmpty">
+            <tbody v-if="!isSalesEmpty">
               <tr v-for="(objSalesGross, rowIndex) in sales" :key="rowIndex">
                 <td v-for="(key, cellIndex) in Object.keys(objSalesGross).slice(0, 13)" :key="cellIndex">
                   <input v-if="key === 'provider_invoice'" v-model="objSalesGross[key]"
@@ -142,14 +142,18 @@
             </tbody>
 
           </table>
-          <div v-if="isSalesEmpty" class="sectionSales__saleEmpty" role="alert">
-            <span class="sr-only">Info</span>
-            <div>
+
+          <div v-if="isSalesEmpty" class="table-empty" role="alert">
+            <div class="error-message-box">
               <i class="bi bi-exclamation-triangle"></i>
-              <span class="font-medium"> Nothing was found!</span> Try using
-              different options.
+              <p class="error-message">Nothing was found! Try using
+                different options.</p>
             </div>
           </div>
+        </div> -->
+
+        <div>
+          <Spinner />
         </div>
       </div>
     </Card>
@@ -178,84 +182,9 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
-import { getApi, postApi } from '../../../services/apiServices'
-import Card from '../../Card/Card.vue'
-// const props = defineProps(['sales'])
-// import { loadSaleGross } from '../../../views/SalesGross.vue'
-
-// onMounted(async () => {
-//   deleteOperationModalRef.value.addEventListener('hidden.bs.modal', () => {
-//     loadSaleGross()
-//   })
-// })
-
-// const sendIdOperation = (obj) => {
-//   saleId.value = obj.id;
-// }
-
-// const confirmDelete = async () => {
-//   const sale_id = saleId.value;
-
-//   deleteApi(`${import.meta.env.VITE_APP_API}/delete/delete-sale/${sale_id}`)
-//     .then(() => {
-//       showToast('Sale Deleted Successfully', 'success', 'green')
-//     })
-//     .catch(error => {
-//       console.log(error);
-//       showToast('Contact IT', 'danger', 'red')
-//     })
-
-// }
-
-// const validateInputBuy = (objSalesGross, key) => {
-//   if (key === 'buy') {
-//     const numberValue = objSalesGross[key]
-//     objSalesGross[key] = Math.max(0, numberValue)
-//     const updateBuy = {
-//       idSalesGross: objSalesGross.id,
-//       buySalesGross: objSalesGross[key],
-//     }
-
-//     postApi(`${import.meta.env.VITE_APP_API}/post/updateBuySalesGross`, updateBuy)
-//       .then()
-//       .catch((error) => console.log(error))
-
-//     objSalesGross.profit = objSalesGross.sell - objSalesGross.buy  //Operacion para calcular profit
-
-//     const updateProfit = {
-//       idSalesGross: objSalesGross.id,
-//       profitSalesGross: objSalesGross.profit
-//     }
-//     postApi(`${import.meta.env.VITE_APP_API}/post/updateProfitSalesGross`, updateProfit)
-//       .then()
-//       .catch((error) => console.log(error))
-//   }
-// }
-
-// const validateInputSell = (objSalesGross, key) => {
-//   if (key === 'sell') {
-//     const numberValue = objSalesGross[key]
-//     objSalesGross[key] = Math.max(0, numberValue)
-
-//     const updateSell = {
-//       idSalesGross: objSalesGross.id,
-//       sellSalesGross: objSalesGross[key]
-//     }
-//     postApi(`${import.meta.env.VITE_APP_API}/post/updateSellSalesGross`, updateSell)
-//       .then()
-//       .catch((error) => console.log(error))
-//   }
-//   objSalesGross.profit = objSalesGross.sell - objSalesGross.buy
-//   const updateProfit = {
-//     idSalesGross: objSalesGross.id,
-//     profitSalesGross: objSalesGross.profit
-//   }
-//   postApi(`${import.meta.env.VITE_APP_API}/post/updateProfitSalesGross`, updateProfit)
-//     .then()
-//     .catch((error) => console.log(error))
-// }
-
-// Esto queda comentado por ahora, ya que era lo que utilizaba cuando tenia dividido por componentes
+import { getApi, postApi } from '@/services/apiServices'
+import Card from '@/components/Card/Card.vue'
+import Spinner from '@/components/Spinner/Spinner.vue'
 
 const sales = ref([])
 const salesFromApi = ref()
@@ -278,6 +207,10 @@ onMounted(async () => {
   deleteOperationModalRef.value.addEventListener('hidden.bs.modal', () => {
     loadSaleGross()
   })
+})
+
+watch(inpt_BookingBL, () => {
+  performSearch()
 })
 
 const loadSaleGross = async () => {
@@ -334,7 +267,7 @@ const validateInputBuy = (objSalesGross, key) => {
       .then()
       .catch((error) => console.log(error))
 
-    objSalesGross.profit = objSalesGross.sell - objSalesGross.buy  //Operacion para calcular profit
+    objSalesGross.profit = objSalesGross.sell - objSalesGross.buy;
 
     const updateProfit = {
       idSalesGross: objSalesGross.id,
@@ -389,10 +322,6 @@ const performSearch = () => {
     checkBookingLength()
   }
 }
-
-watch(inpt_BookingBL, () => {
-  performSearch()
-})
 
 const checkBookingLength = () => {
   sales.value.length === 0

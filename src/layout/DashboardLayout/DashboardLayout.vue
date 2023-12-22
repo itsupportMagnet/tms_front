@@ -1,7 +1,7 @@
 <template>
   <Sidebar />
   <Header :style="{'margin-left': collapsed ? '60px' : '200px', 'padding-left': '15px', 'transition': '0.3s ease' }"/>
-  <div class="body" :style="{'margin-left': collapsed ? '60px' : '200px', 'padding-left': '20px',  'transition': '0.3s ease'}">
+  <div class="body" :style="{'margin-left': collapsed ? '60px' : '200px', 'padding': '0 20px',  'transition': '0.3s ease'}">
     <RouterView />
   </div>
 </template>

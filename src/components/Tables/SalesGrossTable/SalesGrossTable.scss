@@ -2,8 +2,7 @@
 @import "../../../styles/mixin.scss";
 
 .main {
-  width: 101.5%;
-  padding: 0 0;
+  width: 100%;
   padding-top: 1rem;
   justify-content: center;
 
@@ -30,7 +29,7 @@
   }
 
   .main-section {
-    height: 81vh;
+    height: 79vh;
     .search-section {
       display: flex;
       flex-direction: column;
@@ -82,111 +81,132 @@
       overflow-x: auto;
       margin-top: 0.8rem;
       height: 92%;
-      // @media (min-width: 1400px) {
-      //   height: 60vh;
-      // }
 
-      &__table {
+      .main-table {
         border-width: 1px;
         width: 100%; //Al ser pocas columnas, lo estiramos con esto
 
         // height: 10rem !important;
-        .table__header {
+        .table-header {
           @include thead;
         }
-      }
 
-      tbody {
-        text-align: center;
+        tbody {
+          text-align: center;
 
-        tr {
-          border-top: 1px solid rgb(206, 206, 206);
+          tr {
+            border-top: 1px solid rgb(206, 206, 206);
 
-          &:hover {
-            background-color: #ebebeb;
-          }
-
-          td {
-            height: 3.5rem;
-            padding: 0 5px;
-            font-size: 10.5px;
-            font-weight: 600;
-            vertical-align: middle;
-
-            span {
-              display: -webkit-box;
-              -webkit-box-orient: vertical;
-              -webkit-line-clamp: 2;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              justify-content: center;
+            &:hover {
+              background-color: #ebebeb;
             }
 
-            input {
-              height: 30px;
-              width: 80%;
-              min-width: 4rem;
-              border-radius: 4px;
-              border: 1px solid rgb(182, 182, 182);
-              text-align: center;
+            td {
+              height: 3.5rem;
+              padding: 0 5px;
+              font-size: 10.5px;
+              font-weight: 600;
+              vertical-align: middle;
+
+              span {
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                justify-content: center;
+              }
+
+              input {
+                height: 30px;
+                width: 80%;
+                min-width: 4rem;
+                border-radius: 4px;
+                border: 1px solid rgb(182, 182, 182);
+                text-align: center;
+              }
+
+              select {
+                // background-color: #ffffff;
+                // border: none;
+                // height: 30px;
+                // min-width: 5rem;
+                @include select;
+              }
+
+              .btn-action {
+                padding: 0;
+                border: none;
+                background: inherit;
+                font-size: 15px;
+
+                &.btn-delete {
+                  color: red;
+                }
+              }
             }
 
-            select {
-              // background-color: #ffffff;
-              // border: none;
-              // height: 30px;
-              // min-width: 5rem;
+            .select {
               @include select;
             }
 
-            .btn-action {
-              padding: 0;
-              border: none;
-              background: inherit;
-              font-size: 15px;
+            .form-select-pending {
+              background-color: gray !important;
+              border: red;
+              color: white;
+              font-weight: bold;
+            }
 
-              &.btn-delete {
-                color: red;
-              }
+            .form-select-progress {
+              background-color: rgb(230, 230, 82) !important;
+              border: red;
+              color: white;
+              font-weight: bold;
+            }
+
+            .form-select-done {
+              background-color: green;
+              border: red;
+              color: white;
+              font-weight: bold;
+            }
+
+            .form-select-cancelled {
+              background-color: red;
+              border: red;
+              color: white;
+              font-weight: bold;
+            }
+
+            option {
+              background-color: white;
+              color: black;
+              width: 10px !important;
             }
           }
+        }
+      }
 
-          .select {
-            @include select;
+      .table-empty {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+        .error-message-box {
+          text-align: center;
+          gap: 10px;
+          padding: 20px;
+          color: $danger;
+          i {
+            font-size: 40px;
           }
 
-          .form-select-pending {
-            background-color: gray !important;
-            border: red;
-            color: white;
-            font-weight: bold;
-          }
-
-          .form-select-progress {
-            background-color: rgb(230, 230, 82) !important;
-            border: red;
-            color: white;
-            font-weight: bold;
-          }
-
-          .form-select-done {
-            background-color: green;
-            border: red;
-            color: white;
-            font-weight: bold;
-          }
-
-          .form-select-cancelled {
-            background-color: red;
-            border: red;
-            color: white;
-            font-weight: bold;
-          }
-
-          option {
-            background-color: white;
-            color: black;
-            width: 10px !important;
+          .error-message {
+            font-size: 23px;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 0;
           }
         }
       }
