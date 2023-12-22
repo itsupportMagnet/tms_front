@@ -50,32 +50,47 @@
           </div>
           <div v-else>
             <input type="text" class="form-control" id="customerPhone" placeholder="Write down the answer here...">
+            <div class="btnBox ">
+              <button class="btnAdd" @click="addPhoneInpt">
+                +
+              </button>
+            </div>
           </div>
         </div>
-        <div class="btnBox ">
-          <button class="btnAdd" @click="addPhoneInpt">
-            +
-          </button>
-        </div>
+
       </div>
       <div class="col-6">
         <div class="inptBox inptEmailBox">
           <label for="customerEmail" class="form-label">Customer Email</label>
           <div v-if="isUpdateForm">
-            <input v-for="(value, index) in custmoreEmails" :key="index" v-model="custmoreEmails[index]" type="text"
-              class="form-control" placehodler="Write down email here" />
+            <div class="update-email-box">
+              <input v-for="(value, index) in custmoreEmails" :key="index" v-model="custmoreEmails[index]" type="text"
+                class="form-control" placeholder="Write down email here" />
+              <div class="btnBox">
+                <button class="btnAdd" @click="addEmailUpdateInpt">
+                  +
+                </button>
+              </div>
+            </div>
           </div>
           <div v-else>
-            <input type="text" class="form-control" id="customerEmail" placeholder="Write down the answer here...">
+            <div class="add-email-box">
+              <input type="text" class="form-control " id="customerEmail" placeholder="Write down the answer here...">
+              <div class="btnBox">
+                <button class="btnAdd" @click="addEmailInpt">
+                  +
+                </button>
+              </div>
+            </div>
           </div>
 
         </div>
-
+        <!-- 
         <div class="btnBox">
           <button class="btnAdd" @click="addEmailInpt">
             +
           </button>
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -134,13 +149,23 @@ const addPhoneInpt = () => {
 }
 
 const addEmailInpt = () => {
-  const emailInptBox = document.querySelector('.inptEmailBox');
+  const emailInptBox = document.querySelector('.add-email-box');
   const newEmailInpt = document.createElement('input');
   newEmailInpt.classList.add('mt-2', 'form-control');
   newEmailInpt.type = 'email';
   newEmailInpt.placeholder = "Write the extra email here...";
   emailInptBox.appendChild(newEmailInpt);
 }
+
+const addEmailUpdateInpt = () => {
+  const emailInptBox = document.querySelector('.update-email-box');
+  const newEmailInpt = document.createElement('input');
+  newEmailInpt.classList.add('mt-2', 'form-control');
+  newEmailInpt.type = 'email';
+  newEmailInpt.placeholder = "Write the extra email here...";
+  emailInptBox.appendChild(newEmailInpt);
+}
+
 
 const handleSubmit = () => {
   const customerPhoneBox = document.querySelector('.inptPhoneBox');
@@ -153,6 +178,40 @@ const handleSubmit = () => {
     showToast('Please, fill out all the inputs', 'danger', 'red');
     return
   }
+
+  phoneInpts.forEach(i => {
+    if (!i.value) {
+      showToast('Please, fill out Customer Phone', 'danger', 'red');
+      phoneNumbers.value = [];
+      alertPhoneShown.value = true;
+      return;
+    }
+    phoneNumbers.value.push(i.value);
+    alertPhoneShown.value = false;
+  })
+
+  emailInpts.forEach(i => {
+    if (!i.value) {
+      showToast('Please, fill out Customer Email', 'danger', 'red');
+      custmoreEmails.value = [];
+      alertEmailShown.value = true
+      return;
+    }
+    if (!emailRegex.test(i.value.trim())) {
+      isValidEmail.value = false
+      return
+    }
+    custmoreEmails.value.push(i.value);
+    alertEmailShown.value = false;
+    isValidEmail.value = true
+  })
+
+  if (!isValidEmail.value) {
+    showToast("Please use a valid Email", "danger", "red")
+    return
+  }
+
+
 
   if (nameButton.value === "Update") {
     const clientUpdate = {
@@ -176,39 +235,6 @@ const handleSubmit = () => {
         console.log(error)
       })
   } else {
-
-    phoneInpts.forEach(i => {
-      if (!i.value) {
-        showToast('Please, fill out Customer Phone', 'danger', 'red');
-        phoneNumbers.value = [];
-        alertPhoneShown.value = true;
-        return;
-      }
-      phoneNumbers.value.push(i.value);
-      alertPhoneShown.value = false;
-    })
-
-    emailInpts.forEach(i => {
-      if (!i.value) {
-        showToast('Please, fill out Customer Email', 'danger', 'red');
-        custmoreEmails.value = [];
-        alertEmailShown.value = true
-        return;
-      }
-      if (!emailRegex.test(i.value.trim())) {
-        isValidEmail.value = false
-        return
-      }
-      custmoreEmails.value.push(i.value);
-      alertEmailShown.value = false;
-      isValidEmail.value = true
-    })
-
-    if (!isValidEmail.value) {
-      showToast("Please use a valid Email", "danger", "red")
-      return
-    }
-
     const clientObjt = {
       customerId: getIdUltimate.value,
       name: inptName.value,
