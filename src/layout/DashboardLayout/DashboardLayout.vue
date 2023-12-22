@@ -20,5 +20,6 @@ import { RouterView } from 'vue-router';
     background-color: #f6f6f6;
     min-height: 93vh;
     color: #383838;
+    overflow-x: hidden;
   }
 </style>
