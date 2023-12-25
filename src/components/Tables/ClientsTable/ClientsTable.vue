@@ -145,10 +145,14 @@ onMounted(async () => {
   deleteClientModal.value.addEventListener('hidden.bs.modal', () => {
     loadAllClients()
   })
+  updateClientModal.value.addEventListener('hidden.bs.modal', () => {
+    loadAllClients()
+  })
 })
 
 const newClientModal = ref(null)
 const deleteClientModal = ref(null)
+const updateClientModal = ref(null)
 const clients = ref()
 const clientsFromApi = ref()
 const slicedClients = ref([])

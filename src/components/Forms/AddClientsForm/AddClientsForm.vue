@@ -44,29 +44,53 @@
         <div class="inptBox inptPhoneBox">
           <label for="customerPhone" class="form-label">Customer Phone</label>
           <div v-if="isUpdateForm">
-            
+            <input v-for="(value, index) in phoneNumbers" :key="index" v-model="phoneNumbers[index]" type="text"
+              class="form-control" placeholder="Write down phone here" />
+
           </div>
           <div v-else>
             <input type="text" class="form-control" id="customerPhone" placeholder="Write down the answer here...">
+            <div class="btnBox ">
+              <button class="btnAdd" @click="addPhoneInpt">
+                +
+              </button>
+            </div>
           </div>
         </div>
-        <div class="btnBox ">
-          <button class="btnAdd" @click="addPhoneInpt">
-            +
-          </button>
-        </div>
+
       </div>
       <div class="col-6">
         <div class="inptBox inptEmailBox">
           <label for="customerEmail" class="form-label">Customer Email</label>
-          <input type="text" class="form-control" id="customerEmail" placeholder="Write down the answer here...">
-        </div>
+          <div v-if="isUpdateForm">
+            <div class="update-email-box">
+              <input v-for="(value, index) in custmoreEmails" :key="index" v-model="custmoreEmails[index]" type="text"
+                class="form-control" placeholder="Write down email here" />
+              <div class="btnBox">
+                <button class="btnAdd" @click="addEmailUpdateInpt">
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+          <div v-else>
+            <div class="add-email-box">
+              <input type="text" class="form-control " id="customerEmail" placeholder="Write down the answer here...">
+              <div class="btnBox">
+                <button class="btnAdd" @click="addEmailInpt">
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
 
+        </div>
+        <!-- 
         <div class="btnBox">
           <button class="btnAdd" @click="addEmailInpt">
             +
           </button>
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -80,7 +104,7 @@
 
 <script setup>
 
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, defineExpose } from 'vue';
 import { getApi, postApi } from '../../../services/apiServices';
 import { showToast } from '@/helpers/helpers.js'
 import ButtonSubmit from '../../Buttons/ButtonSubmit/ButtonSubmit.vue';
@@ -125,7 +149,7 @@ const addPhoneInpt = () => {
 }
 
 const addEmailInpt = () => {
-  const emailInptBox = document.querySelector('.inptEmailBox');
+  const emailInptBox = document.querySelector('.add-email-box');
   const newEmailInpt = document.createElement('input');
   newEmailInpt.classList.add('mt-2', 'form-control');
   newEmailInpt.type = 'email';
@@ -133,12 +157,27 @@ const addEmailInpt = () => {
   emailInptBox.appendChild(newEmailInpt);
 }
 
+const addEmailUpdateInpt = () => {
+  const emailInptBox = document.querySelector('.update-email-box');
+  const newEmailInpt = document.createElement('input');
+  newEmailInpt.classList.add('mt-2', 'form-control');
+  newEmailInpt.type = 'email';
+  newEmailInpt.placeholder = "Write the extra email here...";
+  emailInptBox.appendChild(newEmailInpt);
+}
+
+
 const handleSubmit = () => {
   const customerPhoneBox = document.querySelector('.inptPhoneBox');
   const phoneInpts = customerPhoneBox.querySelectorAll('input');
   const customerEmailBox = document.querySelector('.inptEmailBox');
   const emailInpts = customerEmailBox.querySelectorAll('input');
   const emailRegex = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/
+
+  if (!inptName.value || !inptAddress.value || !inptContact.value || !slctBusinessLine.value || !slctCustomerType.value) {
+    showToast('Please, fill out all the inputs', 'danger', 'red');
+    return
+  }
 
   phoneInpts.forEach(i => {
     if (!i.value) {
@@ -172,20 +211,18 @@ const handleSubmit = () => {
     return
   }
 
-  if (!inptName.value || !inptAddress.value || !inptContact.value || !slctBusinessLine.value || !slctCustomerType.value) {
-    showToast('Please, fill out all the inputs', 'danger', 'red');
-    return
-  }
+
 
   if (nameButton.value === "Update") {
     const clientUpdate = {
       customerId: getIdUltimate.value,
       name: inptName.value,
       address: inptAddress.value,
+      contact: inptContact.value,
       businessLine: slctBusinessLine.value,
       customerType: slctCustomerType.value,
-      phoneNumbers: phoneNumbers.value,
-      customerEmails: custmoreEmails.value
+      phoneNumbers: JSON.stringify(phoneNumbers.value),
+      customerEmails: JSON.stringify(custmoreEmails.value)
     }
 
     postApi(`${import.meta.env.VITE_APP_API}/post/updateClient`, clientUpdate)
@@ -221,9 +258,6 @@ const handleSubmit = () => {
         showToast('Contact IT', 'danger', 'red')
       })
   }
-
-
-
 }
 
 const cleanFormFields = () => {
@@ -255,6 +289,8 @@ watch(
   () => props.idClient,
   async () => {
     nameButton.value = 'Update'
+    isUpdateForm.value = true;
+    console.log(isUpdateForm.value)
     getApi(`${import.meta.env.VITE_APP_API}/get/clientsById/${props.idClient}`)
       .then((data) => {
         clientUpdateInfo.value = data[0]
