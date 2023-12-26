@@ -46,31 +46,64 @@
           <div class="container-fluid">
             <Card>
               <div class="table-row">
-                <div class="table-responsive table-container">
-                  <table class="table-container__table">
+                <div class="table-responsive table-container summary-table">
+                  <div class="buy-summary-title">
+                    <h2>Buy Summmary</h2>
+                  </div>
+                  <table class="table-container__table table-spacer">
                     <thead class="table__header">
                       <tr class="table__row">
-                        <th class="table__cell" scope="col">Item#</th>
-                        <th class="table__cell" scope="col">Product</th>
-                        <th class="table__cell" scope="col">Quantity</th>
-                        <th class="table__cell" scope="col">Rate</th>
-                        <th class="table__cell" scope="col">Amount</th> <!-- Calculo Quantity x Rate -->
+                        <th class="table__cell" scope="col"># OF ITEM</th>
+                        <th class="table__cell" scope="col">PRODUCT</th>
+                        <th class="table__cell" scope="col">QUANTITY</th>
+                        <th class="table__cell" scope="col">RATE</th>
+                        <th class="table__cell" scope="col">AMOUNT</th> <!-- Calculo Quantity x Rate -->
                       </tr>
                     </thead>
                     <tbody class="tbody">
                       <tr>
                         <td>1</td>
                         <td>Drayage :</td>
-                        <td><input type="number" v-model="drayageQuantity" min="1" /></td>
-                        <td><input type="number" /></td>
-                        <td><input type="number" disabled /></td>
+                        <td><input type="number" v-model="drayageBuyQuantity" min="1" disabled /></td>
+                        <td><input type="number" v-model="buySummaryDrayage" disabled /></td>
+                        <td><input type="number" v-model="buySummaryDrayage" disabled /></td>
                       </tr>
                       <tr>
                         <td>2</td>
                         <td>Chassis :</td>
-                        <td><input type="number" v-model="chassisQuantity" min="1" /></td>
-                        <td><input type="number" /></td>
-                        <td><input type="number" disabled /></td>
+                        <td><input type="number" v-model="chassisBuyQuantity" step="1" min="1" /></td>
+                        <td><input type="number" v-model="buySummaryChassis" disabled /></td>
+                        <td><input type="number" v-model="totalBuyChassisAmount" disabled /></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="sell-summary-title">
+                    <h2>Sell Summmary</h2>
+                  </div>
+                  <table class="table-container__table table-spacer">
+                    <thead class="table__header">
+                      <tr class="table__row">
+                        <th class="table__cell" scope="col"># OF ITEM</th>
+                        <th class="table__cell" scope="col">PRODUCT</th>
+                        <th class="table__cell" scope="col">QUANTITY</th>
+                        <th class="table__cell" scope="col">RATE</th>
+                        <th class="table__cell" scope="col">AMOUNT</th> <!-- Calculo Quantity x Rate -->
+                      </tr>
+                    </thead>
+                    <tbody class="tbody">
+                      <tr>
+                        <td>1</td>
+                        <td>Drayage :</td>
+                        <td><input type="number" v-model="drayageSellQuantity" step="1" min="1" disabled /></td>
+                        <td><input type="number" v-model="sellSummaryDrayage" disabled /></td>
+                        <td><input type="number" v-model="sellSummaryDrayage" disabled /></td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>Chassis :</td>
+                        <td><input type="number" v-model="chassisSellQuantity" min="1" /></td>
+                        <td><input type="number" v-model="sellSummaryChassis" disabled /></td>
+                        <td><input type="number" v-model="totalSellChassisAmount" disabled /></td>
                       </tr>
                     </tbody>
                   </table>
@@ -471,6 +504,12 @@ const modalRefNotes = ref(null)
 const newOperationModal = ref(null);
 const updateOperationModal = ref(null);
 const accesorialModalDone = ref(null);
+const drayageBuyQuantity = ref(1);
+const drayageSellQuantity = ref(1);
+const chassisBuyQuantity = ref(1);
+const chassisSellQuantity = ref(1);
+const totalBuyChassisAmount = ref();
+const totalSellChassisAmount = ref();
 const slctStatus = ref()
 const slctContainerStatus = ref()
 const message = ref()
@@ -496,6 +535,10 @@ const magnetAccesorialValues = ref({});
 const totalAccesorialValues = ref({})
 const closedQuoteBuyChassis = ref();
 const closedQuoteSellChassis = ref();
+const buySummaryDrayage = ref();
+const buySummaryChassis = ref();
+const sellSummaryDrayage = ref();
+const sellSummaryChassis = ref();
 const filterObj = ref({
   date: '',
   status: '',
@@ -505,7 +548,6 @@ const filterObj = ref({
 })
 
 watch(accesorialSelected.value, () => {
-  console.log("Cambio")
   Object.entries(accesorialSelected.value).forEach(([key, value]) => {
     if (!value) {
       delete carrierAccesorialValues.value[key]
@@ -549,14 +591,7 @@ onMounted(async () => {
   accesorialModalDone.value.addEventListener('hidden.bs.modal', () => {
     closeAccesorialModal()
     loadAllOperations()
-    isAccesorialModal1.value = true;
-    isAccesorialModal2.value = false;
-    isAccesorialModal3.value = false;
-    accesorialSelected.value = {};
-    carrierAccesorialValues.value = {};
-    magnetAccesorialValues.value = {};
-    totalAccesorialValues.value = {};
-
+    resetAtDismissModal() //resetear valores al cerrar el modal
     watch(accesorialSelected.value, () => {
       Object.entries(accesorialSelected.value).forEach(([key, value]) => {
         if (!value) {
@@ -856,6 +891,12 @@ const feedingOperationTableModal = (objOperation, e) => {
       getApi(`${import.meta.env.VITE_APP_API}/get/get-normal-quote/${selectedIdOpenQuote.id}`)
         .then((data) => {
           openQuoteInfo.value = data
+          buySummaryDrayage.value = data.carrierFee
+          buySummaryChassis.value = data.carrierChassis
+          sellSummaryDrayage.value = data.magnetFee
+          sellSummaryChassis.value = data.magnetChassis
+          totalBuyChassisAmount.value = buySummaryChassis.value * chassisQuantity.value
+          totalSellChassisAmount.value = sellSummaryChassis.value * chassisQuantity.value
           carrierAccesorialValues.value = data.carrierAccesorials
           magnetAccesorialValues.value = data.magnetAccesorials
           for (let key in data.carrierAccesorials) {
@@ -892,6 +933,11 @@ const feedingOperationTableModal = (objOperation, e) => {
       getApi(`${import.meta.env.VITE_APP_API}/get/get-florida-quote/${selectedClosedQuote.id}`)
         .then((data) => {
           closedQuoteInfo.value = data
+          console.log(data.carrierDrayage)
+          buySummaryDrayage.value = convertToNumber(data.carrierDrayage)
+          // buySummaryChassis.value = data.carrierChassis   FALTA DETALLAR DONDE TRAIGO LA INFO
+          sellSummaryDrayage.value = convertToNumber(data.customerDrayage)
+          // sellSummaryChassis.value = data.magnetChassis   FALTA DETALLAR DONDE TRAIGO LA INFO
 
         })
         .catch((error) => console.log(error))
@@ -990,6 +1036,29 @@ const handleContinueAccesorial1 = () => {
   isAccesorialModal1.value = false;
   isAccesorialModal2.value = true;
   isAccesorialModal3.value = false;
+  loadAllOperations();
+  if (idQuoteModal.value.includes('MGT')) {
+    console.log('Estoy con la quote Abierta')
+
+    const toSalesGrossFromOpenSummary = {
+      operationId : modalInfo.value['ID Operation'],
+      drayageBuyQuantity : drayageBuyQuantity.value,
+      drayageBuySummary : drayageBuySummary.value,
+      totalBuyChassisAmount : totalBuyChassisAmount.value,
+      chassisSellQuantity : chassisSellQuantity.value,
+      chassisSellSummary : chassisSellSummary.value,
+      totalSellChassisAmount : totalSellChassisAmount.value
+    }
+
+    if (salesGrossInfo.value.some(item => item.operation_id === modalInfo.value['ID Operation'])) {
+      //api update
+    }else {
+      //api insert
+    }
+
+  } else {
+    console.log('Estoy con la quote Cerrada')
+  }
 }
 
 const handleBtnBackAccesorial2 = () => {
@@ -1161,9 +1230,36 @@ const calculateTotalAccesorialCharges = (accesorialList) => {
   })
   return totalAmountValues
 }
+
+const resetAtDismissModal = () => {
+  isAccesorialModal1.value = true;
+  isAccesorialModal2.value = false;
+  isAccesorialModal3.value = false;
+  accesorialSelected.value = {};
+  carrierAccesorialValues.value = {};
+  magnetAccesorialValues.value = {};
+  totalAccesorialValues.value = {};
+
+  buySummaryDrayage.value = "";
+  buySummaryChassis.value = "";
+  chassisBuyQuantity.value = 1;
+  sellSummaryDrayage.value = "";
+  sellSummaryChassis.value = "";
+  chassisSellQuantity.value = 1;
+
+}
+
+const calculateTotalChassis = (summary, quantity, total) => {
+  total.value = (summary.value * quantity.value).toFixed(2);
+}
+
+watch([buySummaryChassis, chassisBuyQuantity], () => calculateTotalChassis(buySummaryChassis, chassisBuyQuantity, totalBuyChassisAmount))
+
+watch([sellSummaryChassis, chassisSellQuantity], () => calculateTotalChassis(sellSummaryChassis, chassisSellQuantity, totalSellChassisAmount))
 </script>
 
 <style lang="scss" scoped>
 @import './AllOperations.scss';
-@import '../../Forms/AddQuoteFeeForm/AddQuoteFeeForm.scss'
+@import '../../Forms/AddQuoteFeeForm/AddQuoteFeeForm.scss';
+@import '../../../styles/mixin.scss';
 </style>
