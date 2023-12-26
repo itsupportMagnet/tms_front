@@ -193,32 +193,18 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        
-        .error-message-box {
-          text-align: center;
-          gap: 10px;
-          padding: 20px;
-          color: $danger;
-          i {
-            font-size: 40px;
-          }
 
-          .error-message {
-            font-size: 23px;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-bottom: 0;
-          }
+        .error-message-box {
+          @include error_message_box;
         }
       }
     }
 
-    &__loading{
+    &__loading {
       height: 79vh;
       display: flex;
       justify-content: center;
       align-items: center;
     }
   }
-  
 }

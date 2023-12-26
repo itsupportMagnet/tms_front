@@ -1,4 +1,4 @@
-@import './global.scss';
+@import "./global.scss";
 
 @mixin secondaryTitle {
   h2 {
@@ -15,7 +15,7 @@
     &:before,
     &:after {
       background-color: #c50000;
-      content: '';
+      content: "";
       display: block;
       height: 3px;
       width: 75px;
@@ -46,7 +46,7 @@
     &:before,
     &:after {
       background-color: $primary;
-      content: '';
+      content: "";
       display: block;
       height: 3px;
       width: 75px;
@@ -76,7 +76,7 @@
 
   th {
     text-align: center !important;
-    padding: 0.3rem .5rem;
+    padding: 0.3rem 0.5rem;
     vertical-align: middle;
     height: 40px;
   }
@@ -153,4 +153,29 @@
   width: 1rem;
   height: 1rem;
   color: #6b7280;
+}
+
+@mixin error_message_box {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  color: #991b1b;
+  background-color: #fef2f2;
+
+  i {
+    font-size: 30px;
+  }
+
+  p {
+    font-size: 23px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 0;
+  }
 }
