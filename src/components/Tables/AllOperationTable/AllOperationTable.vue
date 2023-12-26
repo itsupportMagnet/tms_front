@@ -41,45 +41,88 @@
         </div>
 
         <!-- First Modal Before Continue Button -->
-        <div class="modal-body" v-if="isAccesorialModal1">
 
-          <div class="accesories-modal">
-            <div :if="accesorials">
-              <div class="carriersFee__tableContainer--carrirerFee">
-                <div class="carrier_title">
-                  <p>Buy Accesorials</p>
-                </div>
-                <div class="chassisInputContainer" v-if="isOpenQuote">
-                  <label class="chassisInputContainer__label">Buy Chassis:</label>
-                  <input v-model="closedQuoteBuyChassis" type="Number" placeholder="Add Buy Chassis Value" />
-                </div>
-                <div class="carrierAccesorialsContainer">
-                  <div class="carrierAccesorialsContainer__col" v-for="item in accesorials" :key="item.id">
-                    <label>
-                      <input type="checkbox" :value="item.accesorial" v-model="accesorialSelected[item.accesorial]" />
-                      {{ item.accesorial }}
-                    </label>
-                    <input v-if="accesorialSelected[item.accesorial]" class="accesorialValue" type="number"
-                      v-model="carrierAccesorialValues[item.accesorial]" @input="accesorialValuesOnChange" />
-                  </div>
+        <div class="modal-body" v-if="isAccesorialModal1">
+          <div class="container-fluid">
+            <Card>
+              <div class="table-row">
+                <div class="table-responsive table-container">
+                  <table class="table-container__table">
+                    <thead class="table__header">
+                      <tr class="table__row">
+                        <th class="table__cell" scope="col">Item#</th>
+                        <th class="table__cell" scope="col">Product</th>
+                        <th class="table__cell" scope="col">Quantity</th>
+                        <th class="table__cell" scope="col">Rate</th>
+                        <th class="table__cell" scope="col">Amount</th> <!-- Calculo Quantity x Rate -->
+                      </tr>
+                    </thead>
+                    <tbody class="tbody">
+                      <tr>
+                        <td>1</td>
+                        <td>Drayage :</td>
+                        <td><input type="number" v-model="drayageQuantity" min="1" /></td>
+                        <td><input type="number" /></td>
+                        <td><input type="number" disabled /></td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>Chassis :</td>
+                        <td><input type="number" v-model="chassisQuantity" min="1" /></td>
+                        <td><input type="number" /></td>
+                        <td><input type="number" disabled /></td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
-              <!-- MAGNET FEE -->
-              <div class="carriersFee__tableContainer--magnetFee">
-                <div class="magnet_title">
-                  <p>Sell Accesorials</p>
+            </Card>
+          </div>
+
+        </div>
+
+
+        <!-- Second Modal Before Continue Button -->
+        <div class="modal-body" v-if="isAccesorialModal2">
+          <div class="carriers-fee">
+            <div class="main-container">
+              <div :if="accesorials">
+                <div class="buy-rates-section">
+                  <div class="rates-title">
+                    <h2>Buy Accesorials</h2>
+                  </div>
+                  <div class="chassisInputContainer" v-if="isOpenQuote">
+                    <label class="chassisInputContainer__label">Buy Chassis:</label>
+                    <input v-model="closedQuoteBuyChassis" type="Number" placeholder="Add Buy Chassis Value" />
+                  </div>
+                  <div class="buy-accesorials-container">
+                    <div class="buy-accesorials-container__col" v-for="item in accesorials" :key="item.id">
+                      <label>
+                        <input type="checkbox" :value="item.accesorial" v-model="accesorialSelected[item.accesorial]" />
+                        {{ item.accesorial }}
+                      </label>
+                      <input v-if="accesorialSelected[item.accesorial]" class="accesorialValue" type="number"
+                        v-model="carrierAccesorialValues[item.accesorial]" @input="accesorialValuesOnChange" />
+                    </div>
+                  </div>
                 </div>
-                <div class="chassisInputContainer" v-if="isOpenQuote">
-                  <label class="chassisInputContainer__label">Sell Chassis:</label>
-                  <input v-model="closedQuoteSellChassis" type="Number" placeholder="Add Sell Chassis Value" />
-                </div>
-                <div class="magnetAccesorialsContainer">
-                  <div class="magnetAccesorialsContainer__col" v-for="(value, name, index) in accesorialSelected"
-                    :key="index">
-                    <label v-if="value">
-                      {{ name }}
-                      <input v-model="magnetAccesorialValues[name]" type="number" />
-                    </label>
+                <!-- MAGNET FEE -->
+                <div class="sell-rates-section">
+                  <div class="rates-title">
+                    <h2>Sell Accesorials</h2>
+                  </div>
+                  <div class="chassisInputContainer" v-if="isOpenQuote">
+                    <label class="fee-label">Sell Chassis:</label>
+                    <input v-model="closedQuoteSellChassis" type="Number" placeholder="Add Sell Chassis Value" />
+                  </div>
+                  <div class="sell-accesorials-container">
+                    <div class="sell-accesorials-container__col" v-for="(value, name, index) in accesorialSelected"
+                      :key="index">
+                      <label v-if="value">
+                        {{ name }}
+                        <input v-model="magnetAccesorialValues[name]" type="number" />
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -87,8 +130,8 @@
           </div>
         </div>
 
-        <!-- Second Modal After Continue Button -->
-        <div class="modal-body modal-done-status" v-if="isAccesorialModal2">
+        <!-- Third Modal After Continue Button -->
+        <div class="modal-body modal-done-status" v-if="isAccesorialModal3">
           <table v-if="modalInfo">
             <tr v-for="(item, index) in modalInfo" style="border: 1px solid #000" :key="index">
               <th style="background-color: #1d4ed8; color: #fff; padding: 0 10px">
@@ -99,12 +142,20 @@
           </table>
         </div>
 
+        <!-- Footer Buttons -->
+
         <div class="modal-footer" v-if="isAccesorialModal1">
-          <button @click="handleContinueClickBtn" v-if="isAccesorialModal1" type="button"
+          <button @click="handleContinueAccesorial1" v-if="isAccesorialModal1" type="button"
             class="btn btn-success">Continue</button>
         </div>
 
         <div class="modal-footer" v-if="isAccesorialModal2">
+          <button @click="handleBtnBackAccesorial2" type="button" class="btn btn-danger">Go Back</button>
+          <button @click="handleContinueClickBtn" v-if="isAccesorialModal2" type="button"
+            class="btn btn-success">Continue</button>
+        </div>
+
+        <div class="modal-footer" v-if="isAccesorialModal3">
           <button @click="handleClickBtnBack" type="button" class="btn btn-danger">Go
             Back</button>
           <button @click="copyHtmlBtnDoneStatus" type="button" class="btn btn-primary">
@@ -434,6 +485,7 @@ let newOperationKey = ref(0)
 let newDoneModalKey = ref(0)
 const isAccesorialModal1 = ref(true)
 const isAccesorialModal2 = ref(false)
+const isAccesorialModal3 = ref(false)
 const isOpenQuote = ref(false)
 const openQuoteInfo = ref();
 const closedQuoteInfo = ref();
@@ -499,6 +551,7 @@ onMounted(async () => {
     loadAllOperations()
     isAccesorialModal1.value = true;
     isAccesorialModal2.value = false;
+    isAccesorialModal3.value = false;
     accesorialSelected.value = {};
     carrierAccesorialValues.value = {};
     magnetAccesorialValues.value = {};
@@ -933,6 +986,18 @@ const confirmDelete = async () => {
   await deleteOperation(OperationIdToDelete.value)
 }
 
+const handleContinueAccesorial1 = () => {
+  isAccesorialModal1.value = false;
+  isAccesorialModal2.value = true;
+  isAccesorialModal3.value = false;
+}
+
+const handleBtnBackAccesorial2 = () => {
+  isAccesorialModal1.value = true;
+  isAccesorialModal2.value = false;
+  isAccesorialModal3.value = false;
+}
+
 const handleContinueClickBtn = async () => {
   const currentDate = new Date();
 
@@ -1027,12 +1092,14 @@ const handleContinueClickBtn = async () => {
     }
   }
   isAccesorialModal1.value = false;
-  isAccesorialModal2.value = true;
+  isAccesorialModal2.value = false;
+  isAccesorialModal3.value = true;
 }
 
 const handleClickBtnBack = () => {
-  isAccesorialModal1.value = true;
-  isAccesorialModal2.value = false;
+  isAccesorialModal1.value = false;
+  isAccesorialModal2.value = true;
+  isAccesorialModal3.value = false;
   loadAllOperations()
 }
 
