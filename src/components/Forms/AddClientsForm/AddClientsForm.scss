@@ -29,6 +29,16 @@
     }
   }
 
+  .phone-box{
+    display: grid;
+    gap: 7px;
+  }
+
+  .email-box{
+    display: grid;
+    gap: 7px;
+  }
+
   .btnBox {
     display: flex;
     justify-content: center;
@@ -44,3 +54,4 @@
   }
 
 }
+

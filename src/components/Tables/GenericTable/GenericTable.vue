@@ -1,15 +1,12 @@
 <template>
-  <div class="mainContainer">
-    <div v-if="spinnerLoad" class="d-flex justify-content-center my-3">
-      <Spinner />
-    </div>
+  <div class="main-container">
     <Card>
-      <div class="card__tableContainer">
-        <table class="genericTable table table-hover">
+      <div v-if="!isLoading" class="main-section ">
+        <table class="generic-table table table-hover">
           <thead class="table-header">
-            <th scope="col" v-for="(columnName, index) in columnNames" :key="index"> {{ columnName }}</th>
+            <th v-for="(columnName, index) in columnNames" :key="index"> {{ columnName }}</th>
           </thead>
-          <tbody class="genericTBody">
+          <tbody class="generic-tbody">
             <tr v-for="row in tableData" :key="row.id">
               <td v-for="(item, key) in Object.values(row)" :key="key">
                 <select v-if="Array.isArray(item) && item.length > 1" class="form-select">
@@ -28,6 +25,10 @@
           </tbody>
         </table>
       </div>
+
+      <div v-else class="main-section__loading">
+        <Spinner />
+      </div>
     </Card>
   </div>
 </template>
@@ -36,7 +37,8 @@
 import { ref, defineProps } from 'vue'
 import Spinner from '../../Spinner/Spinner.vue';
 import Card from '../../Card/Card.vue';
-const props = defineProps(['tableData', 'columnNames', 'spinnerLoad'])
+
+const props = defineProps(['tableData', 'columnNames', 'isLoading'])
 </script>
 
 <style lang="scss" scoped>

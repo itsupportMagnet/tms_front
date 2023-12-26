@@ -1,22 +1,20 @@
 <template>
   <main class="main">
     <div class="container main-container form">
-      <form method="POST" id="form" class="mt-10">
-        <div :class="{ hidden: !isLoading }">
-          <div class="drayage__spin">
-            <Spin />
-          </div>
+      <form method="POST" id="form">
+        <div :class="{ hidden: !isLoading }" class="spinner-container">
+          <Spinner />
         </div>
 
         <div class="drayage" v-if="!isEmptyPort">
           <div class="drayage__business">
-            <label class="drayage__business--label" for="slct_operation">Coordinator </label>
+            <label class="drayage__label" for="slct_operation">Coordinator </label>
             <input type="text" class="drayage__input" :value="inptCordinator" disabled>
           </div>
 
           <div class="drayage__business">
-            <label class="drayage__business--label" for="slct_operation">Mode of Operation</label>
-            <select class="drayage__business--select" @change="operationOnChange" id="slct_operation" name="ModeOperation"
+            <label class="drayage__label" for="slct_operation">Mode of Operation</label>
+            <select class="drayage__select" @change="operationOnChange" id="slct_operation" name="ModeOperation"
               v-model="slctOperation">
               <option selected disabled value>Select one</option>
               <option value="Import">Import</option>
@@ -40,10 +38,10 @@
 
               <div :class="{ hidden: !slctPOL }">
                 <div class="drayage__spin" v-if="isEmptyCarrier">
-                  <Spin />
+                  <Spinner />
                 </div>
                 <div v-else>
-                  <label class="drayage__label drayage__labelCarrier" for="slct_carrier">Choose your carrier</label>
+                  <label class="drayage__label" for="slct_carrier">Choose your carrier</label>
                   <select multiple v-model="slctCarrier" @change="$emit('carrierEmail', $event.target.value)"
                     class="drayage__select" name="Port carrier">
                     <option v-for="item in carrier" :key="item.index">
@@ -75,8 +73,8 @@
           </div>
 
           <div class="drayage__equipment">
-            <label class="drayage__equipment--label" for="slct_equipment">Equipment</label>
-            <select class="drayage__equipment--select" id="slct_equipment" name="Equipment" v-model="slctEquipment">
+            <label class="drayage__label" for="slct_equipment">Equipment</label>
+            <select class="drayage__select" id="slct_equipment" name="Equipment" v-model="slctEquipment">
               <option selected disabled value>Select one</option>
               <option value="Dry">Dry</option>
               <option value="Reefer">Reefer</option>
@@ -212,7 +210,7 @@
 
           <div class="py-3" :class="{ hidden: !isLoading2 }">
             <div class="d-flex justify-content-center">
-              <Spin />
+              <Spinner />
             </div>
           </div>
 
@@ -229,9 +227,9 @@
 import { onMounted, ref } from 'vue';
 import 'mosha-vue-toastify/dist/style.css';
 import { showToast } from '@/helpers/helpers.js'
-// import Spin from '../../components/Spinner.vue';
+import Spinner from '@/components/Spinner/Spinner.vue'
 import { getApi, postApi } from '@/services/apiServices';
-import SendButton from '../../Buttons/SendButton/SendButton.vue';
+import SendButton from '@/components/Buttons/SendButton/SendButton.vue';
 // import ButtonSubmit from '@/views/pricingTool/ButtonSubmit.vue';
 // import router from '@/router';
 const isEmptyPort = ref(true);
@@ -365,7 +363,7 @@ const handleSubmit = async (e) => {
     loadType: slctLoadType.value,
     isExport: isExport.value,
     quoteStatus: slctQuoteStatus.value,
-    cordinator:  'Testeando'        //localStorage.getItem('userName')
+    cordinator: 'Testeando'        //localStorage.getItem('userName')
   }
 
   postApi(`${import.meta.env.VITE_APP_API}/createQuote`, quoteInfo)

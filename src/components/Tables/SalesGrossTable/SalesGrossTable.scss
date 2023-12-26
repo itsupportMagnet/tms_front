@@ -29,6 +29,7 @@
   }
 
   .main-section {
+    text-align: center;
     height: 79vh;
     .search-section {
       display: flex;
@@ -211,5 +212,13 @@
         }
       }
     }
+
+    &__loading{
+      height: 79vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
+  
 }

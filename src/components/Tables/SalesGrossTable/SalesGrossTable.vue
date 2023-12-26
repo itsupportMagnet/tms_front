@@ -57,7 +57,7 @@
     </div>
 
     <Card>
-      <div class="main-section">
+      <div v-if="!isLoading" class="main-section">
         <div class="search-section">
           <div class="search-box">
             <div class="search-icon">
@@ -73,7 +73,7 @@
         </div>
 
 
-        <!-- <div v-if="sales" class="table-container">
+        <div v-if="sales" class="table-container">
           <table class="main-table table-striped table-hover">
             <thead class="table-header">
               <tr>
@@ -150,11 +150,11 @@
                 different options.</p>
             </div>
           </div>
-        </div> -->
-
-        <div>
-          <Spinner />
         </div>
+      </div>
+
+      <div v-else class="main-section__loading">
+        <Spinner />
       </div>
     </Card>
   </div>
@@ -191,7 +191,7 @@ const salesFromApi = ref()
 const isSalesEmpty = ref(false)
 const providers = ref()
 const customers = ref()
-const isLoad = ref(true)
+const isLoading = ref(true)
 const deleteOperationModalRef = ref(null)
 const saleId = ref();
 const inpt_BookingBL = ref()
@@ -203,7 +203,9 @@ const filterOpt = ref({
 })
 
 onMounted(async () => {
-  loadSaleGross()
+  isLoading.value = true;
+  loadSaleGross();
+
   deleteOperationModalRef.value.addEventListener('hidden.bs.modal', () => {
     loadSaleGross()
   })
@@ -228,8 +230,8 @@ const loadSaleGross = async () => {
     salesFromApi.value = salesGrossData.reverse();
     customers.value = customersData;
     sales.value = salesFromApi.value;
-    isLoad.value = false;
     providers.value = providersData;
+    isLoading.value = false;
 
   } catch (error) {
     console.log(error)

@@ -1,72 +1,65 @@
-@import '../../../styles/global.scss';
-@import '../../../styles/mixin.scss';
+@import "../../../styles/global.scss";
+@import "../../../styles/mixin.scss";
 
-.mainContainer {
+.main-container {
+  margin-top: 10px;
 
-  .card {
-    display: flex;
-    margin-top: 1.5rem;
-    flex-direction: column;
-    width: 100%;
-
-    &__tableContainer {
-      overflow: auto;
-      min-width: 100%;
-      height: 83vh;
-    }
-  }
-
-  .tableContainer {
+  .main-section {
     overflow: auto;
-    padding: 0 0;
     min-width: 100%;
-    height: 100%;
-  }
+    height: 83vh;
 
-  .genericTable {
-    border-radius: 50px;
-
-    .border {
-      height: 1px;
-      padding: 0px;
-      color: black;
-    }
-
-    .table-header {
-      @include thead;
-    }
-
-    .genericTBody {
-      tr {
-        background-color: white !important;
-        border-top: 1px solid rgb(206, 206, 206) !important;
-
-        &:hover {
-          background-color: #ebebeb !important;
-        }
-
-        td {
-          height: 3.5rem;
-          padding: 0 5px;
-          font-size: 10.5px;
-          font-weight: 600;
-          text-align: center;
-          vertical-align: middle;
-
-          span {
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 2;
-            overflow: hidden;
-            text-overflow: ellipsis;
+    .generic-table {
+      border-radius: 50px;
+  
+      .border {
+        height: 1px;
+        padding: 0px;
+        color: black;
+      }
+  
+      .table-header {
+        @include thead;
+      }
+  
+      .generic-tbody {
+        tr {
+          background-color: white !important;
+          border-top: 1px solid rgb(206, 206, 206) !important;
+  
+          &:hover {
+            background-color: #ebebeb !important;
           }
-
-          input{
-            @include input;
+  
+          td {
+            height: 3.5rem;
+            padding: 0 5px;
+            font-size: 10.5px;
+            font-weight: 600;
+            text-align: center;
+            vertical-align: middle;
+  
+            span {
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 2;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+  
+            input {
+              @include input;
+            }
           }
-
         }
       }
+    }
+
+    &__loading{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 83vh;
     }
   }
 }

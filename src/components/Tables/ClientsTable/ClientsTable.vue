@@ -26,7 +26,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <AddClientsForm :idClient="ClientIdToUpdate"  />
+          <AddClientsForm :idClient="clientIdToUpdate"  />
         </div>
       </div>
     </div>
@@ -158,8 +158,8 @@ const clientsFromApi = ref()
 const slicedClients = ref([])
 const isLoad = ref(true)
 const isClientEmpty = ref(false)
-const ClientIdToUpdate = ref()
-const ClientIdToDelete = ref(null)
+const clientIdToUpdate = ref()
+const clientIdToDelete = ref(null)
 const filterOpt = ref({
   srtClient: '',
 })
@@ -179,7 +179,6 @@ const loadAllClients = async () => {
       return rest
     })
     clientsFromApi.value = slicedClients.value
-    console.log(slicedClients.value)
 
   }catch(error){
     console.log(error)
@@ -217,28 +216,28 @@ const filterOpsClients = (client) => {
 }
 
 const showUpdateClientModal =  (idClient) => {
-  ClientIdToUpdate.value = idClient;
-  console.log(ClientIdToUpdate.value)
+  clientIdToUpdate.value = idClient;
 }
 
 const showDeleteModal = (idClient) => {
-  ClientIdToDelete.value = idClient;
-  console.log(ClientIdToDelete.value)
+  clientIdToDelete.value = idClient;
+}
+
+const confirmDeleteClient = async () => {
+   deleteClient(clientIdToDelete.value)
+   .then(()=> showToast('Client Deleted Succesfully', 'success', 'green'))
+   .catch(()=>{
+    console.log(error)
+    showToast('Error, Please Contact IT', 'danger', 'red')
+   })
 }
 
 const deleteClient = async(idClient) => {
   deleteApi(`${import.meta.env.VITE_APP_API}/delete/deleteClient/${idClient}`)
-  .then(() => {
-    showToast('Client Deleted Succesfully', 'success', 'green')
-  })
+  .then(() => true)
   .catch(error => {
-    console.log(error)
-    showToast('Error Please Contact IT', 'danger', 'red')
+    throw error
   })
-}
-
-const confirmDeleteClient = async () => {
-  await deleteClient(ClientIdToDelete.value)
 }
 </script>
 

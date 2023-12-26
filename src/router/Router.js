@@ -63,7 +63,7 @@ const routes = [
       {
         path: '/carriers',
         name: 'Carriers',
-        component: () => import('../views/AllCarriers.vue'),
+        component: () => import('../views/Carriers.vue'),
         meta: {
           isAuth: true,
         },

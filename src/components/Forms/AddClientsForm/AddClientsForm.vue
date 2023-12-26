@@ -41,56 +41,39 @@
 
     <div class="row">
       <div class="col-6">
-        <div class="inptBox inptPhoneBox">
+        <div class="inptBox">
           <label for="customerPhone" class="form-label">Customer Phone</label>
-          <div v-if="isUpdateForm">
+          <div v-if="isUpdateForm" class="phone-box" :class="{ 'edit-phone-box': isUpdateForm }">
             <input v-for="(value, index) in phoneNumbers" :key="index" v-model="phoneNumbers[index]" type="text"
-              class="form-control" placeholder="Write down phone here" />
-
+              class="form-control" :value="value" placeholder="Write down phone here" />
           </div>
-          <div v-else>
+          <div v-else class="phone-box" :class="{ 'add-phone-box': !isUpdateForm }">
             <input type="text" class="form-control" id="customerPhone" placeholder="Write down the answer here...">
-            <div class="btnBox ">
-              <button class="btnAdd" @click="addPhoneInpt">
-                +
-              </button>
-            </div>
           </div>
         </div>
-
+        <div class="btnBox">
+          <button class="btnAdd" @click="addPhoneInpt">
+            +
+          </button>
+        </div>
       </div>
+
       <div class="col-6">
         <div class="inptBox inptEmailBox">
           <label for="customerEmail" class="form-label">Customer Email</label>
-          <div v-if="isUpdateForm">
-            <div class="update-email-box">
-              <input v-for="(value, index) in custmoreEmails" :key="index" v-model="custmoreEmails[index]" type="text"
-                class="form-control" placeholder="Write down email here" />
-              <div class="btnBox">
-                <button class="btnAdd" @click="addEmailUpdateInpt">
-                  +
-                </button>
-              </div>
-            </div>
+          <div v-if="isUpdateForm" class="email-box" :class="{ 'edit-email-box': isUpdateForm }">
+            <input v-for="(value, index) in custmoreEmails" :key="index" v-model="custmoreEmails[index]" type="text"
+              class="form-control" :value="value" placeholder="Write down email here" />
           </div>
-          <div v-else>
-            <div class="add-email-box">
+          <div v-else class="email-box" :class="{ 'add-email-box': !isUpdateForm }">
               <input type="text" class="form-control " id="customerEmail" placeholder="Write down the answer here...">
-              <div class="btnBox">
-                <button class="btnAdd" @click="addEmailInpt">
-                  +
-                </button>
-              </div>
-            </div>
           </div>
-
+          <div class="btnBox">
+            <button class="btnAdd" @click="addEmailInpt">
+              +
+            </button>
+          </div>
         </div>
-        <!-- 
-        <div class="btnBox">
-          <button class="btnAdd" @click="addEmailInpt">
-            +
-          </button>
-        </div> -->
       </div>
     </div>
 
@@ -110,6 +93,7 @@ import { showToast } from '@/helpers/helpers.js'
 import ButtonSubmit from '../../Buttons/ButtonSubmit/ButtonSubmit.vue';
 
 const props = defineProps(['idClient'])
+
 const customers = ref();
 const inptName = ref('');
 const inptAddress = ref('');
@@ -117,7 +101,9 @@ const inptContact = ref('');
 const slctBusinessLine = ref('');
 const slctCustomerType = ref('');
 const phoneNumbers = ref([]);
+const phoneNumbersList = ref([]);
 const custmoreEmails = ref([]);
+const emailList = ref([]);
 const isValidEmail = ref(false);
 const alertPhoneShown = ref(false);
 const alertEmailShown = ref(false);
@@ -139,40 +125,75 @@ onMounted(async () => {
     .catch((error) => console.log(error))
 })
 
+watch(
+  () => props.idClient,
+  async () => {
+    nameButton.value = 'Update'
+    isUpdateForm.value = true;
+
+    getApi(`${import.meta.env.VITE_APP_API}/get/clientsById/${props.idClient}`)
+      .then((data) => {
+        clientUpdateInfo.value = data[0]
+        getIdUltimate.value = clientUpdateInfo.value.id_Client //Fijarse que no exista error
+        inptName.value = clientUpdateInfo.value.customer_name
+        inptAddress.value = clientUpdateInfo.value.address
+        inptContact.value = clientUpdateInfo.value.customer_contact
+        slctBusinessLine.value = 'DRAYAGE'
+        slctCustomerType.value = clientUpdateInfo.value.customer_type
+        phoneNumbers.value = clientUpdateInfo.value.customer_phone
+        custmoreEmails.value = clientUpdateInfo.value.customer_email
+        //Pendiente realizar update de estos campos.
+      })
+      .catch((error) => console.log(error))
+  }
+)
+
 const addPhoneInpt = () => {
-  const phoneInptBox = document.querySelector('.inptPhoneBox');
+  let phoneInptBox;
+
+  if (!isUpdateForm.value) {
+    phoneInptBox = document.querySelector('.add-phone-box');
+  }
+
+  if (isUpdateForm.value) {
+    phoneInptBox = document.querySelector('.edit-phone-box');
+  }
+
+
   const newPhoneInpt = document.createElement('input');
-  newPhoneInpt.classList.add('mt-2', 'form-control');
+  newPhoneInpt.classList.add('form-control');
   newPhoneInpt.type = 'text';
   newPhoneInpt.placeholder = "Write the extra phone number here...";
   phoneInptBox.appendChild(newPhoneInpt);
 }
 
 const addEmailInpt = () => {
-  const emailInptBox = document.querySelector('.add-email-box');
+  let emailInptBox;
+
+  if (!isUpdateForm.value) {
+    emailInptBox = document.querySelector('.add-email-box');
+  }
+
+  if (isUpdateForm.value) {
+    emailInptBox = document.querySelector('.edit-email-box');
+  }
+
   const newEmailInpt = document.createElement('input');
-  newEmailInpt.classList.add('mt-2', 'form-control');
+  newEmailInpt.classList.add('form-control');
   newEmailInpt.type = 'email';
   newEmailInpt.placeholder = "Write the extra email here...";
   emailInptBox.appendChild(newEmailInpt);
 }
-
-const addEmailUpdateInpt = () => {
-  const emailInptBox = document.querySelector('.update-email-box');
-  const newEmailInpt = document.createElement('input');
-  newEmailInpt.classList.add('mt-2', 'form-control');
-  newEmailInpt.type = 'email';
-  newEmailInpt.placeholder = "Write the extra email here...";
-  emailInptBox.appendChild(newEmailInpt);
-}
-
 
 const handleSubmit = () => {
-  const customerPhoneBox = document.querySelector('.inptPhoneBox');
-  const phoneInpts = customerPhoneBox.querySelectorAll('input');
-  const customerEmailBox = document.querySelector('.inptEmailBox');
-  const emailInpts = customerEmailBox.querySelectorAll('input');
+  const phoneBox = document.querySelector(isUpdateForm.value ? '.edit-phone-box' : '.add-phone-box');
+  const phoneInpts = phoneBox.querySelectorAll('input');
+
+  const emailBox = document.querySelector(isUpdateForm.value ? '.edit-email-box' : '.add-email-box');
+  const emailInpts = emailBox.querySelectorAll('input');
+
   const emailRegex = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/
+  
 
   if (!inptName.value || !inptAddress.value || !inptContact.value || !slctBusinessLine.value || !slctCustomerType.value) {
     showToast('Please, fill out all the inputs', 'danger', 'red');
@@ -182,18 +203,19 @@ const handleSubmit = () => {
   phoneInpts.forEach(i => {
     if (!i.value) {
       showToast('Please, fill out Customer Phone', 'danger', 'red');
-      phoneNumbers.value = [];
+      phoneNumbersList.value = [];
       alertPhoneShown.value = true;
       return;
     }
-    phoneNumbers.value.push(i.value);
+    
+    phoneNumbersList.value.push(i.value);
     alertPhoneShown.value = false;
   })
 
   emailInpts.forEach(i => {
     if (!i.value) {
       showToast('Please, fill out Customer Email', 'danger', 'red');
-      custmoreEmails.value = [];
+      emailList.value = [];
       alertEmailShown.value = true
       return;
     }
@@ -201,7 +223,7 @@ const handleSubmit = () => {
       isValidEmail.value = false
       return
     }
-    custmoreEmails.value.push(i.value);
+    emailList.value.push(i.value);
     alertEmailShown.value = false;
     isValidEmail.value = true
   })
@@ -211,9 +233,8 @@ const handleSubmit = () => {
     return
   }
 
-
-
   if (nameButton.value === "Update") {
+    console.log('es update');
     const clientUpdate = {
       customerId: getIdUltimate.value,
       name: inptName.value,
@@ -221,8 +242,8 @@ const handleSubmit = () => {
       contact: inptContact.value,
       businessLine: slctBusinessLine.value,
       customerType: slctCustomerType.value,
-      phoneNumbers: JSON.stringify(phoneNumbers.value),
-      customerEmails: JSON.stringify(custmoreEmails.value)
+      phoneNumbers: JSON.stringify(phoneNumbersList.value),
+      customerEmails: JSON.stringify(emailList.value)
     }
 
     postApi(`${import.meta.env.VITE_APP_API}/post/updateClient`, clientUpdate)
@@ -234,7 +255,9 @@ const handleSubmit = () => {
       .catch((error) => {
         console.log(error)
       })
+
   } else {
+
     const clientObjt = {
       customerId: getIdUltimate.value,
       name: inptName.value,
@@ -242,8 +265,8 @@ const handleSubmit = () => {
       contact: inptContact.value,
       businessLine: slctBusinessLine.value,
       customerType: slctCustomerType.value,
-      phoneNumbers: phoneNumbers.value,
-      customerEmails: custmoreEmails.value
+      phoneNumbers: phoneNumbersList.value,
+      customerEmails: emailList.value
     }
 
     postApi(`${import.meta.env.VITE_APP_API}/post/addClient`, clientObjt)
@@ -261,10 +284,12 @@ const handleSubmit = () => {
 }
 
 const cleanFormFields = () => {
-  const customerPhoneBox = document.querySelector('.inptPhoneBox');
-  const phoneInpts = customerPhoneBox.querySelectorAll('input');
-  const customerEmailBox = document.querySelector('.inptEmailBox');
-  const emailInpts = customerEmailBox.querySelectorAll('input');
+  const phoneBox = document.querySelector(isUpdateForm.value ? '.edit-phone-box' : '.add-phone-box');
+  const phoneInpts = phoneBox.querySelectorAll('input');
+
+  const emailBox = document.querySelector(isUpdateForm.value ? '.edit-email-box' : '.add-email-box');
+  const emailInpts = emailBox.querySelectorAll('input');
+  
   inptName.value = '';
   inptAddress.value = '';
   inptContact.value = '';
@@ -282,31 +307,6 @@ const cleanFormFields = () => {
   phoneNumbers.value = [];
   custmoreEmails.value = [];
 }
-
-// Update utilizando watch para recibir el prop
-
-watch(
-  () => props.idClient,
-  async () => {
-    nameButton.value = 'Update'
-    isUpdateForm.value = true;
-    console.log(isUpdateForm.value)
-    getApi(`${import.meta.env.VITE_APP_API}/get/clientsById/${props.idClient}`)
-      .then((data) => {
-        clientUpdateInfo.value = data[0]
-        getIdUltimate.value = clientUpdateInfo.value.id_Client //Fijarse que no exista error
-        inptName.value = clientUpdateInfo.value.customer_name
-        inptAddress.value = clientUpdateInfo.value.address
-        inptContact.value = clientUpdateInfo.value.customer_contact
-        slctBusinessLine.value = 'DRAYAGE'
-        slctCustomerType.value = clientUpdateInfo.value.customer_type
-        phoneNumbers.value = clientUpdateInfo.value.customer_phone
-        custmoreEmails.value = clientUpdateInfo.value.customer_email
-        //Pendiente realizar update de estos campos.
-      })
-      .catch((error) => console.log(error))
-  }
-)
 
 </script>
 
