@@ -1,18 +1,18 @@
 <template>
   <!-- SEARCH -->
-  <div class="searchSection">
-    <div class="searchSection__container d-flex column-gap-2">
+  <div class="search-section">
+    <div class="search-section__container">
       <!-- RELATIVE -->
-      <div class="searchSection__container--form">
-        <input v-model="inpt_id" type="text" id="default-search" class="searchSection__input searchSection__inputSearchID"
-          placeholder="Search by Quote ID" required />
+      <div class="search-section__container--form">
+        <input v-model="inpt_id" type="text" class="search-quote-inpt" placeholder="Search by Quote ID" required />
       </div>
     </div>
 
-    <div class="sort">
-      <div class="sort__sortByPort">
-        <label for="countries" class="sort__sortByPort--labelSort">Sort by Port</label>
-        <select @change="sortByPort" class="sort__sortByPort--select sort__sortByPort--selectPort">
+    <div class="filter-container">
+      <div class="filter-container__box">
+        <label for="countries">Sort by Port</label>
+        <select @change="sortByPort"
+          class="filter-container__sortByPort--select filter-container__sortByPort--selectPort">
           <option selected value="All">All</option>
           <option v-for="port in ports" :value="port.port_name" :key="port">
             {{ port.port_name }}
@@ -20,28 +20,28 @@
         </select>
       </div>
 
-      <div class="sort__sortByOperation">
-        <label for="countries" class="sort__sortByOperation--labelOperation">Sort by Operation</label>
-        <select @change="sortByOperation" class="sort__sortByOperation--select sort__sortByOperation--selectOperation">
+      <div class="filter-container__box">
+        <label for="countries">Sort by Operation</label>
+        <select @change="sortByOperation">
           <option selected value="All">All</option>
           <option value="Import">Import</option>
           <option value="Export">Export</option>
         </select>
       </div>
 
-      <div class="sortByDate">
-        <label for="countries" class="sort__sortByDate--labelDate">Sort by Date</label>
-        <select @change="sortByDate" class="sort__sortByDate--selectDate">
+      <div class="filter-container__box">
+        <label for="countries">Sort by Date</label>
+        <select @change="sortByDate">
           <option selected value="All">All</option>
           <option value="newer">Newer</option>
           <option value="older">Older</option>
         </select>
       </div>
-      <div class="sortByMonth">
-        <label for="month" class="sort__sortByMonth--labelMonth">
+      <div class="filter-container__box">
+        <label for="month">
           Sort by Month
         </label>
-        <select @change="sortByMonth" class="sort__sortByMonth--selectMonth">
+        <select @change="sortByMonth">
           <option value="">All Months</option>
           <option value="0">January</option>
           <option value="1">February</option>
@@ -62,9 +62,9 @@
 
   <main>
     <Card>
-      <div class="sectionQuotes">
-        <div class="sectionQuotes__tableContainer" v-bind="tableContainer">
-          <table v-bind="tablet" v-if="quotesFromApi" class="sectionQuotes__tableContainer--table">
+      <div class="quotes-section">
+        <div class="table-container">
+          <table v-if="quotesFromApi" class="table-container__table">
             <thead class="sectionQuotes__thead">
               <tr class="sectionQuotes__tableSticky">
                 <th scope="col">QUOTEID</th>
@@ -87,7 +87,7 @@
             <tbody v-if="!isQuotesEmpty" class="tbody">
               <tr v-for="quote in quotes" :key="quote.id" class="trbody">
                 <td v-for="(item, index) in quote" :key="index">
-                  <select v-if="index === 'quoteStatus'" @change="(e) => changeStatus(quote.quoteID, e)" class="select"
+                  <select v-if="index === 'quoteStatus'" @change="(e) => changeStatus(quote.quoteID, e)"
                     v-model="quote[index]" :class="changeColorStatus(quote[index])">
                     <option value="1">Requested</option>
                     <option value="2">Carrier rate provided</option>
@@ -97,7 +97,7 @@
                     <option value="6">Client Rejected</option>
                   </select>
                   <span v-else-if="index === 'date'">
-                    {{ formatUS(quote.date) }}
+                    {{ formatDate(quote.date) }}
                   </span>
                   <span v-else>
                     {{ item }}
@@ -111,15 +111,14 @@
             <Spin />
           </div>
 
-          <div v-if="isQuotesEmpty" class="sectionSales__quoteEmpty" role="alert">
-            <span class="sr-only">Info</span>
-            <div>
-              <i class="fa-solid fa-lock"></i>
-              <span class="font-medium"> Nothing was found!</span> Try using
-              different options.
-            </div>
+
+          <div class="error-message-box" v-if="isQuotesEmpty">
+            <i class="bi bi-exclamation-triangle"></i>
+            <span> Nothing was found!</span> Try using
+            different options.
           </div>
         </div>
+
       </div>
     </Card>
   </main>
@@ -128,18 +127,21 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue'
 import { getApi, postApi } from '../../../services/apiServices'
+import { formatDate } from '../../../utils/utils';
 import Card from '../../Card/Card.vue';
 
-const isQuotesEmpty = ref(false)
-const quotes = ref()
-const quotesFromApi = ref()
-const ports = ref([])
-const inpt_id = ref()
+const isQuotesEmpty = ref(false);
+const quotes = ref();
+const quotesFromApi = ref();
+const ports = ref([]);
+const inpt_id = ref();
+const filterOptions = ref({
+  srtPort: '',
+  srtOperation: '',
+  srtDate: '',
+  srtMonth: '',
+})
 
-const formatUS = (date) => {
-  let newDate = new Date(date)
-  return newDate.toLocaleDateString("en-US")
-}
 
 onMounted(async () => {
   getApi(`${import.meta.env.VITE_APP_API}/get/ports`)
@@ -154,12 +156,6 @@ onMounted(async () => {
     .catch((error) => console.log(error))
 })
 
-const filterOptions = ref({
-  srtPort: '',
-  srtOperation: '',
-  srtDate: '',
-  srtMonth: '',
-})
 
 watch(inpt_id, () => {
   performSearch()
@@ -174,9 +170,15 @@ const performSearch = () => {
     const getQuoteByID = quotesFromApi.value.filter((item) =>
       item.quoteID.trim().startsWith(inputValue),
     )
-    quotes.value = getQuoteByID
-    checkQuotesLength()
+    quotes.value = getQuoteByID;
+    checkQuotesLength();
   }
+}
+
+const checkQuotesLength = () => {
+  quotes.value.length === 0
+    ? (isQuotesEmpty.value = true)
+    : (isQuotesEmpty.value = false)
 }
 
 const changeColorStatus = (id) => {
@@ -295,13 +297,6 @@ const filterMonth = (quote) => {
   }
   return quote
 }
-
-const checkQuotesLength = () => {
-  quotes.value.length === 0
-    ? (isQuotesEmpty.value = true)
-    : (isQuotesEmpty.value = false)
-}
-
 </script>
 
 <style lang="scss" scoped>

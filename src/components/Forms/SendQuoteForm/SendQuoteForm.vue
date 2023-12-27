@@ -4,14 +4,14 @@
       <!-- <ToastCoreUI :title="showMessage" :color="showColor" /> -->
     </div>
 
-    <div class="container main-container sendQuote">
+    <div class="main-container">
       <form method="POST" id="form" class="sendQuote__form">
         <label class="sendQuote__form--labelId" for="inpt_id">Quote ID</label>
         <input type="text" placeholder="Wrote the Quote ID Here..." class="sendQuote__form--inputId" id="inpt_id"
           name="LineBusiness" v-model="inptId" />
         <ButtonSubmit class="sendQuote__form--btnSubmit" @click="handleIdSubmit" name="Get Quote" />
-        <div :class="{ hidden: !isLoading1 }">
-          <div class="d-flex justify-content-center my-3">
+        <div v-if="isLoading1">
+          <div class="spinner-container">
             <Spin />
           </div>
         </div>
@@ -587,7 +587,7 @@
           </div> -->
         <!-- <button @click="addEmailInput" class="btnAddEmail">+</button> -->
 
-        <div :class="{ hidden: !isLoading2 }">
+        <div v-if="isLoading2">
           <div class="d-flex justify-content-center">
             <Spin />
           </div>

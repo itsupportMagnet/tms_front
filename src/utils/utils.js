@@ -9,3 +9,8 @@ export const formatColumnName = (columnName) => {
 export const formatColumnNameCarriers = (columnName) => {
   return columnName.replace(/_/g, ' ').toUpperCase();
 }
+
+export const formatDate = (date) => {
+  let newDate = new Date(date);
+  return newDate.toLocaleDateString("en-US");
+}
