@@ -72,7 +72,7 @@
                         <td>2</td>
                         <td>Chassis :</td>
                         <td><input type="number" v-model="chassisBuyQuantity" step="1" min="1" /></td>
-                        <td><input type="number" v-model="buySummaryChassis" disabled /></td>
+                        <td><input type="number" v-model="chassisBuyRate" disabled /></td>
                         <td><input type="number" v-model="totalBuyChassisAmount" disabled /></td>
                       </tr>
                     </tbody>
@@ -102,7 +102,7 @@
                         <td>2</td>
                         <td>Chassis :</td>
                         <td><input type="number" v-model="chassisSellQuantity" min="1" /></td>
-                        <td><input type="number" v-model="sellSummaryChassis" disabled /></td>
+                        <td><input type="number" v-model="chassisSellRate" disabled /></td>
                         <td><input type="number" v-model="totalSellChassisAmount" disabled /></td>
                       </tr>
                     </tbody>
@@ -536,9 +536,9 @@ const totalAccesorialValues = ref({})
 const closedQuoteBuyChassis = ref();
 const closedQuoteSellChassis = ref();
 const buySummaryDrayage = ref();
-const buySummaryChassis = ref();
+const chassisBuyRate = ref();
 const sellSummaryDrayage = ref();
-const sellSummaryChassis = ref();
+const chassisSellRate = ref();
 const filterObj = ref({
   date: '',
   status: '',
@@ -892,11 +892,11 @@ const feedingOperationTableModal = (objOperation, e) => {
         .then((data) => {
           openQuoteInfo.value = data
           buySummaryDrayage.value = data.carrierFee
-          buySummaryChassis.value = data.carrierChassis
+          chassisBuyRate.value = data.carrierChassis
           sellSummaryDrayage.value = data.magnetFee
-          sellSummaryChassis.value = data.magnetChassis
-          totalBuyChassisAmount.value = buySummaryChassis.value * chassisQuantity.value
-          totalSellChassisAmount.value = sellSummaryChassis.value * chassisQuantity.value
+          chassisSellRate.value = data.magnetChassis
+          totalBuyChassisAmount.value = chassisBuyRate.value * chassisBuyQuantity.value
+          totalSellChassisAmount.value = chassisSellRate.value * chassisSellQuantity.value
           carrierAccesorialValues.value = data.carrierAccesorials
           magnetAccesorialValues.value = data.magnetAccesorials
           for (let key in data.carrierAccesorials) {
@@ -935,9 +935,9 @@ const feedingOperationTableModal = (objOperation, e) => {
           closedQuoteInfo.value = data
           console.log(data.carrierDrayage)
           buySummaryDrayage.value = convertToNumber(data.carrierDrayage)
-          // buySummaryChassis.value = data.carrierChassis   FALTA DETALLAR DONDE TRAIGO LA INFO
+          // chassisBuyRate.value = data.carrierChassis   FALTA DETALLAR DONDE TRAIGO LA INFO
           sellSummaryDrayage.value = convertToNumber(data.customerDrayage)
-          // sellSummaryChassis.value = data.magnetChassis   FALTA DETALLAR DONDE TRAIGO LA INFO
+          // chassisSellRate.value = data.magnetChassis   FALTA DETALLAR DONDE TRAIGO LA INFO
 
         })
         .catch((error) => console.log(error))
@@ -1042,22 +1042,47 @@ const handleContinueAccesorial1 = () => {
 
     const toSalesGrossFromOpenSummary = {
       operationId : modalInfo.value['ID Operation'],
-      drayageBuyQuantity : drayageBuyQuantity.value,
-      drayageBuySummary : drayageBuySummary.value,
+      chassisBuyQuantity : chassisBuyQuantity.value,
+      chassisBuySummary : chassisBuyRate.value,
       totalBuyChassisAmount : totalBuyChassisAmount.value,
       chassisSellQuantity : chassisSellQuantity.value,
-      chassisSellSummary : chassisSellSummary.value,
+      chassisSellSummary : chassisSellRate.value,
       totalSellChassisAmount : totalSellChassisAmount.value
     }
 
     if (salesGrossInfo.value.some(item => item.operation_id === modalInfo.value['ID Operation'])) {
-      //api update
+      postApi(`${import.meta.env.VITE_APP_API}/post/updateSummarySalesGross`, toSalesGrossFromOpenSummary)
+      .then(loadAllOperations())
+      .catch((error) => console.log(error))
     }else {
-      //api insert
+      postApi(`${import.meta.env.VITE_APP_API}/post/newSummarySalesGross`, toSalesGrossFromOpenSummary)
+      .then(loadAllOperations())
+      .catch((error) => console.log(error))
     }
-
+    console.log (toSalesGrossFromOpenSummary)
   } else {
     console.log('Estoy con la quote Cerrada')
+
+    const toSalesGrossFromClosedSummary = {
+      operationId : modalInfo.value['ID Operation'],
+      chassisBuyQuantity : chassisBuyQuantity.value,
+      chassisBuySummary : chassisBuyRate.value,
+      totalBuyChassisAmount : totalBuyChassisAmount.value,
+      chassisSellQuantity : chassisSellQuantity.value,
+      chassisSellSummary : chassisSellRate.value,
+      totalSellChassisAmount : totalSellChassisAmount.value
+    }
+
+    if (salesGrossInfo.value.some(item => item.operation_id === modalInfo.value['ID Operation'])) {
+      postApi(`${import.meta.env.VITE_APP_API}/post/updateSummarySalesGross`, toSalesGrossFromClosedSummary)
+      .then(loadAllOperations())
+      .catch((error) => console.log(error))
+    }else {
+      postApi(`${import.meta.env.VITE_APP_API}/post/newSummarySalesGross`, toSalesGrossFromClosedSummary)
+      .then(loadAllOperations())
+      .catch((error) => console.log(error))
+    }
+    console.log (toSalesGrossFromClosedSummary)
   }
 }
 
@@ -1239,12 +1264,12 @@ const resetAtDismissModal = () => {
   carrierAccesorialValues.value = {};
   magnetAccesorialValues.value = {};
   totalAccesorialValues.value = {};
-
+  /* First Modal Reset Values */
   buySummaryDrayage.value = "";
-  buySummaryChassis.value = "";
+  chassisBuyRate.value = "";
   chassisBuyQuantity.value = 1;
   sellSummaryDrayage.value = "";
-  sellSummaryChassis.value = "";
+  chassisSellRate.value = "";
   chassisSellQuantity.value = 1;
 
 }
@@ -1253,9 +1278,9 @@ const calculateTotalChassis = (summary, quantity, total) => {
   total.value = (summary.value * quantity.value).toFixed(2);
 }
 
-watch([buySummaryChassis, chassisBuyQuantity], () => calculateTotalChassis(buySummaryChassis, chassisBuyQuantity, totalBuyChassisAmount))
+watch([chassisBuyRate, chassisBuyQuantity], () => calculateTotalChassis(chassisBuyRate, chassisBuyQuantity, totalBuyChassisAmount))
 
-watch([sellSummaryChassis, chassisSellQuantity], () => calculateTotalChassis(sellSummaryChassis, chassisSellQuantity, totalSellChassisAmount))
+watch([chassisSellRate, chassisSellQuantity], () => calculateTotalChassis(chassisSellRate, chassisSellQuantity, totalSellChassisAmount))
 </script>
 
 <style lang="scss" scoped>
