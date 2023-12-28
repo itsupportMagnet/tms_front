@@ -111,9 +111,7 @@
               </div>
             </Card>
           </div>
-
         </div>
-
 
         <!-- Second Modal Before Continue Button -->
         <div class="modal-body" v-if="isAccesorialModal2">
@@ -124,10 +122,10 @@
                   <div class="rates-title">
                     <h2>Buy Accesorials</h2>
                   </div>
-                  <div class="chassisInputContainer" v-if="isOpenQuote">
+                  <!-- <div class="chassisInputContainer" v-if="isOpenQuote">
                     <label class="chassisInputContainer__label">Buy Chassis:</label>
                     <input v-model="closedQuoteBuyChassis" type="Number" placeholder="Add Buy Chassis Value" />
-                  </div>
+                  </div> -->
                   <div class="buy-accesorials-container">
                     <div class="buy-accesorials-container__col" v-for="item in accesorials" :key="item.id">
                       <label>
@@ -144,10 +142,10 @@
                   <div class="rates-title">
                     <h2>Sell Accesorials</h2>
                   </div>
-                  <div class="chassisInputContainer" v-if="isOpenQuote">
+                  <!-- <div class="chassisInputContainer" v-if="isOpenQuote">
                     <label class="fee-label">Sell Chassis:</label>
                     <input v-model="closedQuoteSellChassis" type="Number" placeholder="Add Sell Chassis Value" />
-                  </div>
+                  </div> -->
                   <div class="sell-accesorials-container">
                     <div class="sell-accesorials-container__col" v-for="(value, name, index) in accesorialSelected"
                       :key="index">
@@ -882,6 +880,9 @@ const feedingOperationTableModal = (objOperation, e) => {
   if (e.target.value === '3') {
     loadAllOperations()
     idQuoteModal.value = objOperation.quoteID
+    console.log('id: ' + objOperation.id)
+    console.log('operation id: ' + objOperation.idOperation)
+    doesOperationExist(objOperation.idOperation)
     if (idQuoteModal.value.includes('MGT')) {
       const selectedIdOpenQuote = {
         id: objOperation.quoteID
@@ -935,9 +936,9 @@ const feedingOperationTableModal = (objOperation, e) => {
           closedQuoteInfo.value = data
           console.log(data.carrierDrayage)
           buySummaryDrayage.value = convertToNumber(data.carrierDrayage)
-          // chassisBuyRate.value = data.carrierChassis   FALTA DETALLAR DONDE TRAIGO LA INFO
+          chassisBuyRate.value = convertToNumber(data.carrierChassis)
           sellSummaryDrayage.value = convertToNumber(data.customerDrayage)
-          // chassisSellRate.value = data.magnetChassis   FALTA DETALLAR DONDE TRAIGO LA INFO
+          chassisSellRate.value = convertToNumber(data.customerChassis)
 
         })
         .catch((error) => console.log(error))
@@ -1039,50 +1040,51 @@ const handleContinueAccesorial1 = () => {
   loadAllOperations();
   if (idQuoteModal.value.includes('MGT')) {
     console.log('Estoy con la quote Abierta')
-
+    console.log('Primer Console Log TotalAmount: ' +totalSellChassisAmount.value)
+    
     const toSalesGrossFromOpenSummary = {
-      operationId : modalInfo.value['ID Operation'],
-      chassisBuyQuantity : chassisBuyQuantity.value,
-      chassisBuySummary : chassisBuyRate.value,
-      totalBuyChassisAmount : totalBuyChassisAmount.value,
-      chassisSellQuantity : chassisSellQuantity.value,
-      chassisSellSummary : chassisSellRate.value,
-      totalSellChassisAmount : totalSellChassisAmount.value
+      operationId: modalInfo.value['ID Operation'],
+      chassisBuyQuantity: chassisBuyQuantity.value,
+      chassisBuySummary: chassisBuyRate.value,
+      totalBuyChassisAmount: totalBuyChassisAmount.value,
+      chassisSellQuantity: chassisSellQuantity.value,
+      chassisSellSummary: chassisSellRate.value,
+      totalSellChassisAmount: totalSellChassisAmount.value
     }
 
     if (salesGrossInfo.value.some(item => item.operation_id === modalInfo.value['ID Operation'])) {
       postApi(`${import.meta.env.VITE_APP_API}/post/updateSummarySalesGross`, toSalesGrossFromOpenSummary)
-      .then(loadAllOperations())
-      .catch((error) => console.log(error))
-    }else {
+        .then(loadAllOperations())
+        .catch((error) => console.log(error))
+    } else {
       postApi(`${import.meta.env.VITE_APP_API}/post/newSummarySalesGross`, toSalesGrossFromOpenSummary)
-      .then(loadAllOperations())
-      .catch((error) => console.log(error))
+        .then(loadAllOperations())
+        .catch((error) => console.log(error))
     }
-    console.log (toSalesGrossFromOpenSummary)
+    console.log(toSalesGrossFromOpenSummary)
   } else {
     console.log('Estoy con la quote Cerrada')
-
+    console.log('Primer Log' + totalSellChassisAmount.value)
     const toSalesGrossFromClosedSummary = {
-      operationId : modalInfo.value['ID Operation'],
-      chassisBuyQuantity : chassisBuyQuantity.value,
-      chassisBuySummary : chassisBuyRate.value,
-      totalBuyChassisAmount : totalBuyChassisAmount.value,
-      chassisSellQuantity : chassisSellQuantity.value,
-      chassisSellSummary : chassisSellRate.value,
-      totalSellChassisAmount : totalSellChassisAmount.value
+      operationId: modalInfo.value['ID Operation'],
+      chassisBuyQuantity: chassisBuyQuantity.value,
+      chassisBuySummary: chassisBuyRate.value,
+      totalBuyChassisAmount: totalBuyChassisAmount.value,
+      chassisSellQuantity: chassisSellQuantity.value,
+      chassisSellSummary: chassisSellRate.value,
+      totalSellChassisAmount: totalSellChassisAmount.value
     }
 
     if (salesGrossInfo.value.some(item => item.operation_id === modalInfo.value['ID Operation'])) {
       postApi(`${import.meta.env.VITE_APP_API}/post/updateSummarySalesGross`, toSalesGrossFromClosedSummary)
-      .then(loadAllOperations())
-      .catch((error) => console.log(error))
-    }else {
+        .then(loadAllOperations())
+        .catch((error) => console.log(error))
+    } else {
       postApi(`${import.meta.env.VITE_APP_API}/post/newSummarySalesGross`, toSalesGrossFromClosedSummary)
-      .then(loadAllOperations())
-      .catch((error) => console.log(error))
+        .then(loadAllOperations())
+        .catch((error) => console.log(error))
     }
-    console.log (toSalesGrossFromClosedSummary)
+    console.log(toSalesGrossFromClosedSummary)
   }
 }
 
@@ -1097,17 +1099,18 @@ const handleContinueClickBtn = async () => {
 
   loadAllOperations();
   if (idQuoteModal.value.includes('MGT')) {
+    console.log(totalSellChassisAmount.value)
     sumAccesorialValues()
     const customerDrayageNumber = parseFloat(openQuoteInfo.value.magnetFee)
     const carrierDrayageNumber = parseFloat(openQuoteInfo.value.carrierFee)
     const carrierChassisNumber = parseFloat(openQuoteInfo.value.carrierChassis)
     const magnetChassisNumber = parseFloat(openQuoteInfo.value.magnetChassis)
     const totalAccesorialCharges = calculateTotalAccesorialCharges(magnetAccesorialValues.value)
-    const totalCarrierCharges = sumCarrierAccesorialValues();
-    const totalMagnetCharges = sumMagnetAccesorialValues();
-    const totalChassisCharges = magnetChassisNumber
-    const buyCalculatedNumber = carrierDrayageNumber + totalCarrierCharges + carrierChassisNumber
-    const sellCalculatedNumber = customerDrayageNumber + totalMagnetCharges + magnetChassisNumber
+    const totalCarrierAccesorialCharges = sumCarrierAccesorialValues();
+    const totalMagnetAccesorialCharges = sumMagnetAccesorialValues();
+    const totalChassisCharges = parseFloat(totalSellChassisAmount.value)
+    const buyCalculatedNumber = carrierDrayageNumber + totalCarrierAccesorialCharges + convertToNumber(totalBuyChassisAmount.value)
+    const sellCalculatedNumber = customerDrayageNumber + totalMagnetAccesorialCharges + convertToNumber(totalSellChassisAmount.value)
     const profitCalculatedNumber = sellCalculatedNumber - buyCalculatedNumber
     modalInfo.value.totalCharges = `Drayage: $${openQuoteInfo.value.magnetFee} + Chassis: $${totalChassisCharges} ${printTotalCharges(magnetAccesorialValues.value)}`
     modalInfo.value.totalAmount = `$${customerDrayageNumber + totalAccesorialCharges + totalChassisCharges}`
@@ -1124,8 +1127,8 @@ const handleContinueClickBtn = async () => {
       date: getMonthName(currentDate.getMonth()),
       carrierAccesorials: JSON.stringify(carrierAccesorialValues.value),
       magnetAccesorials: JSON.stringify(magnetAccesorialValues.value),
-      buyChassis: carrierChassisNumber,
-      sellChassis: magnetChassisNumber
+      buyChassis: totalBuyChassisAmount.value,
+      sellChassis: totalSellChassisAmount.value
     }
 
     if (salesGrossInfo.value.some(item => item.operation_id === modalInfo.value['ID Operation'])) {
@@ -1139,25 +1142,28 @@ const handleContinueClickBtn = async () => {
     }
 
   } else {
-    if (!closedQuoteBuyChassis.value || closedQuoteBuyChassis.value === '0') {
-      showToast('Please Add Buy Chassis Value', 'danger', 'red')
-      return
-    }
-    if (!closedQuoteSellChassis.value || closedQuoteSellChassis.value === '0') {
-      showToast('Please add Sell Chassis Value', 'danger', 'red')
-      return
-    }
+    // if (!closedQuoteBuyChassis.value || closedQuoteBuyChassis.value === '0') {
+    //   showToast('Please Add Buy Chassis Value', 'danger', 'red')
+    //   return
+    // }
+    // if (!closedQuoteSellChassis.value || closedQuoteSellChassis.value === '0') {
+    //   showToast('Please add Sell Chassis Value', 'danger', 'red')
+    //   return
+    // }
     sumAccesorialValues();
+    console.log(closedQuoteInfo.value.customerDrayage)
+    console.log(closedQuoteInfo.value.carrierDrayage)
+    console.log(totalSellChassisAmount.value)
     const customerDrayageNumber = convertToNumber(closedQuoteInfo.value.customerDrayage)
     const carrierDrayageNumber = convertToNumber(closedQuoteInfo.value.carrierDrayage)
-    const closedChassisNumber = convertToNumber(closedQuoteSellChassis.value)
+    const closedChassisNumber = convertToNumber(totalSellChassisAmount.value)
     const totalAccesorialCharges = calculateTotalAccesorialCharges(magnetAccesorialValues.value)
     const totalCarrierCharges = sumCarrierAccesorialValues();
     const totalMagnetCharges = sumMagnetAccesorialValues();
-    const buyCalculatedNumber = carrierDrayageNumber + totalCarrierCharges + convertToNumber(closedQuoteBuyChassis.value)
-    const sellCalculatedNumber = customerDrayageNumber + totalMagnetCharges + convertToNumber(closedQuoteSellChassis.value)
+    const buyCalculatedNumber = carrierDrayageNumber + totalCarrierCharges + convertToNumber(totalBuyChassisAmount.value)
+    const sellCalculatedNumber = customerDrayageNumber + totalMagnetCharges + convertToNumber(totalSellChassisAmount.value)
     const profitCalculatedNumber = sellCalculatedNumber - buyCalculatedNumber
-    modalInfo.value.totalCharges = `Drayage: ${closedQuoteInfo.value.customerDrayage} + Chassis: $${closedQuoteSellChassis.value} ${printTotalCharges(magnetAccesorialValues.value)}`
+    modalInfo.value.totalCharges = `Drayage: ${closedQuoteInfo.value.customerDrayage} + Chassis: $${totalSellChassisAmount.value} ${printTotalCharges(magnetAccesorialValues.value)}`
     modalInfo.value.totalAmount = `$${customerDrayageNumber + totalAccesorialCharges + closedChassisNumber}`
     const toSalesGrossFromFloridaQuotes = {
       operationId: modalInfo.value['ID Operation'],
@@ -1171,8 +1177,8 @@ const handleContinueClickBtn = async () => {
       date: getMonthName(currentDate.getMonth()),
       carrierAccesorials: JSON.stringify(carrierAccesorialValues.value),
       magnetAccesorials: JSON.stringify(magnetAccesorialValues.value),
-      buyChassis: closedQuoteBuyChassis.value,
-      sellChassis: closedQuoteSellChassis.value
+      buyChassis: totalBuyChassisAmount.value,
+      sellChassis: totalSellChassisAmount.value
     }
 
     if (salesGrossInfo.value.some(item => item.operation_id === modalInfo.value['ID Operation'])) {
@@ -1276,6 +1282,23 @@ const resetAtDismissModal = () => {
 
 const calculateTotalChassis = (summary, quantity, total) => {
   total.value = (summary.value * quantity.value).toFixed(2);
+}
+
+const doesOperationExist = (idOperation) => {
+
+  return getApi(`${import.meta.env.VITE_APP_API}/get/getSalesGrossSelected/${idOperation}`)
+    .then((data) => {
+      console.log('Probando informacion que traigo de la api: ' + data)
+      if (Object.keys(data).length !== 0) {
+        console.log(data)
+        console.log('Se supone que deberia pasar esta funcion')
+        return true //al finalizar
+      }
+      console.log('Me retorna false por algun motivo')
+      return false
+
+    })
+
 }
 
 watch([chassisBuyRate, chassisBuyQuantity], () => calculateTotalChassis(chassisBuyRate, chassisBuyQuantity, totalBuyChassisAmount))
