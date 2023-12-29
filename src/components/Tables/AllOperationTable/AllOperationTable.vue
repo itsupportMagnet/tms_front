@@ -801,15 +801,18 @@ const feedingOperationTableModal = (objOperation, e) => {
   if (e.target.value === '3') {
 
     loadAllOperations()
-
+    idQuoteModal.value = objOperation.quoteID
     if (doesOperationExist(operation.value.idOperation)) {
       e.target.setAttribute('data-bs-toggle', 'modal')
       e.target.setAttribute('data-bs-target', '#accesorialModalDone')
-      // slctStatus.value = e.target
+      slctStatus.value = e.target  //No dejar comentado, sin este valor el modal se vuelve loco xd 
 
-      const { buyDrayage, buyDrayageUnitRate, buyChassisUnitRate, buyQtyChassis, sellDrayage } = saleById.value;
+      console.log(saleById.value)
 
-      feedModalSummaryTable(buyDrayage, buyDrayageUnitRate, buyChassisUnitRate, buyQtyChassis);
+      const { buyDrayage, buyQtyChassis, buyChassisUnitRate, sellDrayage, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials } = saleById.value;
+
+
+      feedModalSummaryTable(buyDrayage, buyQtyChassis, buyChassisUnitRate, sellDrayage, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials);
 
 
     } else {
@@ -1075,60 +1078,63 @@ const confirmDelete = async () => {
   await deleteOperation(OperationIdToDelete.value)
 }
 
-// const handleContinueAccesorial1 = () => {
-//   isAccesorialModal1.value = false;
-//   isAccesorialModal2.value = true;
-//   isAccesorialModal3.value = false;
-//   loadAllOperations();
-//   if (idQuoteModal.value.includes('MGT')) {
-//     console.log('Estoy con la quote Abierta')
-//     console.log('Primer Console Log TotalAmount: ' + totalSellChassisAmount.value)
+const handleContinueAccesorial1 = () => {
+  isAccesorialModal1.value = false;
+  isAccesorialModal2.value = true;
+  isAccesorialModal3.value = false;
+  
+  saleById.value.buyChassis = inptTotalSellChassisAmount.value;
+  
 
-//     // const toSalesGrossFromOpenSummary = {
-//     //   operationId: modalInfo.value['ID Operation'],
-//     //   chassisBuyQuantity: chassisBuyQuantity.value,
-//     //   chassisBuySummary: chassisBuyRate.value,
-//     //   totalBuyChassisAmount: totalBuyChassisAmount.value,
-//     //   chassisSellQuantity: chassisSellQuantity.value,
-//     //   chassisSellSummary: chassisSellRate.value,
-//     //   totalSellChassisAmount: totalSellChassisAmount.value
-//     // }
+  // if (idQuoteModal.value.includes('MGT')) {
+  //   console.log('Estoy con la quote Abierta')
+  //   console.log('Primer Console Log TotalAmount: ' + totalSellChassisAmount.value)
 
-//     if (salesGrossInfo.value.some(item => item.operation_id === modalInfo.value['ID Operation'])) {
-//       postApi(`${import.meta.env.VITE_APP_API}/post/updateSummarySalesGross`, toSalesGrossFromOpenSummary)
-//         .then(loadAllOperations())
-//         .catch((error) => console.log(error))
-//     } else {
-//       postApi(`${import.meta.env.VITE_APP_API}/post/newSummarySalesGross`, toSalesGrossFromOpenSummary)
-//         .then(loadAllOperations())
-//         .catch((error) => console.log(error))
-//     }
-//     console.log(toSalesGrossFromOpenSummary)
-//   } else {
-//     console.log('Estoy con la quote Cerrada')
-//     console.log('Primer Log' + totalSellChassisAmount.value)
-//     const toSalesGrossFromClosedSummary = {
-//       operationId: modalInfo.value['ID Operation'],
-//       chassisBuyQuantity: chassisBuyQuantity.value,
-//       chassisBuySummary: chassisBuyRate.value,
-//       totalBuyChassisAmount: totalBuyChassisAmount.value,
-//       chassisSellQuantity: chassisSellQuantity.value,
-//       chassisSellSummary: chassisSellRate.value,
-//       totalSellChassisAmount: totalSellChassisAmount.value
-//     }
+  //   // const toSalesGrossFromOpenSummary = {
+  //   //   operationId: modalInfo.value['ID Operation'],
+  //   //   chassisBuyQuantity: chassisBuyQuantity.value,
+  //   //   chassisBuySummary: chassisBuyRate.value,
+  //   //   totalBuyChassisAmount: totalBuyChassisAmount.value,
+  //   //   chassisSellQuantity: chassisSellQuantity.value,
+  //   //   chassisSellSummary: chassisSellRate.value,
+  //   //   totalSellChassisAmount: totalSellChassisAmount.value
+  //   // }
 
-//     if (salesGrossInfo.value.some(item => item.operation_id === modalInfo.value['ID Operation'])) {
-//       postApi(`${import.meta.env.VITE_APP_API}/post/updateSummarySalesGross`, toSalesGrossFromClosedSummary)
-//         .then(loadAllOperations())
-//         .catch((error) => console.log(error))
-//     } else {
-//       postApi(`${import.meta.env.VITE_APP_API}/post/newSummarySalesGross`, toSalesGrossFromClosedSummary)
-//         .then(loadAllOperations())
-//         .catch((error) => console.log(error))
-//     }
-//     console.log(toSalesGrossFromClosedSummary)
-//   }
-// }
+  //   if (salesGrossInfo.value.some(item => item.operation_id === modalInfo.value['ID Operation'])) {
+  //     postApi(`${import.meta.env.VITE_APP_API}/post/updateSummarySalesGross`, toSalesGrossFromOpenSummary)
+  //       .then(loadAllOperations())
+  //       .catch((error) => console.log(error))
+  //   } else {
+  //     postApi(`${import.meta.env.VITE_APP_API}/post/newSummarySalesGross`, toSalesGrossFromOpenSummary)
+  //       .then(loadAllOperations())
+  //       .catch((error) => console.log(error))
+  //   }
+  //   console.log(toSalesGrossFromOpenSummary)
+  // } else {
+  //   console.log('Estoy con la quote Cerrada')
+  //   console.log('Primer Log' + totalSellChassisAmount.value)
+  //   const toSalesGrossFromClosedSummary = {
+  //     operationId: modalInfo.value['ID Operation'],
+  //     chassisBuyQuantity: chassisBuyQuantity.value,
+  //     chassisBuySummary: chassisBuyRate.value,
+  //     totalBuyChassisAmount: totalBuyChassisAmount.value,
+  //     chassisSellQuantity: chassisSellQuantity.value,
+  //     chassisSellSummary: chassisSellRate.value,
+  //     totalSellChassisAmount: totalSellChassisAmount.value
+  //   }
+
+  //   if (salesGrossInfo.value.some(item => item.operation_id === modalInfo.value['ID Operation'])) {
+  //     postApi(`${import.meta.env.VITE_APP_API}/post/updateSummarySalesGross`, toSalesGrossFromClosedSummary)
+  //       .then(loadAllOperations())
+  //       .catch((error) => console.log(error))
+  //   } else {
+  //     postApi(`${import.meta.env.VITE_APP_API}/post/newSummarySalesGross`, toSalesGrossFromClosedSummary)
+  //       .then(loadAllOperations())
+  //       .catch((error) => console.log(error))
+  //   }
+  //   console.log(toSalesGrossFromClosedSummary)
+  // }
+}
 
 const handleBtnBackAccesorial2 = () => {
   isAccesorialModal1.value = true;
@@ -1141,7 +1147,6 @@ const handleContinueClickBtn = async () => {
 
   loadAllOperations();
   if (idQuoteModal.value.includes('MGT')) {
-    console.log(totalSellChassisAmount.value)
     sumAccesorialValues()
     const customerDrayageNumber = parseFloat(openQuoteInfo.value.magnetFee)
     const carrierDrayageNumber = parseFloat(openQuoteInfo.value.carrierFee)
@@ -1304,26 +1309,27 @@ const calculateTotalAccesorialCharges = (accesorialList) => {
   return totalAmountValues
 }
 
-// const resetAtDismissModal = () => {
-//   isAccesorialModal1.value = true;
-//   isAccesorialModal2.value = false;
-//   isAccesorialModal3.value = false;
-//   accesorialSelected.value = {};
-//   carrierAccesorialValues.value = {};
-//   magnetAccesorialValues.value = {};
-//   totalAccesorialValues.value = {};
-//   /* First Modal Reset Values */
-//   buySummaryDrayage.value = "";
-//   chassisBuyRate.value = "";
-//   chassisBuyQuantity.value = 1;
-//   sellSummaryDrayage.value = "";
-//   chassisSellRate.value = "";
-//   chassisSellQuantity.value = 1;
+const resetAtDismissModal = () => {
+  isAccesorialModal1.value = true;
+  isAccesorialModal2.value = false;
+  isAccesorialModal3.value = false;
+  // accesorialSelected.value = {};
+  // carrierAccesorialValues.value = {};
+  // magnetAccesorialValues.value = {};
+  // totalAccesorialValues.value = {};
+  // /* First Modal Reset Values */
+  // buySummaryDrayage.value = "";
+  // chassisBuyRate.value = "";
+  // chassisBuyQuantity.value = 1;
+  // sellSummaryDrayage.value = "";
+  // chassisSellRate.value = "";
+  // chassisSellQuantity.value = 1;
 
-// }
+}
 
 const calculateTotalChassis = (summary, quantity, total) => {
   total.value = (summary.value * quantity.value).toFixed(2);
+  
 }
 
 const doesOperationExist = (idOperation) => {
@@ -1343,7 +1349,7 @@ const chckIsAnOpenOperation = (quoteID) => {
   return quoteID.includes('MGT')
 }
 
-const feedModalSummaryTable = (drayageBuyUnit, chassisBuyQty, chassisBuyUnit, drayageSellUnit, chassisSellQty, chassisSellUnit, chassisSellTotal) => {
+const feedModalSummaryTable = (drayageBuyUnit, chassisBuyQty, chassisBuyUnit, drayageSellUnit, chassisSellQty, chassisSellUnit, chassisSellTotal, buyAccesorials, sellAccesorials) => {
 
   inptDrayageBuyQuantity.value = 1;
   inptChassisBuyQuantity.value = chassisBuyQty;
@@ -1359,11 +1365,24 @@ const feedModalSummaryTable = (drayageBuyUnit, chassisBuyQty, chassisBuyUnit, dr
 
   inptSellSummaryDrayage.value = drayageSellUnit;
   inptChassisSellRate.value = chassisSellUnit;
+
+  /*  Datos Accesorials  */
+
+  carrierAccesorialValues.value = buyAccesorials
+  magnetAccesorialValues.value = sellAccesorials
+  for (let key in buyAccesorials) {
+    accesorialSelected.value[key] = true;
+  }
+  for (let key in sellAccesorials) {
+    accesorialSelected.value[key] = true;
+  }
+
 }
 
-// watch([chassisBuyRate, chassisBuyQuantity], () => calculateTotalChassis(chassisBuyRate, chassisBuyQuantity, totalBuyChassisAmount))
 
-// watch([chassisSellRate, chassisSellQuantity], () => calculateTotalChassis(chassisSellRate, chassisSellQuantity, totalSellChassisAmount))
+ watch([inptChassisBuyRate, inptChassisBuyQuantity], () => calculateTotalChassis(inptChassisBuyRate, inptChassisBuyQuantity, inptTotalBuyChassisAmount))
+
+ watch([inptChassisSellRate, inptChassisSellQuantity], () => calculateTotalChassis(inptChassisSellRate, inptChassisSellQuantity, inptTotalSellChassisAmount))
 </script>
 
 <style lang="scss" scoped>
