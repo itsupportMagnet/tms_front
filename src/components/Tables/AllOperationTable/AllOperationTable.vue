@@ -489,6 +489,7 @@ import PrimaryButton from '@/components/Buttons/PrimaryButton/PrimaryButton.vue'
 import Card from '../../Card/Card.vue';
 
 const operations = ref()
+const operation = ref();
 const operationsFromApi = ref([])
 const containerStatus = ref()
 const inpt_date = ref('')
@@ -759,6 +760,7 @@ const rowClass = (id) => {
 
 const statusOnChange = async (objOperation, e) => {
   const parseStatus = parseInt(e.target.value)
+  operation.value = objOperation;
   const newStatus = {
     idOperation: objOperation.idOperation,
     status: parseStatus,
@@ -767,6 +769,122 @@ const statusOnChange = async (objOperation, e) => {
     .then()
     .catch((error) => console.log(error))
   feedingOperationTableModal(objOperation, e)
+}
+
+const feedingOperationTableModal = (objOperation, e) => {
+  if (e.target.value === '1') {
+    modalInfo.value = {
+      'ID Operation': objOperation.idOperation,
+      'Booking/BL': objOperation.bookingBl,
+      'Container ID': objOperation.containerId,
+      'Operation Efective Day': objOperation.operationDate,
+      'Size Container': objOperation.containerSize,
+      'Operation mode': objOperation.modeOfOperation,
+      'Warehouse location': objOperation.warehouseLocation,
+      Port: objOperation.port,
+      Customer: objOperation.customer,
+    }
+    e.target.setAttribute('data-bs-toggle', 'modal')
+    e.target.setAttribute('data-bs-target', '#modal')
+    slctStatus.value = e.target
+    return
+  }
+
+  if (e.target.value === '3') {
+    loadAllOperations()
+    console.log(operation.value);
+    doesOperationExist(operation.value.idOperation);
+
+    // if (idQuoteModal.value.includes('MGT')) {
+    //   const selectedIdOpenQuote = {
+    //     id: objOperation.quoteID
+    //   }
+    //   isOpenQuote.value = false
+
+    //   getApi(`${import.meta.env.VITE_APP_API}/get/get-normal-quote/${selectedIdOpenQuote.id}`)
+    //     .then((data) => {
+    //       openQuoteInfo.value = data
+    //       buySummaryDrayage.value = data.carrierFee
+    //       chassisBuyRate.value = data.carrierChassis
+    //       sellSummaryDrayage.value = data.magnetFee
+    //       chassisSellRate.value = data.magnetChassis
+    //       totalBuyChassisAmount.value = chassisBuyRate.value * chassisBuyQuantity.value
+    //       totalSellChassisAmount.value = chassisSellRate.value * chassisSellQuantity.value
+    //       carrierAccesorialValues.value = data.carrierAccesorials
+    //       magnetAccesorialValues.value = data.magnetAccesorials
+    //       for (let key in data.carrierAccesorials) {
+    //         accesorialSelected.value[key] = true;
+    //       }
+    //       for (let key in data.magnetAccesorials) {
+    //         accesorialSelected.value[key] = true;
+    //       }
+    //     })
+    //     .catch((error) => console.log(error))
+
+    //   modalInfo.value = {
+    //     'ID Operation': objOperation.idOperation,
+    //     'Booking/BL': objOperation.bookingBl,
+    //     'Container ID': objOperation.containerId,
+    //     'Container Type': objOperation.containerType,
+    //     SSLine: objOperation.ssline,
+    //     Customer: objOperation.customer,
+    //     totalCharges: '',
+    //     totalAmount: ''
+    //   }
+
+    //   modalInfoExtra.value = {
+    //     'Provider': objOperation.provider,
+    //     'Quote ID': objOperation.quoteID
+    //   }
+    // }
+    // else {
+    //   const selectedClosedQuote = {
+    //     id: objOperation.quoteID
+    //   }
+
+    //   isOpenQuote.value = true
+    //   getApi(`${import.meta.env.VITE_APP_API}/get/get-florida-quote/${selectedClosedQuote.id}`)
+    //     .then((data) => {
+    //       closedQuoteInfo.value = data
+    //       console.log(data.carrierDrayage)
+    //       buySummaryDrayage.value = convertToNumber(data.carrierDrayage)
+    //       chassisBuyRate.value = convertToNumber(data.carrierChassis)
+    //       sellSummaryDrayage.value = convertToNumber(data.customerDrayage)
+    //       chassisSellRate.value = convertToNumber(data.customerChassis)
+
+    //     })
+    //     .catch((error) => console.log(error))
+
+    //   modalInfo.value = {
+    //     'ID Operation': objOperation.idOperation,
+    //     'Booking/BL': objOperation.bookingBl,
+    //     'Container ID': objOperation.containerId,
+    //     'Container Type': objOperation.containerType,
+    //     SSLine: objOperation.ssline,
+    //     Customer: objOperation.customer,
+    //     totalCharges: '',
+    //     totalAmount: '',
+    //   }
+
+    //   modalInfoExtra.value = {
+    //     'Provider': objOperation.provider,
+    //     'Quote ID': objOperation.quoteID
+    //   }
+    // }
+
+    getApi(`${import.meta.env.VITE_APP_API}/get/accesorials`).then(
+      (data) => (accesorials.value = data)
+    );
+
+    if (idQuoteModal.value.includes("I'll define it later")) {
+      showToast('El Quote ID no esta definido', 'danger', 'red')
+    } else {
+      e.target.setAttribute('data-bs-toggle', 'modal')
+      e.target.setAttribute('data-bs-target', '#accesorialModalDone')
+      slctStatus.value = e.target
+      return
+    }
+  }
 }
 
 const containerStatusOnChange = async (objOperation, e) => {
@@ -858,122 +976,6 @@ const getMonthName = (monthNumber) => {
   return months[monthNumber]
 }
 
-const feedingOperationTableModal = (objOperation, e) => {
-  if (e.target.value === '1') {
-    modalInfo.value = {
-      'ID Operation': objOperation.idOperation,
-      'Booking/BL': objOperation.bookingBl,
-      'Container ID': objOperation.containerId,
-      'Operation Efective Day': objOperation.operationDate,
-      'Size Container': objOperation.containerSize,
-      'Operation mode': objOperation.modeOfOperation,
-      'Warehouse location': objOperation.warehouseLocation,
-      Port: objOperation.port,
-      Customer: objOperation.customer,
-    }
-    e.target.setAttribute('data-bs-toggle', 'modal')
-    e.target.setAttribute('data-bs-target', '#modal')
-    slctStatus.value = e.target
-    return
-  }
-
-  if (e.target.value === '3') {
-    loadAllOperations()
-    idQuoteModal.value = objOperation.quoteID
-    console.log('id: ' + objOperation.id)
-    console.log('operation id: ' + objOperation.idOperation)
-    doesOperationExist(objOperation.idOperation)
-    if (idQuoteModal.value.includes('MGT')) {
-      const selectedIdOpenQuote = {
-        id: objOperation.quoteID
-      }
-      isOpenQuote.value = false
-
-      getApi(`${import.meta.env.VITE_APP_API}/get/get-normal-quote/${selectedIdOpenQuote.id}`)
-        .then((data) => {
-          openQuoteInfo.value = data
-          buySummaryDrayage.value = data.carrierFee
-          chassisBuyRate.value = data.carrierChassis
-          sellSummaryDrayage.value = data.magnetFee
-          chassisSellRate.value = data.magnetChassis
-          totalBuyChassisAmount.value = chassisBuyRate.value * chassisBuyQuantity.value
-          totalSellChassisAmount.value = chassisSellRate.value * chassisSellQuantity.value
-          carrierAccesorialValues.value = data.carrierAccesorials
-          magnetAccesorialValues.value = data.magnetAccesorials
-          for (let key in data.carrierAccesorials) {
-            accesorialSelected.value[key] = true;
-          }
-          for (let key in data.magnetAccesorials) {
-            accesorialSelected.value[key] = true;
-          }
-        })
-        .catch((error) => console.log(error))
-
-      modalInfo.value = {
-        'ID Operation': objOperation.idOperation,
-        'Booking/BL': objOperation.bookingBl,
-        'Container ID': objOperation.containerId,
-        'Container Type': objOperation.containerType,
-        SSLine: objOperation.ssline,
-        Customer: objOperation.customer,
-        totalCharges: '',
-        totalAmount: ''
-      }
-
-      modalInfoExtra.value = {
-        'Provider': objOperation.provider,
-        'Quote ID': objOperation.quoteID
-      }
-    }
-    else {
-      const selectedClosedQuote = {
-        id: objOperation.quoteID
-      }
-
-      isOpenQuote.value = true
-      getApi(`${import.meta.env.VITE_APP_API}/get/get-florida-quote/${selectedClosedQuote.id}`)
-        .then((data) => {
-          closedQuoteInfo.value = data
-          console.log(data.carrierDrayage)
-          buySummaryDrayage.value = convertToNumber(data.carrierDrayage)
-          chassisBuyRate.value = convertToNumber(data.carrierChassis)
-          sellSummaryDrayage.value = convertToNumber(data.customerDrayage)
-          chassisSellRate.value = convertToNumber(data.customerChassis)
-
-        })
-        .catch((error) => console.log(error))
-
-      modalInfo.value = {
-        'ID Operation': objOperation.idOperation,
-        'Booking/BL': objOperation.bookingBl,
-        'Container ID': objOperation.containerId,
-        'Container Type': objOperation.containerType,
-        SSLine: objOperation.ssline,
-        Customer: objOperation.customer,
-        totalCharges: '',
-        totalAmount: '',
-      }
-
-      modalInfoExtra.value = {
-        'Provider': objOperation.provider,
-        'Quote ID': objOperation.quoteID
-      }
-    }
-
-    getApi(`${import.meta.env.VITE_APP_API}/get/accesorials`).then(
-      (data) => (accesorials.value = data)
-    );
-
-    if (idQuoteModal.value.includes("I'll define it later")) {
-      showToast('El Quote ID no esta definido', 'danger', 'red')
-    } else {
-      e.target.setAttribute('data-bs-toggle', 'modal')
-      e.target.setAttribute('data-bs-target', '#accesorialModalDone')
-      slctStatus.value = e.target
-      return
-    }
-  }
-}
 
 const closeModal = () => {
   slctStatus.value.removeAttribute('data-bs-toggle')
@@ -1285,20 +1287,7 @@ const calculateTotalChassis = (summary, quantity, total) => {
 }
 
 const doesOperationExist = (idOperation) => {
-
-  return getApi(`${import.meta.env.VITE_APP_API}/get/getSalesGrossSelected/${idOperation}`)
-    .then((data) => {
-      console.log('Probando informacion que traigo de la api: ' + data)
-      if (Object.keys(data).length !== 0) {
-        console.log(data)
-        console.log('Se supone que deberia pasar esta funcion')
-        return true //al finalizar
-      }
-      console.log('Me retorna false por algun motivo')
-      return false
-
-    })
-
+  console.log(idOperation);
 }
 
 watch([chassisBuyRate, chassisBuyQuantity], () => calculateTotalChassis(chassisBuyRate, chassisBuyQuantity, totalBuyChassisAmount))
