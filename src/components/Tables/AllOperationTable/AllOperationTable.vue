@@ -557,6 +557,7 @@ watch(accesorialSelected.value, () => {
 
 onMounted(async () => {
   loadAllOperations();
+
   getApi(`${import.meta.env.VITE_APP_API}/get/providers`)
     .then(data => carriers.value = data)
     .catch(error => {
@@ -758,7 +759,7 @@ const rowClass = (id) => {
 }
 
 const statusOnChange = async (objOperation, e) => {
-  const parseStatus = parseInt(e.target.value)
+  const parseStatus = parseInt(e.target.value);
   const newStatus = {
     idOperation: objOperation.idOperation,
     status: parseStatus,
@@ -766,7 +767,8 @@ const statusOnChange = async (objOperation, e) => {
   postApi(`${import.meta.env.VITE_APP_API}/post/change-status`, newStatus)
     .then()
     .catch((error) => console.log(error))
-  feedingOperationTableModal(objOperation, e)
+
+  feedingOperationTableModal(objOperation, e);
 }
 
 const containerStatusOnChange = async (objOperation, e) => {
@@ -878,105 +880,107 @@ const feedingOperationTableModal = (objOperation, e) => {
   }
 
   if (e.target.value === '3') {
-    loadAllOperations()
-    idQuoteModal.value = objOperation.quoteID
-    if (doesOperationExist(objOperation.idOperation)) {
-      console.log(doesOperationExist)
-    } else {
-      console.log('LLEGO')
-      if (idQuoteModal.value.includes('MGT')) {
-        const selectedIdOpenQuote = {
-          id: objOperation.quoteID
-        }
-        isOpenQuote.value = false
 
-        getApi(`${import.meta.env.VITE_APP_API}/get/get-normal-quote/${selectedIdOpenQuote.id}`)
-          .then((data) => {
-            openQuoteInfo.value = data
-            buySummaryDrayage.value = data.carrierFee
-            chassisBuyRate.value = data.carrierChassis
-            sellSummaryDrayage.value = data.magnetFee
-            chassisSellRate.value = data.magnetChassis
-            totalBuyChassisAmount.value = chassisBuyRate.value * chassisBuyQuantity.value
-            totalSellChassisAmount.value = chassisSellRate.value * chassisSellQuantity.value
-            carrierAccesorialValues.value = data.carrierAccesorials
-            magnetAccesorialValues.value = data.magnetAccesorials
-            for (let key in data.carrierAccesorials) {
-              accesorialSelected.value[key] = true;
-            }
-            for (let key in data.magnetAccesorials) {
-              accesorialSelected.value[key] = true;
-            }
-          })
-          .catch((error) => console.log(error))
+    loadAllOperations();
 
-        modalInfo.value = {
-          'ID Operation': objOperation.idOperation,
-          'Booking/BL': objOperation.bookingBl,
-          'Container ID': objOperation.containerId,
-          'Container Type': objOperation.containerType,
-          SSLine: objOperation.ssline,
-          Customer: objOperation.customer,
-          totalCharges: '',
-          totalAmount: ''
-        }
+    idQuoteModal.value = objOperation.quoteID;
 
-        modalInfoExtra.value = {
-          'Provider': objOperation.provider,
-          'Quote ID': objOperation.quoteID
-        }
+    console.log(doesOperationExist(objOperation.idOperation))
+
+    if (idQuoteModal.value.includes('MGT')) {
+      const selectedIdOpenQuote = {
+        id: objOperation.quoteID
       }
-      else {
-        const selectedClosedQuote = {
-          id: objOperation.quoteID
-        }
+      isOpenQuote.value = false
 
-        isOpenQuote.value = true
-        getApi(`${import.meta.env.VITE_APP_API}/get/get-florida-quote/${selectedClosedQuote.id}`)
-          .then((data) => {
-            closedQuoteInfo.value = data
-            console.log(data.carrierDrayage)
-            buySummaryDrayage.value = convertToNumber(data.carrierDrayage)
-            chassisBuyRate.value = convertToNumber(data.carrierChassis)
-            sellSummaryDrayage.value = convertToNumber(data.customerDrayage)
-            chassisSellRate.value = convertToNumber(data.customerChassis)
+      getApi(`${import.meta.env.VITE_APP_API}/get/get-normal-quote/${selectedIdOpenQuote.id}`)
+        .then((data) => {
+          openQuoteInfo.value = data
+          buySummaryDrayage.value = data.carrierFee
+          chassisBuyRate.value = data.carrierChassis
+          sellSummaryDrayage.value = data.magnetFee
+          chassisSellRate.value = data.magnetChassis
+          totalBuyChassisAmount.value = chassisBuyRate.value * chassisBuyQuantity.value
+          totalSellChassisAmount.value = chassisSellRate.value * chassisSellQuantity.value
+          carrierAccesorialValues.value = data.carrierAccesorials
+          magnetAccesorialValues.value = data.magnetAccesorials
+          for (let key in data.carrierAccesorials) {
+            accesorialSelected.value[key] = true;
+          }
+          for (let key in data.magnetAccesorials) {
+            accesorialSelected.value[key] = true;
+          }
+        })
+        .catch((error) => console.log(error))
 
-          })
-          .catch((error) => console.log(error))
-
-        modalInfo.value = {
-          'ID Operation': objOperation.idOperation,
-          'Booking/BL': objOperation.bookingBl,
-          'Container ID': objOperation.containerId,
-          'Container Type': objOperation.containerType,
-          SSLine: objOperation.ssline,
-          Customer: objOperation.customer,
-          totalCharges: '',
-          totalAmount: '',
-        }
-
-        modalInfoExtra.value = {
-          'Provider': objOperation.provider,
-          'Quote ID': objOperation.quoteID
-        }
+      modalInfo.value = {
+        'ID Operation': objOperation.idOperation,
+        'Booking/BL': objOperation.bookingBl,
+        'Container ID': objOperation.containerId,
+        'Container Type': objOperation.containerType,
+        SSLine: objOperation.ssline,
+        Customer: objOperation.customer,
+        totalCharges: '',
+        totalAmount: ''
       }
-    }
 
+      modalInfoExtra.value = {
+        'Provider': objOperation.provider,
+        'Quote ID': objOperation.quoteID
+      }
 
-    getApi(`${import.meta.env.VITE_APP_API}/get/accesorials`).then(
-      (data) => (accesorials.value = data)
-    );
-
-    if (idQuoteModal.value.includes("I'll define it later")) {
-      showToast('El Quote ID no esta definido', 'danger', 'red')
     } else {
-      e.target.setAttribute('data-bs-toggle', 'modal')
-      e.target.setAttribute('data-bs-target', '#accesorialModalDone')
-      slctStatus.value = e.target
-      return
+
+      const selectedClosedQuote = {
+        id: objOperation.quoteID
+      }
+
+      isOpenQuote.value = true
+      getApi(`${import.meta.env.VITE_APP_API}/get/get-florida-quote/${selectedClosedQuote.id}`)
+        .then((data) => {
+          closedQuoteInfo.value = data
+          console.log(data.carrierDrayage)
+          buySummaryDrayage.value = convertToNumber(data.carrierDrayage)
+          chassisBuyRate.value = convertToNumber(data.carrierChassis)
+          sellSummaryDrayage.value = convertToNumber(data.customerDrayage)
+          chassisSellRate.value = convertToNumber(data.customerChassis)
+
+        })
+        .catch((error) => console.log(error))
+
+      modalInfo.value = {
+        'ID Operation': objOperation.idOperation,
+        'Booking/BL': objOperation.bookingBl,
+        'Container ID': objOperation.containerId,
+        'Container Type': objOperation.containerType,
+        SSLine: objOperation.ssline,
+        Customer: objOperation.customer,
+        totalCharges: '',
+        totalAmount: '',
+      }
+
+      modalInfoExtra.value = {
+        'Provider': objOperation.provider,
+        'Quote ID': objOperation.quoteID
+      }
     }
   }
+
+
+  getApi(`${import.meta.env.VITE_APP_API}/get/accesorials`).then(
+    (data) => (accesorials.value = data)
+  );
+
+  if (idQuoteModal.value.includes("I'll define it later")) {
+    showToast('El Quote ID no esta definido', 'danger', 'red')
+  } else {
+    e.target.setAttribute('data-bs-toggle', 'modal')
+    e.target.setAttribute('data-bs-target', '#accesorialModalDone')
+    slctStatus.value = e.target
+    return
+  }
 }
+
 
 const closeModal = () => {
   slctStatus.value.removeAttribute('data-bs-toggle')
@@ -1099,10 +1103,11 @@ const handleBtnBackAccesorial2 = () => {
 
 const handleContinueClickBtn = async () => {
   const currentDate = new Date();
-
+  console.log(totalSellChassisAmount.value)
   loadAllOperations();
+
   if (idQuoteModal.value.includes('MGT')) {
-    console.log(totalSellChassisAmount.value)
+
     sumAccesorialValues()
     const customerDrayageNumber = parseFloat(openQuoteInfo.value.magnetFee)
     const carrierDrayageNumber = parseFloat(openQuoteInfo.value.carrierFee)
@@ -1288,23 +1293,7 @@ const calculateTotalChassis = (summary, quantity, total) => {
 }
 
 const doesOperationExist = (idOperation) => {
-
-  return getApi(`${import.meta.env.VITE_APP_API}/get/getSalesGrossSelected/${idOperation}`)
-    .then((data) => {
-      return data
-      // if (Object.keys(data).length !== 0) {
-      //   console.log(data)
-      //   console.log('Se supone que deberia pasar esta funcion')
-      //   openQuoteInfo.value = data
-      //   totalBuyChassisAmount.value = openQuoteInfo.value.buyChassis
-      //   totalSellChassisAmount.value = openQuoteInfo.value.sellChassis
-      //   return true //al finalizar
-      // }
-      // console.log('Me retorna false por algun motivo')
-      // return data
-    })
-    .catch((error) => console.log(error))
-
+  return salesGrossInfo.value.filter(item => item.operation_id === idOperation)
 }
 
 watch([chassisBuyRate, chassisBuyQuantity], () => calculateTotalChassis(chassisBuyRate, chassisBuyQuantity, totalBuyChassisAmount))
