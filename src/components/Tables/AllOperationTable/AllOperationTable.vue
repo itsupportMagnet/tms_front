@@ -537,6 +537,7 @@ const buySummaryDrayage = ref();
 const chassisBuyRate = ref();
 const sellSummaryDrayage = ref();
 const chassisSellRate = ref();
+const saleById = ref();
 const filterObj = ref({
   date: '',
   status: '',
@@ -1293,7 +1294,16 @@ const calculateTotalChassis = (summary, quantity, total) => {
 }
 
 const doesOperationExist = (idOperation) => {
-  return salesGrossInfo.value.filter(item => item.operation_id === idOperation)
+  const foundItem = salesGrossInfo.value.find(item => item.operation_id === idOperation);
+
+  if (foundItem) {
+    saleById.value = foundItem;
+    return true;
+  }
+
+  saleById.value = {};
+  return false;
+
 }
 
 watch([chassisBuyRate, chassisBuyQuantity], () => calculateTotalChassis(chassisBuyRate, chassisBuyQuantity, totalBuyChassisAmount))
