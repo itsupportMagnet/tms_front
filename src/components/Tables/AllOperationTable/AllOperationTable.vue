@@ -537,9 +537,9 @@ const openQuoteInfo = ref();
 const closedQuoteInfo = ref();
 const salesGrossInfo = ref();
 const accesorialSelected = ref({});
-const carrierAccesorialValues = ref({});
-const magnetAccesorialValues = ref({});
-const totalAccesorialValues = ref({})
+const carrierAccesorialValues = ref({}); //Se deben borrar al cerrar el modal
+const magnetAccesorialValues = ref({}); //Se deben borrar al cerrar el modal
+const totalAccesorialValues = ref({}) //Se deben borrar al cerrar el modal
 const closedQuoteBuyChassis = ref();
 const closedQuoteSellChassis = ref();
 
@@ -814,6 +814,8 @@ const feedingOperationTableModal = (objOperation, e) => {
 
       feedModalSummaryTable(buyDrayage, buyQtyChassis, buyChassisUnitRate, sellDrayage, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials);
 
+      feedModalAccesorial(buyAccesorials, sellAccesorials)
+
 
     } else {
       if (chckIsAnOpenOperation(operation.value.quoteID)) {
@@ -1082,9 +1084,9 @@ const handleContinueAccesorial1 = () => {
   isAccesorialModal1.value = false;
   isAccesorialModal2.value = true;
   isAccesorialModal3.value = false;
-  
+
   saleById.value.buyChassis = inptTotalSellChassisAmount.value;
-  
+
 
   // if (idQuoteModal.value.includes('MGT')) {
   //   console.log('Estoy con la quote Abierta')
@@ -1329,7 +1331,7 @@ const resetAtDismissModal = () => {
 
 const calculateTotalChassis = (summary, quantity, total) => {
   total.value = (summary.value * quantity.value).toFixed(2);
-  
+
 }
 
 const doesOperationExist = (idOperation) => {
@@ -1366,8 +1368,9 @@ const feedModalSummaryTable = (drayageBuyUnit, chassisBuyQty, chassisBuyUnit, dr
   inptSellSummaryDrayage.value = drayageSellUnit;
   inptChassisSellRate.value = chassisSellUnit;
 
-  /*  Datos Accesorials  */
+}
 
+const feedModalAccesorial = (buyAccesorials, sellAccesorials) => {
   carrierAccesorialValues.value = buyAccesorials
   magnetAccesorialValues.value = sellAccesorials
   for (let key in buyAccesorials) {
@@ -1379,10 +1382,9 @@ const feedModalSummaryTable = (drayageBuyUnit, chassisBuyQty, chassisBuyUnit, dr
 
 }
 
+watch([inptChassisBuyRate, inptChassisBuyQuantity], () => calculateTotalChassis(inptChassisBuyRate, inptChassisBuyQuantity, inptTotalBuyChassisAmount))
 
- watch([inptChassisBuyRate, inptChassisBuyQuantity], () => calculateTotalChassis(inptChassisBuyRate, inptChassisBuyQuantity, inptTotalBuyChassisAmount))
-
- watch([inptChassisSellRate, inptChassisSellQuantity], () => calculateTotalChassis(inptChassisSellRate, inptChassisSellQuantity, inptTotalSellChassisAmount))
+watch([inptChassisSellRate, inptChassisSellQuantity], () => calculateTotalChassis(inptChassisSellRate, inptChassisSellQuantity, inptTotalSellChassisAmount))
 </script>
 
 <style lang="scss" scoped>
