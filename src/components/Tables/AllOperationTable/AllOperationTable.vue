@@ -64,16 +64,16 @@
                       <tr>
                         <td>1</td>
                         <td>Drayage :</td>
-                        <td><input type="number" v-model="drayageBuyQuantity" min="1" disabled /></td>
-                        <td><input type="number" v-model="buySummaryDrayage" disabled /></td>
-                        <td><input type="number" v-model="buySummaryDrayage" disabled /></td>
+                        <td><input type="number" v-model="inptDrayageBuyQuantity" min="1" disabled /></td>
+                        <td><input type="number" v-model="inptBuySummaryDrayage" disabled /></td>
+                        <td><input type="number" v-model="inptBuySummaryDrayage" disabled /></td>
                       </tr>
                       <tr>
                         <td>2</td>
                         <td>Chassis :</td>
-                        <td><input type="number" v-model="chassisBuyQuantity" step="1" min="1" /></td>
-                        <td><input type="number" v-model="chassisBuyRate" disabled /></td>
-                        <td><input type="number" v-model="totalBuyChassisAmount" disabled /></td>
+                        <td><input type="number" v-model="inptChassisBuyQuantity" step="1" min="1" /></td>
+                        <td><input type="number" v-model="inptChassisBuyRate" disabled /></td>
+                        <td><input type="number" v-model="inptTotalBuyChassisAmount" disabled /></td>
                       </tr>
                     </tbody>
                   </table>
@@ -94,16 +94,16 @@
                       <tr>
                         <td>1</td>
                         <td>Drayage :</td>
-                        <td><input type="number" v-model="drayageSellQuantity" step="1" min="1" disabled /></td>
-                        <td><input type="number" v-model="sellSummaryDrayage" disabled /></td>
-                        <td><input type="number" v-model="sellSummaryDrayage" disabled /></td>
+                        <td><input type="number" v-model="inptDrayageSellQuantity" step="1" min="1" disabled /></td>
+                        <td><input type="number" v-model="inptSellSummaryDrayage" disabled /></td>
+                        <td><input type="number" v-model="inptSellSummaryDrayage" disabled /></td>
                       </tr>
                       <tr>
                         <td>2</td>
                         <td>Chassis :</td>
-                        <td><input type="number" v-model="chassisSellQuantity" min="1" /></td>
-                        <td><input type="number" v-model="chassisSellRate" disabled /></td>
-                        <td><input type="number" v-model="totalSellChassisAmount" disabled /></td>
+                        <td><input type="number" v-model="inptChassisSellQuantity" min="1" /></td>
+                        <td><input type="number" v-model="inptChassisSellRate" disabled /></td>
+                        <td><input type="number" v-model="inptTotalSellChassisAmount" disabled /></td>
                       </tr>
                     </tbody>
                   </table>
@@ -503,12 +503,20 @@ const modalRefNotes = ref(null)
 const newOperationModal = ref(null);
 const updateOperationModal = ref(null);
 const accesorialModalDone = ref(null);
-const drayageBuyQuantity = ref(1);
-const drayageSellQuantity = ref(1);
-const chassisBuyQuantity = ref(1);
-const chassisSellQuantity = ref(1);
-const totalBuyChassisAmount = ref();
-const totalSellChassisAmount = ref();
+
+const inptDrayageBuyQuantity = ref(1);
+const inptChassisBuyQuantity = ref(1);
+const inptTotalBuyChassisAmount = ref();
+
+const inptDrayageSellQuantity = ref(1);
+const inptChassisSellQuantity = ref(1);
+const inptTotalSellChassisAmount = ref();
+
+const inptBuySummaryDrayage = ref();
+const inptChassisBuyRate = ref();
+const inptSellSummaryDrayage = ref();
+const inptChassisSellRate = ref();
+
 const slctStatus = ref()
 const slctContainerStatus = ref()
 const message = ref()
@@ -534,10 +542,10 @@ const magnetAccesorialValues = ref({});
 const totalAccesorialValues = ref({})
 const closedQuoteBuyChassis = ref();
 const closedQuoteSellChassis = ref();
-const buySummaryDrayage = ref();
-const chassisBuyRate = ref();
-const sellSummaryDrayage = ref();
-const chassisSellRate = ref();
+
+const saleById = ref();
+const isDoneOperationUpdate = ref(false);
+const doneModalInfo = ref();
 const filterObj = ref({
   date: '',
   status: '',
@@ -791,11 +799,43 @@ const feedingOperationTableModal = (objOperation, e) => {
   }
 
   if (e.target.value === '3') {
-    loadAllOperations()
-    console.log(operation.value);
-    doesOperationExist(operation.value.idOperation);
 
-    // if (idQuoteModal.value.includes('MGT')) {
+    loadAllOperations()
+
+    if (doesOperationExist(operation.value.idOperation)) {
+      e.target.setAttribute('data-bs-toggle', 'modal')
+      e.target.setAttribute('data-bs-target', '#accesorialModalDone')
+      // slctStatus.value = e.target
+
+      const { buyDrayage, buyDrayageUnitRate, buyChassisUnitRate, buyQtyChassis, sellDrayage } = saleById.value;
+
+      feedModalSummaryTable(buyDrayage, buyDrayageUnitRate, buyChassisUnitRate, buyQtyChassis);
+
+
+    } else {
+      if (chckIsAnOpenOperation(operation.value.quoteID)) {
+
+        getApi(`${import.meta.env.VITE_APP_API}/get/get-normal-quote/${operation.value.quoteID}`)
+          .then(data => console.log(data))
+          .catch(error => console.log(error))
+
+        e.target.setAttribute('data-bs-toggle', 'modal')
+        e.target.setAttribute('data-bs-target', '#accesorialModalDone')
+        slctStatus.value = e.target
+      }
+    }
+
+
+
+
+
+
+
+
+
+
+
+    // if (operation.value.quoteID.includes('MGT')) {
     //   const selectedIdOpenQuote = {
     //     id: objOperation.quoteID
     //   }
@@ -1035,60 +1075,60 @@ const confirmDelete = async () => {
   await deleteOperation(OperationIdToDelete.value)
 }
 
-const handleContinueAccesorial1 = () => {
-  isAccesorialModal1.value = false;
-  isAccesorialModal2.value = true;
-  isAccesorialModal3.value = false;
-  loadAllOperations();
-  if (idQuoteModal.value.includes('MGT')) {
-    console.log('Estoy con la quote Abierta')
-    console.log('Primer Console Log TotalAmount: ' +totalSellChassisAmount.value)
-    
-    const toSalesGrossFromOpenSummary = {
-      operationId: modalInfo.value['ID Operation'],
-      chassisBuyQuantity: chassisBuyQuantity.value,
-      chassisBuySummary: chassisBuyRate.value,
-      totalBuyChassisAmount: totalBuyChassisAmount.value,
-      chassisSellQuantity: chassisSellQuantity.value,
-      chassisSellSummary: chassisSellRate.value,
-      totalSellChassisAmount: totalSellChassisAmount.value
-    }
+// const handleContinueAccesorial1 = () => {
+//   isAccesorialModal1.value = false;
+//   isAccesorialModal2.value = true;
+//   isAccesorialModal3.value = false;
+//   loadAllOperations();
+//   if (idQuoteModal.value.includes('MGT')) {
+//     console.log('Estoy con la quote Abierta')
+//     console.log('Primer Console Log TotalAmount: ' + totalSellChassisAmount.value)
 
-    if (salesGrossInfo.value.some(item => item.operation_id === modalInfo.value['ID Operation'])) {
-      postApi(`${import.meta.env.VITE_APP_API}/post/updateSummarySalesGross`, toSalesGrossFromOpenSummary)
-        .then(loadAllOperations())
-        .catch((error) => console.log(error))
-    } else {
-      postApi(`${import.meta.env.VITE_APP_API}/post/newSummarySalesGross`, toSalesGrossFromOpenSummary)
-        .then(loadAllOperations())
-        .catch((error) => console.log(error))
-    }
-    console.log(toSalesGrossFromOpenSummary)
-  } else {
-    console.log('Estoy con la quote Cerrada')
-    console.log('Primer Log' + totalSellChassisAmount.value)
-    const toSalesGrossFromClosedSummary = {
-      operationId: modalInfo.value['ID Operation'],
-      chassisBuyQuantity: chassisBuyQuantity.value,
-      chassisBuySummary: chassisBuyRate.value,
-      totalBuyChassisAmount: totalBuyChassisAmount.value,
-      chassisSellQuantity: chassisSellQuantity.value,
-      chassisSellSummary: chassisSellRate.value,
-      totalSellChassisAmount: totalSellChassisAmount.value
-    }
+//     // const toSalesGrossFromOpenSummary = {
+//     //   operationId: modalInfo.value['ID Operation'],
+//     //   chassisBuyQuantity: chassisBuyQuantity.value,
+//     //   chassisBuySummary: chassisBuyRate.value,
+//     //   totalBuyChassisAmount: totalBuyChassisAmount.value,
+//     //   chassisSellQuantity: chassisSellQuantity.value,
+//     //   chassisSellSummary: chassisSellRate.value,
+//     //   totalSellChassisAmount: totalSellChassisAmount.value
+//     // }
 
-    if (salesGrossInfo.value.some(item => item.operation_id === modalInfo.value['ID Operation'])) {
-      postApi(`${import.meta.env.VITE_APP_API}/post/updateSummarySalesGross`, toSalesGrossFromClosedSummary)
-        .then(loadAllOperations())
-        .catch((error) => console.log(error))
-    } else {
-      postApi(`${import.meta.env.VITE_APP_API}/post/newSummarySalesGross`, toSalesGrossFromClosedSummary)
-        .then(loadAllOperations())
-        .catch((error) => console.log(error))
-    }
-    console.log(toSalesGrossFromClosedSummary)
-  }
-}
+//     if (salesGrossInfo.value.some(item => item.operation_id === modalInfo.value['ID Operation'])) {
+//       postApi(`${import.meta.env.VITE_APP_API}/post/updateSummarySalesGross`, toSalesGrossFromOpenSummary)
+//         .then(loadAllOperations())
+//         .catch((error) => console.log(error))
+//     } else {
+//       postApi(`${import.meta.env.VITE_APP_API}/post/newSummarySalesGross`, toSalesGrossFromOpenSummary)
+//         .then(loadAllOperations())
+//         .catch((error) => console.log(error))
+//     }
+//     console.log(toSalesGrossFromOpenSummary)
+//   } else {
+//     console.log('Estoy con la quote Cerrada')
+//     console.log('Primer Log' + totalSellChassisAmount.value)
+//     const toSalesGrossFromClosedSummary = {
+//       operationId: modalInfo.value['ID Operation'],
+//       chassisBuyQuantity: chassisBuyQuantity.value,
+//       chassisBuySummary: chassisBuyRate.value,
+//       totalBuyChassisAmount: totalBuyChassisAmount.value,
+//       chassisSellQuantity: chassisSellQuantity.value,
+//       chassisSellSummary: chassisSellRate.value,
+//       totalSellChassisAmount: totalSellChassisAmount.value
+//     }
+
+//     if (salesGrossInfo.value.some(item => item.operation_id === modalInfo.value['ID Operation'])) {
+//       postApi(`${import.meta.env.VITE_APP_API}/post/updateSummarySalesGross`, toSalesGrossFromClosedSummary)
+//         .then(loadAllOperations())
+//         .catch((error) => console.log(error))
+//     } else {
+//       postApi(`${import.meta.env.VITE_APP_API}/post/newSummarySalesGross`, toSalesGrossFromClosedSummary)
+//         .then(loadAllOperations())
+//         .catch((error) => console.log(error))
+//     }
+//     console.log(toSalesGrossFromClosedSummary)
+//   }
+// }
 
 const handleBtnBackAccesorial2 = () => {
   isAccesorialModal1.value = true;
@@ -1264,35 +1304,66 @@ const calculateTotalAccesorialCharges = (accesorialList) => {
   return totalAmountValues
 }
 
-const resetAtDismissModal = () => {
-  isAccesorialModal1.value = true;
-  isAccesorialModal2.value = false;
-  isAccesorialModal3.value = false;
-  accesorialSelected.value = {};
-  carrierAccesorialValues.value = {};
-  magnetAccesorialValues.value = {};
-  totalAccesorialValues.value = {};
-  /* First Modal Reset Values */
-  buySummaryDrayage.value = "";
-  chassisBuyRate.value = "";
-  chassisBuyQuantity.value = 1;
-  sellSummaryDrayage.value = "";
-  chassisSellRate.value = "";
-  chassisSellQuantity.value = 1;
+// const resetAtDismissModal = () => {
+//   isAccesorialModal1.value = true;
+//   isAccesorialModal2.value = false;
+//   isAccesorialModal3.value = false;
+//   accesorialSelected.value = {};
+//   carrierAccesorialValues.value = {};
+//   magnetAccesorialValues.value = {};
+//   totalAccesorialValues.value = {};
+//   /* First Modal Reset Values */
+//   buySummaryDrayage.value = "";
+//   chassisBuyRate.value = "";
+//   chassisBuyQuantity.value = 1;
+//   sellSummaryDrayage.value = "";
+//   chassisSellRate.value = "";
+//   chassisSellQuantity.value = 1;
 
-}
+// }
 
 const calculateTotalChassis = (summary, quantity, total) => {
   total.value = (summary.value * quantity.value).toFixed(2);
 }
 
 const doesOperationExist = (idOperation) => {
-  console.log(idOperation);
+  const foundItem = salesGrossInfo.value.find(item => item.operation_id === idOperation);
+
+  if (foundItem) {
+    isDoneOperationUpdate.value = true;
+    saleById.value = foundItem;
+    return true;
+  }
+  isDoneOperationUpdate.value = false;
+  saleById.value = {};
+  return false;
 }
 
-watch([chassisBuyRate, chassisBuyQuantity], () => calculateTotalChassis(chassisBuyRate, chassisBuyQuantity, totalBuyChassisAmount))
+const chckIsAnOpenOperation = (quoteID) => {
+  return quoteID.includes('MGT')
+}
 
-watch([chassisSellRate, chassisSellQuantity], () => calculateTotalChassis(chassisSellRate, chassisSellQuantity, totalSellChassisAmount))
+const feedModalSummaryTable = (drayageBuyUnit, chassisBuyQty, chassisBuyUnit, drayageSellUnit, chassisSellQty, chassisSellUnit, chassisSellTotal) => {
+
+  inptDrayageBuyQuantity.value = 1;
+  inptChassisBuyQuantity.value = chassisBuyQty;
+  inptChassisBuyRate.value = chassisBuyUnit;
+
+  inptTotalBuyChassisAmount.value = inptChassisBuyQuantity.value * inptChassisBuyRate.value;
+
+  inptDrayageSellQuantity.value = 1;
+  inptChassisSellQuantity.value = chassisSellQty;
+  inptTotalSellChassisAmount.value = chassisSellTotal;
+
+  inptBuySummaryDrayage.value = drayageBuyUnit;
+
+  inptSellSummaryDrayage.value = drayageSellUnit;
+  inptChassisSellRate.value = chassisSellUnit;
+}
+
+// watch([chassisBuyRate, chassisBuyQuantity], () => calculateTotalChassis(chassisBuyRate, chassisBuyQuantity, totalBuyChassisAmount))
+
+// watch([chassisSellRate, chassisSellQuantity], () => calculateTotalChassis(chassisSellRate, chassisSellQuantity, totalSellChassisAmount))
 </script>
 
 <style lang="scss" scoped>
