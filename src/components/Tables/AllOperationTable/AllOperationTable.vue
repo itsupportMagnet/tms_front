@@ -42,7 +42,7 @@
 
         <!-- First Modal Before Continue Button -->
 
-        <div class="modal-body" v-if="isAccesorialModal1">
+        <div class="modal-body" v-if="isTableSummayModal">
           <div class="container-fluid">
             <Card>
               <div class="table-row">
@@ -114,7 +114,7 @@
         </div>
 
         <!-- Second Modal Before Continue Button -->
-        <div class="modal-body" v-if="isAccesorialModal2">
+        <div class="modal-body" v-if="isAccesorialModal">
           <div class="carriers-fee">
             <div class="main-container">
               <div :if="accesorials">
@@ -122,10 +122,7 @@
                   <div class="rates-title">
                     <h2>Buy Accesorials</h2>
                   </div>
-                  <!-- <div class="chassisInputContainer" v-if="isOpenQuote">
-                    <label class="chassisInputContainer__label">Buy Chassis:</label>
-                    <input v-model="closedQuoteBuyChassis" type="Number" placeholder="Add Buy Chassis Value" />
-                  </div> -->
+
                   <div class="buy-accesorials-container">
                     <div class="buy-accesorials-container__col" v-for="item in accesorials" :key="item.id">
                       <label>
@@ -142,10 +139,7 @@
                   <div class="rates-title">
                     <h2>Sell Accesorials</h2>
                   </div>
-                  <!-- <div class="chassisInputContainer" v-if="isOpenQuote">
-                    <label class="fee-label">Sell Chassis:</label>
-                    <input v-model="closedQuoteSellChassis" type="Number" placeholder="Add Sell Chassis Value" />
-                  </div> -->
+
                   <div class="sell-accesorials-container">
                     <div class="sell-accesorials-container__col" v-for="(value, name, index) in accesorialSelected"
                       :key="index">
@@ -163,31 +157,73 @@
 
         <!-- Third Modal After Continue Button -->
         <div class="modal-body modal-done-status" v-if="isAccesorialModal3">
-          <table v-if="modalInfo">
-            <tr v-for="(item, index) in modalInfo" style="border: 1px solid #000" :key="index">
+          <table>
+            <!-- <tr v-for="(item, index) in modalInfo" style="border: 1px solid #000" :key="index">
               <th style="background-color: #1d4ed8; color: #fff; padding: 0 10px">
                 {{ formatAndCapitalize(index) }}
               </th>
               <td style="padding: 0 10px">{{ item }}</td>
+            </tr> -->
+            <tr style="border: 1px solid #000">
+              <th style="background-color: #1d4ed8; color: #fff; padding: 0 10px">
+                ID Operation
+              </th>
+              <td style="padding: 0 10px">{{sale.operation_id}}</td>
+            </tr>
+            <tr style="border: 1px solid #000">
+              <th style="background-color: #1d4ed8; color: #fff; padding: 0 10px">
+                Booking/BL
+              </th>
+              <td style="padding: 0 10px">{{ sale.booking_bl }}</td>
+            </tr>
+            <tr style="border: 1px solid #000">
+              <th style="background-color: #1d4ed8; color: #fff; padding: 0 10px">
+                Container ID
+              </th>
+              <td style="padding: 0 10px">{{sale.container_id}}</td>
+            </tr>
+            <tr style="border: 1px solid #000">
+              <th style="background-color: #1d4ed8; color: #fff; padding: 0 10px">
+                SSLine
+              </th>
+              <td style="padding: 0 10px">{{operation.ssline}}</td>
+            </tr>
+            <tr style="border: 1px solid #000">
+              <th style="background-color: #1d4ed8; color: #fff; padding: 0 10px">
+                Customer
+              </th>
+              <td style="padding: 0 10px">{{sale.customer}}</td>
+            </tr>
+            <tr style="border: 1px solid #000">
+              <th style="background-color: #1d4ed8; color: #fff; padding: 0 10px">
+                Total Charges
+              </th>
+              <td style="padding: 0 10px">total</td>
+            </tr>
+            <tr style="border: 1px solid #000">
+              <th style="background-color: #1d4ed8; color: #fff; padding: 0 10px">
+                Total Amount
+              </th>
+              <td style="padding: 0 10px">total</td>
             </tr>
           </table>
         </div>
 
-        <!-- Footer Buttons -->
 
-        <div class="modal-footer" v-if="isAccesorialModal1">
-          <button @click="handleContinueAccesorial1" v-if="isAccesorialModal1" type="button"
+        <!-- Footer Buttons -->
+        <div class="modal-footer" v-if="isTableSummayModal">
+          <button @click="handleContinueToAccesorials" v-if="isTableSummayModal" type="button"
             class="btn btn-success">Continue</button>
         </div>
 
-        <div class="modal-footer" v-if="isAccesorialModal2">
-          <button @click="handleBtnBackAccesorial2" type="button" class="btn btn-danger">Go Back</button>
-          <button @click="handleContinueClickBtn" v-if="isAccesorialModal2" type="button"
+        <div class="modal-footer" v-if="isAccesorialModal">
+          <button @click="handleGoBackToSummaryTableModal" type="button" class="btn btn-danger">Go Back</button>
+          <button @click="handleContinueToChargesTable" v-if="isAccesorialModal" type="button"
             class="btn btn-success">Continue</button>
         </div>
 
         <div class="modal-footer" v-if="isAccesorialModal3">
-          <button @click="handleClickBtnBack" type="button" class="btn btn-danger">Go
+          <button @click="handleGoBackToAccesorialModal" type="button" class="btn btn-danger">Go
             Back</button>
           <button @click="copyHtmlBtnDoneStatus" type="button" class="btn btn-primary">
             Copy Info
@@ -529,8 +565,8 @@ const carriers = ref();
 const accesorials = ref();
 let newOperationKey = ref(0)
 let newDoneModalKey = ref(0)
-const isAccesorialModal1 = ref(true)
-const isAccesorialModal2 = ref(false)
+const isTableSummayModal = ref(true)
+const isAccesorialModal = ref(false)
 const isAccesorialModal3 = ref(false)
 const isOpenQuote = ref(false)
 const openQuoteInfo = ref();
@@ -543,7 +579,7 @@ const totalAccesorialValues = ref({}) //Se deben borrar al cerrar el modal
 const closedQuoteBuyChassis = ref();
 const closedQuoteSellChassis = ref();
 
-const saleById = ref();
+const sale = ref();
 const isDoneOperationUpdate = ref(false);
 const doneModalInfo = ref();
 const filterObj = ref({
@@ -799,23 +835,25 @@ const feedingOperationTableModal = (objOperation, e) => {
   }
 
   if (e.target.value === '3') {
+    e.target.setAttribute('data-bs-toggle', 'modal');
+    e.target.setAttribute('data-bs-target', '#accesorialModalDone');
+    slctStatus.value = e.target;
 
     loadAllOperations()
-    idQuoteModal.value = objOperation.quoteID
+
+    // idQuoteModal.value = objOperation.quoteID;
+
     if (doesOperationExist(operation.value.idOperation)) {
-      e.target.setAttribute('data-bs-toggle', 'modal')
-      e.target.setAttribute('data-bs-target', '#accesorialModalDone')
-      slctStatus.value = e.target  //No dejar comentado, sin este valor el modal se vuelve loco xd 
 
-      console.log(saleById.value)
 
-      const { buyDrayage, buyQtyChassis, buyChassisUnitRate, sellDrayage, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials } = saleById.value;
+      console.log(sale.value)
+
+      const { buyDrayage, buyQtyChassis, buyChassisUnitRate, sellDrayage, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials } = sale.value;
 
 
       feedModalSummaryTable(buyDrayage, buyQtyChassis, buyChassisUnitRate, sellDrayage, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials);
 
       feedModalAccesorial(buyAccesorials, sellAccesorials)
-
 
     } else {
       if (chckIsAnOpenOperation(operation.value.quoteID)) {
@@ -1080,12 +1118,12 @@ const confirmDelete = async () => {
   await deleteOperation(OperationIdToDelete.value)
 }
 
-const handleContinueAccesorial1 = () => {
-  isAccesorialModal1.value = false;
-  isAccesorialModal2.value = true;
+const handleContinueToAccesorials = () => {
+  isTableSummayModal.value = false;
+  isAccesorialModal.value = true;
   isAccesorialModal3.value = false;
 
-  saleById.value.buyChassis = inptTotalSellChassisAmount.value;
+  sale.value.buyChassis = inptTotalSellChassisAmount.value;
 
 
   // if (idQuoteModal.value.includes('MGT')) {
@@ -1138,116 +1176,129 @@ const handleContinueAccesorial1 = () => {
   // }
 }
 
-const handleBtnBackAccesorial2 = () => {
-  isAccesorialModal1.value = true;
-  isAccesorialModal2.value = false;
+const handleGoBackToSummaryTableModal = () => {
+  isTableSummayModal.value = true;
+  isAccesorialModal.value = false;
   isAccesorialModal3.value = false;
 }
 
-const handleContinueClickBtn = async () => {
+const handleContinueToChargesTable = async () => {
   const currentDate = new Date();
+  isTableSummayModal.value = false;
+  isAccesorialModal.value = false;
+  isAccesorialModal3.value = true;
+
+  sale.value.date = currentDate;
+
+  if(isDoneOperationUpdate.value){
+    postApi(`${import.meta.env.VITE_APP_API}/post/updateSaleGross`, sale.value)
+    .then(()=> console.log("Se updateo correctamente"))
+    .catch(error => console.log(error))
+  }
+  
+
+  
+  // saveAccesorials();
 
   loadAllOperations();
-  if (idQuoteModal.value.includes('MGT')) {
-    sumAccesorialValues()
-    const customerDrayageNumber = parseFloat(openQuoteInfo.value.magnetFee)
-    const carrierDrayageNumber = parseFloat(openQuoteInfo.value.carrierFee)
-    const carrierChassisNumber = parseFloat(openQuoteInfo.value.carrierChassis)
-    const magnetChassisNumber = parseFloat(openQuoteInfo.value.magnetChassis)
-    const totalAccesorialCharges = calculateTotalAccesorialCharges(magnetAccesorialValues.value)
-    const totalCarrierAccesorialCharges = sumCarrierAccesorialValues();
-    const totalMagnetAccesorialCharges = sumMagnetAccesorialValues();
-    const totalChassisCharges = parseFloat(totalSellChassisAmount.value)
-    const buyCalculatedNumber = carrierDrayageNumber + totalCarrierAccesorialCharges + convertToNumber(totalBuyChassisAmount.value)
-    const sellCalculatedNumber = customerDrayageNumber + totalMagnetAccesorialCharges + convertToNumber(totalSellChassisAmount.value)
-    const profitCalculatedNumber = sellCalculatedNumber - buyCalculatedNumber
-    modalInfo.value.totalCharges = `Drayage: $${openQuoteInfo.value.magnetFee} + Chassis: $${totalChassisCharges} ${printTotalCharges(magnetAccesorialValues.value)}`
-    modalInfo.value.totalAmount = `$${customerDrayageNumber + totalAccesorialCharges + totalChassisCharges}`
+  // if (idQuoteModal.value.includes('MGT')) {
+  //   sumAccesorialValues()
+  //   const customerDrayageNumber = parseFloat(openQuoteInfo.value.magnetFee)
+  //   const carrierDrayageNumber = parseFloat(openQuoteInfo.value.carrierFee)
+  //   const carrierChassisNumber = parseFloat(openQuoteInfo.value.carrierChassis)
+  //   const magnetChassisNumber = parseFloat(openQuoteInfo.value.magnetChassis)
+  //   const totalAccesorialCharges = calculateTotalAccesorialCharges(magnetAccesorialValues.value)
+  //   const totalCarrierAccesorialCharges = sumCarrierAccesorialValues();
+  //   const totalMagnetAccesorialCharges = sumMagnetAccesorialValues();
+  //   const totalChassisCharges = parseFloat(totalSellChassisAmount.value)
+  //   const buyCalculatedNumber = carrierDrayageNumber + totalCarrierAccesorialCharges + convertToNumber(totalBuyChassisAmount.value)
+  //   const sellCalculatedNumber = customerDrayageNumber + totalMagnetAccesorialCharges + convertToNumber(totalSellChassisAmount.value)
+  //   const profitCalculatedNumber = sellCalculatedNumber - buyCalculatedNumber
+  //   modalInfo.value.totalCharges = `Drayage: $${openQuoteInfo.value.magnetFee} + Chassis: $${totalChassisCharges} ${printTotalCharges(magnetAccesorialValues.value)}`
+  //   modalInfo.value.totalAmount = `$${customerDrayageNumber + totalAccesorialCharges + totalChassisCharges}`
 
-    const toSalesGrossFromNormalQuotes = {
-      operationId: modalInfo.value['ID Operation'],
-      bookingBl: modalInfo.value['Booking/BL'],
-      containerId: modalInfo.value['Container ID'],
-      provider: modalInfoExtra.value['Provider'],
-      customer: modalInfo.value.Customer,
-      buy: buyCalculatedNumber,
-      sell: sellCalculatedNumber,
-      profit: profitCalculatedNumber,
-      date: getMonthName(currentDate.getMonth()),
-      carrierAccesorials: JSON.stringify(carrierAccesorialValues.value),
-      magnetAccesorials: JSON.stringify(magnetAccesorialValues.value),
-      buyChassis: totalBuyChassisAmount.value,
-      sellChassis: totalSellChassisAmount.value
-    }
+  //   const toSalesGrossFromNormalQuotes = {
+  //     operationId: modalInfo.value['ID Operation'],
+  //     bookingBl: modalInfo.value['Booking/BL'],
+  //     containerId: modalInfo.value['Container ID'],
+  //     provider: modalInfoExtra.value['Provider'],
+  //     customer: modalInfo.value.Customer,
+  //     buy: buyCalculatedNumber,
+  //     sell: sellCalculatedNumber,
+  //     profit: profitCalculatedNumber,
+  //     date: getMonthName(currentDate.getMonth()),
+  //     carrierAccesorials: JSON.stringify(carrierAccesorialValues.value),
+  //     magnetAccesorials: JSON.stringify(magnetAccesorialValues.value),
+  //     buyChassis: totalBuyChassisAmount.value,
+  //     sellChassis: totalSellChassisAmount.value
+  //   }
 
-    if (salesGrossInfo.value.some(item => item.operation_id === modalInfo.value['ID Operation'])) {
-      postApi(`${import.meta.env.VITE_APP_API}/post/updateSaleGrossFromFloridaQuotes`, toSalesGrossFromNormalQuotes)
-        .then(loadAllOperations())
-        .catch((error) => console.log(error))
-    } else {
-      postApi(`${import.meta.env.VITE_APP_API}/post/newSaleGrossFromFloridaQuotes`, toSalesGrossFromNormalQuotes)
-        .then(loadAllOperations())
-        .catch((error) => console.log(error))
-    }
+  //   if (salesGrossInfo.value.some(item => item.operation_id === modalInfo.value['ID Operation'])) {
+  //     postApi(`${import.meta.env.VITE_APP_API}/post/updateSaleGrossFromFloridaQuotes`, toSalesGrossFromNormalQuotes)
+  //       .then(loadAllOperations())
+  //       .catch((error) => console.log(error))
+  //   } else {
+  //     postApi(`${import.meta.env.VITE_APP_API}/post/newSaleGrossFromFloridaQuotes`, toSalesGrossFromNormalQuotes)
+  //       .then(loadAllOperations())
+  //       .catch((error) => console.log(error))
+  //   }
 
-  } else {
-    // if (!closedQuoteBuyChassis.value || closedQuoteBuyChassis.value === '0') {
-    //   showToast('Please Add Buy Chassis Value', 'danger', 'red')
-    //   return
-    // }
-    // if (!closedQuoteSellChassis.value || closedQuoteSellChassis.value === '0') {
-    //   showToast('Please add Sell Chassis Value', 'danger', 'red')
-    //   return
-    // }
-    sumAccesorialValues();
-    console.log(closedQuoteInfo.value.customerDrayage)
-    console.log(closedQuoteInfo.value.carrierDrayage)
-    console.log(totalSellChassisAmount.value)
-    const customerDrayageNumber = convertToNumber(closedQuoteInfo.value.customerDrayage)
-    const carrierDrayageNumber = convertToNumber(closedQuoteInfo.value.carrierDrayage)
-    const closedChassisNumber = convertToNumber(totalSellChassisAmount.value)
-    const totalAccesorialCharges = calculateTotalAccesorialCharges(magnetAccesorialValues.value)
-    const totalCarrierCharges = sumCarrierAccesorialValues();
-    const totalMagnetCharges = sumMagnetAccesorialValues();
-    const buyCalculatedNumber = carrierDrayageNumber + totalCarrierCharges + convertToNumber(totalBuyChassisAmount.value)
-    const sellCalculatedNumber = customerDrayageNumber + totalMagnetCharges + convertToNumber(totalSellChassisAmount.value)
-    const profitCalculatedNumber = sellCalculatedNumber - buyCalculatedNumber
-    modalInfo.value.totalCharges = `Drayage: ${closedQuoteInfo.value.customerDrayage} + Chassis: $${totalSellChassisAmount.value} ${printTotalCharges(magnetAccesorialValues.value)}`
-    modalInfo.value.totalAmount = `$${customerDrayageNumber + totalAccesorialCharges + closedChassisNumber}`
-    const toSalesGrossFromFloridaQuotes = {
-      operationId: modalInfo.value['ID Operation'],
-      bookingBl: modalInfo.value['Booking/BL'],
-      containerId: modalInfo.value['Container ID'],
-      provider: modalInfoExtra.value['Provider'],
-      customer: modalInfo.value.Customer,
-      buy: buyCalculatedNumber,
-      sell: sellCalculatedNumber,
-      profit: profitCalculatedNumber,
-      date: getMonthName(currentDate.getMonth()),
-      carrierAccesorials: JSON.stringify(carrierAccesorialValues.value),
-      magnetAccesorials: JSON.stringify(magnetAccesorialValues.value),
-      buyChassis: totalBuyChassisAmount.value,
-      sellChassis: totalSellChassisAmount.value
-    }
+  // } else {
+  //   // if (!closedQuoteBuyChassis.value || closedQuoteBuyChassis.value === '0') {
+  //   //   showToast('Please Add Buy Chassis Value', 'danger', 'red')
+  //   //   return
+  //   // }
+  //   // if (!closedQuoteSellChassis.value || closedQuoteSellChassis.value === '0') {
+  //   //   showToast('Please add Sell Chassis Value', 'danger', 'red')
+  //   //   return
+  //   // }
+  //   sumAccesorialValues();
+  //   console.log(closedQuoteInfo.value.customerDrayage)
+  //   console.log(closedQuoteInfo.value.carrierDrayage)
+  //   console.log(totalSellChassisAmount.value)
+  //   const customerDrayageNumber = convertToNumber(closedQuoteInfo.value.customerDrayage)
+  //   const carrierDrayageNumber = convertToNumber(closedQuoteInfo.value.carrierDrayage)
+  //   const closedChassisNumber = convertToNumber(totalSellChassisAmount.value)
+  //   const totalAccesorialCharges = calculateTotalAccesorialCharges(magnetAccesorialValues.value)
+  //   const totalCarrierCharges = sumCarrierAccesorialValues();
+  //   const totalMagnetCharges = sumMagnetAccesorialValues();
+  //   const buyCalculatedNumber = carrierDrayageNumber + totalCarrierCharges + convertToNumber(totalBuyChassisAmount.value)
+  //   const sellCalculatedNumber = customerDrayageNumber + totalMagnetCharges + convertToNumber(totalSellChassisAmount.value)
+  //   const profitCalculatedNumber = sellCalculatedNumber - buyCalculatedNumber
+  //   modalInfo.value.totalCharges = `Drayage: ${closedQuoteInfo.value.customerDrayage} + Chassis: $${totalSellChassisAmount.value} ${printTotalCharges(magnetAccesorialValues.value)}`
+  //   modalInfo.value.totalAmount = `$${customerDrayageNumber + totalAccesorialCharges + closedChassisNumber}`
+  //   const toSalesGrossFromFloridaQuotes = {
+  //     operationId: modalInfo.value['ID Operation'],
+  //     bookingBl: modalInfo.value['Booking/BL'],
+  //     containerId: modalInfo.value['Container ID'],
+  //     provider: modalInfoExtra.value['Provider'],
+  //     customer: modalInfo.value.Customer,
+  //     buy: buyCalculatedNumber,
+  //     sell: sellCalculatedNumber,
+  //     profit: profitCalculatedNumber,
+  //     date: getMonthName(currentDate.getMonth()),
+  //     carrierAccesorials: JSON.stringify(carrierAccesorialValues.value),
+  //     magnetAccesorials: JSON.stringify(magnetAccesorialValues.value),
+  //     buyChassis: totalBuyChassisAmount.value,
+  //     sellChassis: totalSellChassisAmount.value
+  //   }
 
-    if (salesGrossInfo.value.some(item => item.operation_id === modalInfo.value['ID Operation'])) {
-      postApi(`${import.meta.env.VITE_APP_API}/post/updateSaleGrossFromFloridaQuotes/`, toSalesGrossFromFloridaQuotes)
-        .then(loadAllOperations())
-        .catch((error) => console.log(error))
-    } else {
-      postApi(`${import.meta.env.VITE_APP_API}/post/newSaleGrossFromFloridaQuotes`, toSalesGrossFromFloridaQuotes)
-        .then(loadAllOperations())
-        .catch((error) => console.log(error))
-    }
-  }
-  isAccesorialModal1.value = false;
-  isAccesorialModal2.value = false;
-  isAccesorialModal3.value = true;
+  //   if (salesGrossInfo.value.some(item => item.operation_id === modalInfo.value['ID Operation'])) {
+  //     postApi(`${import.meta.env.VITE_APP_API}/post/updateSaleGrossFromFloridaQuotes/`, toSalesGrossFromFloridaQuotes)
+  //       .then(loadAllOperations())
+  //       .catch((error) => console.log(error))
+  //   } else {
+  //     postApi(`${import.meta.env.VITE_APP_API}/post/newSaleGrossFromFloridaQuotes`, toSalesGrossFromFloridaQuotes)
+  //       .then(loadAllOperations())
+  //       .catch((error) => console.log(error))
+  //   }
+  // }
+  
 }
 
-const handleClickBtnBack = () => {
-  isAccesorialModal1.value = false;
-  isAccesorialModal2.value = true;
+const handleGoBackToAccesorialModal = () => {
+  isTableSummayModal.value = false;
+  isAccesorialModal.value = true;
   isAccesorialModal3.value = false;
   loadAllOperations()
 }
@@ -1312,8 +1363,8 @@ const calculateTotalAccesorialCharges = (accesorialList) => {
 }
 
 const resetAtDismissModal = () => {
-  isAccesorialModal1.value = true;
-  isAccesorialModal2.value = false;
+  isTableSummayModal.value = true;
+  isAccesorialModal.value = false;
   isAccesorialModal3.value = false;
   // accesorialSelected.value = {};
   // carrierAccesorialValues.value = {};
@@ -1331,7 +1382,14 @@ const resetAtDismissModal = () => {
 
 const calculateTotalChassis = (summary, quantity, total) => {
   total.value = (summary.value * quantity.value).toFixed(2);
+}
 
+const buyChassisQtyOnChange = ()=> {
+  sale.value.buyQtyChassis = inptChassisBuyQuantity;
+}
+
+const sellChassisQtyOnChange = ()=> {
+  sale.value.sellQtyChassis = inptChassisSellQuantity;
 }
 
 const doesOperationExist = (idOperation) => {
@@ -1339,11 +1397,11 @@ const doesOperationExist = (idOperation) => {
 
   if (foundItem) {
     isDoneOperationUpdate.value = true;
-    saleById.value = foundItem;
+    sale.value = foundItem;
     return true;
   }
   isDoneOperationUpdate.value = false;
-  saleById.value = {};
+  sale.value = {};
   return false;
 }
 
@@ -1352,39 +1410,36 @@ const chckIsAnOpenOperation = (quoteID) => {
 }
 
 const feedModalSummaryTable = (drayageBuyUnit, chassisBuyQty, chassisBuyUnit, drayageSellUnit, chassisSellQty, chassisSellUnit, chassisSellTotal, buyAccesorials, sellAccesorials) => {
-
   inptDrayageBuyQuantity.value = 1;
   inptChassisBuyQuantity.value = chassisBuyQty;
   inptChassisBuyRate.value = chassisBuyUnit;
-
   inptTotalBuyChassisAmount.value = inptChassisBuyQuantity.value * inptChassisBuyRate.value;
-
   inptDrayageSellQuantity.value = 1;
   inptChassisSellQuantity.value = chassisSellQty;
   inptTotalSellChassisAmount.value = chassisSellTotal;
-
   inptBuySummaryDrayage.value = drayageBuyUnit;
-
   inptSellSummaryDrayage.value = drayageSellUnit;
   inptChassisSellRate.value = chassisSellUnit;
-
 }
 
 const feedModalAccesorial = (buyAccesorials, sellAccesorials) => {
-  carrierAccesorialValues.value = buyAccesorials
-  magnetAccesorialValues.value = sellAccesorials
+  carrierAccesorialValues.value = buyAccesorials;
+  magnetAccesorialValues.value = sellAccesorials;
+
   for (let key in buyAccesorials) {
     accesorialSelected.value[key] = true;
   }
   for (let key in sellAccesorials) {
     accesorialSelected.value[key] = true;
   }
-
 }
 
-watch([inptChassisBuyRate, inptChassisBuyQuantity], () => calculateTotalChassis(inptChassisBuyRate, inptChassisBuyQuantity, inptTotalBuyChassisAmount))
+watch([inptChassisBuyRate, inptChassisBuyQuantity], () => calculateTotalChassis(inptChassisBuyRate, inptChassisBuyQuantity, inptTotalBuyChassisAmount));
 
-watch([inptChassisSellRate, inptChassisSellQuantity], () => calculateTotalChassis(inptChassisSellRate, inptChassisSellQuantity, inptTotalSellChassisAmount))
+watch([inptChassisSellRate, inptChassisSellQuantity], () => calculateTotalChassis(inptChassisSellRate, inptChassisSellQuantity, inptTotalSellChassisAmount));
+
+watch(inptChassisBuyQuantity, ()=> buyChassisQtyOnChange());
+watch(inptChassisSellQuantity, ()=> sellChassisQtyOnChange());
 </script>
 
 <style lang="scss" scoped>
