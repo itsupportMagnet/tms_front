@@ -14,7 +14,7 @@
           </select>
         </div>
 
-        <div class="animate__animated animate_flipInX filter-box">
+        <div class="animate__animated animate__flipInX filter-box">
           <strong>
             <label class="label">Sort by Year</label>
           </strong>
@@ -31,18 +31,18 @@
           </strong>
           <select @change="sortByMonth" class="form-select">
             <option selected value="All">All</option>
-            <option value="JANUARY">JANUARY</option>
-            <option value="FEBRUARY">FEBRUARY</option>
-            <option value="MARCH">MARCH</option>
-            <option value="APRIL">APRIL</option>
-            <option value="MAY">MAY</option>
-            <option value="JUNE">JUNE</option>
-            <option value="JULY">JULY</option>
-            <option value="AUGUST">AUGUST</option>
-            <option value="SEPTEMBER">SEPTEMBER</option>
-            <option value="OCTOBER">OCTOBER</option>
-            <option value="NOVEMBER">NOVEMBER</option>
-            <option value="DECEMBER">DECEMBER</option>
+            <option value="01">JANUARY</option>
+            <option value="02">FEBRUARY</option>
+            <option value="03">MARCH</option>
+            <option value="04">APRIL</option>
+            <option value="05">MAY</option>
+            <option value="06">JUNE</option>
+            <option value="07">JULY</option>
+            <option value="08">AUGUST</option>
+            <option value="09">SEPTEMBER</option>
+            <option value="10">OCTOBER</option>
+            <option value="11">NOVEMBER</option>
+            <option value="12">DECEMBER</option>
           </select>
         </div>
 
@@ -357,9 +357,10 @@ const sortByMonth = (e) => {
   if (e.target.value === 'All') {
     filterOpt.value.srtMonth = ''
   } else {
-    filterOpt.value.srtMonth = e.target.value
-    console.log(e.target.value)
-    console.log('filtro: '+filterOpt.value.srtMonth)
+    const monthSelected = e.target.value
+    console.log(monthSelected)
+    filterOpt.value.srtMonth = monthSelected
+
   }
   filterSalesGross()
 }
@@ -407,14 +408,18 @@ const filterSalesGross = () => {
 
 const filterYear = (salesFromApi) => {
   if(filterOpt.value.srtYear){
-    return salesFromApi.month_of_invoice === filterOpt.value.srtMonth
+    const dateYearParts = salesFromApi.month_of_invoice.split('-');
+    const year = dateYearParts[2]; //Al dividir los valores, el año corresponde a la posicion 2
+    return year === filterOpt.value.srtYear
   }
-  return salesFromApi
+  return salesFromApi //Esto se realiza para evitar cambios 
 }
 
 const filterMonth = (salesFromApi) => {
   if (filterOpt.value.srtMonth) {
-    return salesFromApi.month_of_invoice === filterOpt.value.srtMonth
+    const dateMonthParts = salesFromApi.month_of_invoice.split('-');
+    const month = dateMonthParts[0]; //Al dividr los valores, el mes corresponde a la posicion 0
+    return month === filterOpt.value.srtMonth;
   }
   return salesFromApi
 }
