@@ -846,9 +846,10 @@ const feedingOperationTableModal = (objOperation, e) => {
 
     if (doesOperationExist(operation.value.idOperation)) {
 
-      const { buyDrayage, buyQtyChassis, buyChassisUnitRate, sellDrayage, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials } = sale.value;
-
-      feedModalSummaryTable(buyDrayage, buyQtyChassis, buyChassisUnitRate, sellDrayage, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials);
+      console.log(sale.value)
+      const { buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials } = sale.value;
+      console.log(sale.value)
+      feedModalSummaryTable(buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials);
 
       feedModalAccesorial(buyAccesorials, sellAccesorials)
 
@@ -1117,7 +1118,7 @@ const confirmDelete = async () => {
 }
 
 const handleContinueToAccesorials = () => {
-  isTableSummayModal.value = false;
+  isTableSummaryModal.value = false;
   isAccesorialModal.value = true;
   isAccesorialModal3.value = false;
 
@@ -1175,7 +1176,7 @@ const handleContinueToAccesorials = () => {
 }
 
 const handleGoBackToSummaryTableModal = () => {
-  isTableSummayModal.value = true;
+  isTableSummaryModal.value = true;
   isAccesorialModal.value = false;
   isAccesorialModal3.value = false;
 }
@@ -1187,6 +1188,7 @@ const handleContinueToChargesTable = async () => {
   isAccesorialModal3.value = true;
 
   sale.value.date = currentDate;
+  console.log(sale.value)
 
   if(isDoneOperationUpdate.value){
     postApi(`${import.meta.env.VITE_APP_API}/post/updateSaleGross`, sale.value)
@@ -1295,7 +1297,7 @@ const handleContinueToChargesTable = async () => {
 }
 
 const handleGoBackToAccesorialModal = () => {
-  isTableSummayModal.value = false;
+  isTableSummaryModal.value = false;
   isAccesorialModal.value = true;
   isAccesorialModal3.value = false;
   loadAllOperations()
@@ -1361,7 +1363,7 @@ const calculateTotalAccesorialCharges = (accesorialList) => {
 }
 
 const resetAtDismissModal = () => {
-  isTableSummayModal.value = true;
+  isTableSummaryModal.value = true;
   isAccesorialModal.value = false;
   isAccesorialModal3.value = false;
   // accesorialSelected.value = {};
