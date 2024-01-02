@@ -7,7 +7,7 @@
 </template>
 
 <styles scoped lang="scss">
-@import '../../../styles/global.scss';
+@import '../../../styles/variables.scss';
 
 .btn {
   position: relative;
