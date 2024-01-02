@@ -18,7 +18,7 @@ const isActive = computed(() => route.path === props.to);
 </template>
 
 <style lang="scss">
-@import '../../styles/global.scss' ;
+@import '../../styles/variables.scss' ;
 
 .link {
   display: flex;

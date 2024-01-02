@@ -80,7 +80,7 @@ const isToolsDropdownClicked = ref(false);
 
 
 <style lang="scss" scoped>
-@import '../../styles/global.scss';
+@import '../../styles/variables.scss';
 
 .sidebar {
   color: white;

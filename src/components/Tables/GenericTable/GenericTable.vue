@@ -34,7 +34,6 @@
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue'
 import Spinner from '../../Spinner/Spinner.vue';
 import Card from '../../Card/Card.vue';
 

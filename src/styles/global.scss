@@ -1,18 +1,5 @@
-$primary: #1d4ed8;
-$primary_hover: #3b6cf4;
-$active_link: #002486;
-$secondaryColor: #10b981;
+@import './variables.scss';
 
-$gray_200: #dbdbdb;
-$tablesBackgroundColor: #FAFAFA;
-$primaryBtnColor: #3b82f6;
-$whiteColor: white;
-$danger: rgb(255, 35, 35);
-
-$tableColor: #1a6aff;
-
-$breakpoint_sm: 576px;
-$breakpoint_md: 768px;
-$breakpoint_lg: 992px;
-$breakpoint_xl: 1200px;
-$breakpoint_xxl: 1400px;
+body {
+  font-family: $primaryFontFamily, sans-serif !important;
+}
