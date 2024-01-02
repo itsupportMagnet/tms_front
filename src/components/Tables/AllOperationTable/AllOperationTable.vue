@@ -42,7 +42,7 @@
 
         <!-- First Modal Before Continue Button -->
 
-        <div class="modal-body" v-if="isTableSummayModal">
+        <div class="modal-body" v-if="isTableSummaryModal">
           <div class="container-fluid">
             <Card>
               <div class="table-row">
@@ -211,8 +211,8 @@
 
 
         <!-- Footer Buttons -->
-        <div class="modal-footer" v-if="isTableSummayModal">
-          <button @click="handleContinueToAccesorials" v-if="isTableSummayModal" type="button"
+        <div class="modal-footer" v-if="isTableSummaryModal">
+          <button @click="handleContinueToAccesorials" v-if="isTableSummaryModal" type="button"
             class="btn btn-success">Continue</button>
         </div>
 
@@ -565,7 +565,7 @@ const carriers = ref();
 const accesorials = ref();
 let newOperationKey = ref(0)
 let newDoneModalKey = ref(0)
-const isTableSummayModal = ref(true)
+const isTableSummaryModal = ref(true)
 const isAccesorialModal = ref(false)
 const isAccesorialModal3 = ref(false)
 const isOpenQuote = ref(false)
@@ -845,21 +845,18 @@ const feedingOperationTableModal = (objOperation, e) => {
 
     if (doesOperationExist(operation.value.idOperation)) {
 
-
-      console.log(sale.value)
-
       const { buyDrayage, buyQtyChassis, buyChassisUnitRate, sellDrayage, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials } = sale.value;
-
 
       feedModalSummaryTable(buyDrayage, buyQtyChassis, buyChassisUnitRate, sellDrayage, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials);
 
       feedModalAccesorial(buyAccesorials, sellAccesorials)
 
     } else {
+
       if (chckIsAnOpenOperation(operation.value.quoteID)) {
 
         getApi(`${import.meta.env.VITE_APP_API}/get/get-normal-quote/${operation.value.quoteID}`)
-          .then(data => console.log(data))
+          .then(data => sale.value = data)
           .catch(error => console.log(error))
 
         e.target.setAttribute('data-bs-toggle', 'modal')
@@ -1184,7 +1181,7 @@ const handleGoBackToSummaryTableModal = () => {
 
 const handleContinueToChargesTable = async () => {
   const currentDate = new Date();
-  isTableSummayModal.value = false;
+  isTableSummaryModal.value = false;
   isAccesorialModal.value = false;
   isAccesorialModal3.value = true;
 
