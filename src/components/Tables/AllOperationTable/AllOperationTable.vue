@@ -602,6 +602,7 @@ watch(accesorialSelected.value, () => {
 
 onMounted(async () => {
   loadAllOperations();
+
   getApi(`${import.meta.env.VITE_APP_API}/get/providers`)
     .then(data => carriers.value = data)
     .catch(error => {

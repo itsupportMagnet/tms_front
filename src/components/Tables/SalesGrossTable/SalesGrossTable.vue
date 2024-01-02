@@ -14,12 +14,27 @@
           </select>
         </div>
 
+        <div class="animate__animated animate_flipInX filter-box">
+          <strong>
+            <label class="label">Sort by Year</label>
+          </strong>
+          <select @change="sortByYear" class="form-select">
+            <option selected value="All">All</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+          </select>
+        </div>
+
         <div class="animate__animated animate__flipInX filter-box">
           <strong>
             <label class="label">Sort by Month</label>
           </strong>
           <select @change="sortByMonth" class="form-select">
             <option selected value="All">All</option>
+            <option value="JANUARY">JANUARY</option>
+            <option value="FEBRUARY">FEBRUARY</option>
+            <option value="MARCH">MARCH</option>
+            <option value="APRIL">APRIL</option>
             <option value="MAY">MAY</option>
             <option value="JUNE">JUNE</option>
             <option value="JULY">JULY</option>
@@ -182,7 +197,8 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
-import { getApi, postApi } from '@/services/apiServices'
+import { getApi, postApi, deleteApi } from '@/services/apiServices'
+import {showToast} from '../../../helpers/helpers'
 import Card from '@/components/Card/Card.vue'
 import Spinner from '@/components/Spinner/Spinner.vue'
 
@@ -197,6 +213,7 @@ const saleId = ref();
 const inpt_BookingBL = ref()
 const filterOpt = ref({
   srtProvider: '',
+  srtYear: '',
   srtMonth: '',
   srtProfit: '',
   srtCustomer: '',
@@ -341,6 +358,22 @@ const sortByMonth = (e) => {
     filterOpt.value.srtMonth = ''
   } else {
     filterOpt.value.srtMonth = e.target.value
+    console.log(e.target.value)
+    console.log('filtro: '+filterOpt.value.srtMonth)
+  }
+  filterSalesGross()
+}
+
+const sortByYear = (e) => {
+  if(isSalesEmpty.value){
+    sales.value = salesFromApi.value
+    isSalesEmpty.value = false
+  }
+
+  if(e.target.value === 'All'){
+    filterOpt.value.srtYear = ''
+  }else{
+    filterOpt.value.srtYear = e.target.value
   }
   filterSalesGross()
 }
@@ -364,11 +397,19 @@ const filterSalesGross = () => {
     .filter(filterProvider)
     .filter(filterMonth)
     .filter(filterCustomer)
+    .filter(filterYear)
   if (newProvider.length) {
     sales.value = newProvider
   } else {
     isSalesEmpty.value = true
   }
+}
+
+const filterYear = (salesFromApi) => {
+  if(filterOpt.value.srtYear){
+    return salesFromApi.month_of_invoice === filterOpt.value.srtMonth
+  }
+  return salesFromApi
 }
 
 const filterMonth = (salesFromApi) => {
