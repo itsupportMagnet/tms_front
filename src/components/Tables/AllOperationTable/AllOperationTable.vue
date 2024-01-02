@@ -867,14 +867,6 @@ const feedingOperationTableModal = (objOperation, e) => {
 
 
 
-
-
-
-
-
-
-
-
     // if (operation.value.quoteID.includes('MGT')) {
     //   const selectedIdOpenQuote = {
     //     id: objOperation.quoteID

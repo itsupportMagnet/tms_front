@@ -1,5 +1,5 @@
 <script setup>
-import { ref, defineProps, watchEffect } from 'vue';
+import { ref, watchEffect } from 'vue';
 import { BarChart } from 'vue-chart-3';
 import { Chart, registerables } from 'chart.js';
 
