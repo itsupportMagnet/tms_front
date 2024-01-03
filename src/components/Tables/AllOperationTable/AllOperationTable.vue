@@ -168,19 +168,19 @@
               <th style="background-color: #1d4ed8; color: #fff; padding: 0 10px">
                 ID Operation
               </th>
-              <td style="padding: 0 10px">{{ sale.operation_id }}</td>
+              <td style="padding: 0 10px">{{ operation.idOperation }}</td>
             </tr>
             <tr style="border: 1px solid #000">
               <th style="background-color: #1d4ed8; color: #fff; padding: 0 10px">
                 Booking/BL
               </th>
-              <td style="padding: 0 10px">{{ sale.booking_bl }}</td>
+              <td style="padding: 0 10px">{{ operation.bookingBl }}</td>
             </tr>
             <tr style="border: 1px solid #000">
               <th style="background-color: #1d4ed8; color: #fff; padding: 0 10px">
                 Container ID
               </th>
-              <td style="padding: 0 10px">{{ sale.container_id }}</td>
+              <td style="padding: 0 10px">{{ operation.containerId }}</td>
             </tr>
             <tr style="border: 1px solid #000">
               <th style="background-color: #1d4ed8; color: #fff; padding: 0 10px">
@@ -192,19 +192,19 @@
               <th style="background-color: #1d4ed8; color: #fff; padding: 0 10px">
                 Customer
               </th>
-              <td style="padding: 0 10px">{{ sale.customer }}</td>
+              <td style="padding: 0 10px">{{ operation.customer }}</td>
             </tr>
             <tr style="border: 1px solid #000">
               <th style="background-color: #1d4ed8; color: #fff; padding: 0 10px">
                 Total Charges
               </th>
-              <td style="padding: 0 10px">total</td>
+              <td style="padding: 0 10px">{{ totalChargesDisplayed }}</td>
             </tr>
             <tr style="border: 1px solid #000">
               <th style="background-color: #1d4ed8; color: #fff; padding: 0 10px">
                 Total Amount
               </th>
-              <td style="padding: 0 10px">total</td>
+              <td style="padding: 0 10px">{{ totalAmountDisplayed }}</td>
             </tr>
           </table>
         </div>
@@ -578,6 +578,8 @@ const magnetAccesorialValues = ref({}); //Se deben borrar al cerrar el modal
 const totalAccesorialValues = ref({}) //Se deben borrar al cerrar el modal
 const closedQuoteBuyChassis = ref();
 const closedQuoteSellChassis = ref();
+let totalChargesDisplayed = ref();
+let totalAmountDisplayed = ref();
 
 const sale = ref();
 const isDoneOperationUpdate = ref(false);
@@ -842,11 +844,22 @@ const feedingOperationTableModal = (objOperation, e) => {
 
     loadAllOperations()
 
+    getApi(`${import.meta.env.VITE_APP_API}/get/accesorials`).then(
+      (data) => (accesorials.value = data)
+    );
+
+    if (operation.value.quoteID.includes("I'll define it later")) {
+      showToast('El Quote ID no esta definido', 'danger', 'red')
+    } else {
+      e.target.setAttribute('data-bs-toggle', 'modal')
+      e.target.setAttribute('data-bs-target', '#accesorialModalDone')
+      slctStatus.value = e.target
+    }
+
     // idQuoteModal.value = objOperation.quoteID;
 
     if (doesOperationExist(operation.value.idOperation)) {
       const { buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials } = sale.value;
-
       feedModalSummaryTable(buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis);
       feedModalAccesorial(buyAccesorials, sellAccesorials);
       return
@@ -858,8 +871,12 @@ const feedingOperationTableModal = (objOperation, e) => {
         .then(data => {
           sale.value = data;
           const { buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials } = sale.value;
+          console.log(sale.value)
+          const { idOperation, bookingBl, containerId, provider } = operation.value;
           feedModalSummaryTable(buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials);
 
+          feedingSaleWithOperationData(idOperation, bookingBl, containerId, provider);
+         
           feedModalAccesorial(buyAccesorials, sellAccesorials);
         })
         .catch(error => console.log(error))
@@ -870,28 +887,15 @@ const feedingOperationTableModal = (objOperation, e) => {
       getApi(`${import.meta.env.VITE_APP_API}/get/get-florida-quote/${operation.value.quoteID}`)
         .then(data => {
           sale.value = data;
-          
           const { buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials } = sale.value;
-
+          console.log(sale.value)
+          const { idOperation, bookingBl, containerId, provider } = operation.value;
           feedModalSummaryTable(buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials);
 
-          feedModalAccesorial(buyAccesorials, sellAccesorials);
+          feedingSaleWithOperationData(idOperation, bookingBl, containerId, provider);
+
         })
         .catch(error => console.log(error))
-    }
-
-
-    getApi(`${import.meta.env.VITE_APP_API}/get/accesorials`).then(
-      (data) => (accesorials.value = data)
-    );
-
-    if (idQuoteModal.value.includes("I'll define it later")) {
-      showToast('El Quote ID no esta definido', 'danger', 'red')
-    } else {
-      e.target.setAttribute('data-bs-toggle', 'modal')
-      e.target.setAttribute('data-bs-target', '#accesorialModalDone')
-      slctStatus.value = e.target
-      return
     }
   }
 }
@@ -1112,21 +1116,32 @@ const handleContinueToChargesTable = async () => {
   isTableSummaryModal.value = false;
   isAccesorialModal.value = false;
   isAccesorialModal3.value = true;
-
+  const totalAccesorialCharges = calculateTotalAccesorialCharges(magnetAccesorialValues.value)
+  totalChargesDisplayed = `Drayage: $${parseFloat(sale.value.sellDrayageUnitRate)} + Chassis: $${parseFloat(inptTotalSellChassisAmount.value)} ${printTotalCharges(magnetAccesorialValues.value)}`
+  totalAmountDisplayed = `$${parseFloat(sale.value.sellDrayageUnitRate) + parseFloat(totalAccesorialCharges) + parseFloat(inptTotalSellChassisAmount.value) }` //falta total chassisAmount
   sale.value.date = currentDate;
+  sale.value.buy = parseFloat(inptBuySummaryDrayage.value) + parseFloat(inptTotalBuyChassisAmount.value) // Falta sumar los accesorials de buy
+  sale.value.sell = parseFloat(inptSellSummaryDrayage.value) + parseFloat(inptTotalSellChassisAmount.value) //Falta sumar los accesorials de sell
+  sale.value.profit = parseFloat(sale.value.sell) - parseFloat(sale.value.buy)
+  sale.value.buyAccesorials = carrierAccesorialValues
+  sale.value.sellAccesorials = magnetAccesorialValues
+  sale.value.buyQtyChassis = inptChassisBuyQuantity
+  sale.value.sellQtyChassis = inptChassisSellQuantity
   console.log(sale.value)
 
   if (isDoneOperationUpdate.value) {
     postApi(`${import.meta.env.VITE_APP_API}/post/updateSaleGross`, sale.value)
-      .then(() => console.log("Se updateo correctamente"))
+      .then(() => console.log(sale.value))
       .catch(error => console.log(error))
-  }else{
+  } else {
     console.log('console.log mientras creo el endpoint')
     console.log(sale.value)
-    // postApi(`${import.meta.env.VITE_APP_API}/post/newOperationSaleGross`, sale.value)
-    //   .then(() => console.log("Se Creo una nueva operacion en salegross"))
-    //   .catch(error => console.log(error)) 
+    postApi(`${import.meta.env.VITE_APP_API}/post/newOperationSaleGross`, sale.value)
+      .then(() => console.log("Se Creo una nueva operacion en salegross"))
+      .catch(error => console.log(error))
   }
+
+
 
 
 
@@ -1276,7 +1291,7 @@ const sumAccesorialValues = () => {
 const printTotalCharges = (accesorialList) => {
   let formattedString = '';
   Object.entries(accesorialList).forEach(([key, value]) => {
-    formattedString += `+ ${key} = $${value} `;
+    formattedString += `+ ${key} = $${parseFloat(value)} `;
   });
 
   return formattedString;
@@ -1302,6 +1317,9 @@ const resetAtDismissModal = () => {
   carrierAccesorialValues.value = {};
   magnetAccesorialValues.value = {};
   totalAccesorialValues.value = {};
+
+
+  sale.value = ''; //Resetear el valor de sale al salir del modal.
   // /* First Modal Reset Values */
   // buySummaryDrayage.value = "";
   // chassisBuyRate.value = "";
@@ -1348,7 +1366,7 @@ const feedModalSummaryTable = (drayageBuyUnit, chassisBuyQty, chassisBuyUnit, dr
   inptTotalBuyChassisAmount.value = inptChassisBuyQuantity.value * inptChassisBuyRate.value;
   inptDrayageSellQuantity.value = 1;
   inptChassisSellQuantity.value = chassisSellQty || 1;
-  inptTotalSellChassisAmount.value = chassisSellTotal;
+  inptTotalSellChassisAmount.value = inptChassisSellQuantity.value * inptChassisSellRate.value;//Hay que tener cuidado como traemos los datos
   inptBuySummaryDrayage.value = drayageBuyUnit;
   inptSellSummaryDrayage.value = drayageSellUnit;
   inptChassisSellRate.value = chassisSellUnit;
@@ -1357,13 +1375,22 @@ const feedModalSummaryTable = (drayageBuyUnit, chassisBuyQty, chassisBuyUnit, dr
 const feedModalAccesorial = (buyAccesorials, sellAccesorials) => {
   carrierAccesorialValues.value = buyAccesorials;
   magnetAccesorialValues.value = sellAccesorials;
-
+  console.log(carrierAccesorialValues.value)
+  console.log(magnetAccesorialValues.value)
   for (let key in buyAccesorials) {
     accesorialSelected.value[key] = true;
   }
   for (let key in sellAccesorials) {
     accesorialSelected.value[key] = true;
   }
+}
+
+const feedingSaleWithOperationData = (idOperation, bookingBl, containerId, provider) => {
+  sale.value.operation_id = idOperation;
+  sale.value.booking_bl = bookingBl;
+  sale.value.contaier_id = containerId;
+  sale.value.provider = provider;
+  console.log(sale.value)
 }
 
 watch([inptChassisBuyRate, inptChassisBuyQuantity], () => calculateTotalChassis(inptChassisBuyRate, inptChassisBuyQuantity, inptTotalBuyChassisAmount));
