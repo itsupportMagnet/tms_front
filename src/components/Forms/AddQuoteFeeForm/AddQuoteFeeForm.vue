@@ -42,13 +42,13 @@
               <div class="inpt-col">
                 <label for="carrierEmail"> Buy Fee </label>
                 <input placeholder="Write down the answer here.." id="carrierEmail" type="number"
-                  v-model="inptCarrierFee" />
+                  v-model="inptBuyDrayageUnitRate" />
               </div>
 
               <div class="inpt-col">
                 <label for="carrierChassis">Chassis Value </label>
                 <input placeholder="Chassis value per day.." id="carrierChassis" type="number"
-                  v-model="inptCarrierChassis" />
+                  v-model="inptBuyChassisUnitRate" />
               </div>
             </div>
             <!-- ACCESORIAL -->
@@ -62,7 +62,7 @@
                   {{ item.accesorial }}
                 </label>
                 <input v-if="accesorialSelected[item.accesorial]" class="accesorialValue" type="number"
-                  v-model="carrierAccesorialValues[item.accesorial]" @input="accesorialValuesOnChange" />
+                  v-model="buyAccesorial[item.accesorial]" @input="accesorialValuesOnChange" />
               </div>
             </div>
           </div>
@@ -127,15 +127,15 @@ const quote = ref("");
 const accesorials = ref([]);
 const formatDate = ref("");
 const inptCarrierEmail = ref("");
-const inptCarrierFee = ref(0);
-const inptCarrierChassis = ref(0);
+const inptBuyDrayageUnitRate = ref(0);
+const inptBuyChassisUnitRate = ref(0);
 const inptMagnetFee = ref(0);
 const inptMagnetChassis = ref(0);
 const inptNotes = ref();
 const isLoading = ref(false);
 const isLoading2 = ref(false);
 const accesorialSelected = ref({});
-const carrierAccesorialValues = ref({});
+const buyAccesorial = ref({});
 const magnetAccesorialValues = ref({});
 
 const handleGetQuote = async (e) => {
@@ -161,6 +161,8 @@ const handleGetQuote = async (e) => {
       isLoading.value = false;
       quote.value = data.message;
       formatDate.value = data.message.date;
+      console.log(quote)
+      console.log(quote.value)
       getApi(`${import.meta.env.VITE_APP_API}/get/accesorials`).then(
         (data) => (accesorials.value = data)
       );
@@ -170,21 +172,21 @@ const handleGetQuote = async (e) => {
 
 const accesorialOnChange = (e) => {
   const value = e.target.value;
-  if (value in carrierAccesorialValues.value) {
-    delete carrierAccesorialValues.value[value];
+  if (value in buyAccesorial.value) {
+    delete buyAccesorial.value[value];
     delete magnetAccesorialValues.value[value];
     return;
   }
-  carrierAccesorialValues.value[value] = null;
+  buyAccesorial.value[value] = null;
 };
 
 const saveFormInfo = () => {
   isLoading2.value = false;
 
   quote.value.carrierEmail = inptCarrierEmail.value;
-  quote.value.carrierFee = inptCarrierFee.value;
-  quote.value.carrierChassis = inptCarrierChassis.value;
-  quote.value.carrierAccesorials = carrierAccesorialValues.value;
+  quote.value.buyDrayageUnitRate = inptBuyDrayageUnitRate.value;
+  quote.value.buyChassisUnitRate = inptBuyChassisUnitRate.value;
+  quote.value.buyAccesorial = buyAccesorial.value;
   quote.value.magnetFee = inptMagnetFee.value;
   quote.value.magnetChassis = inptMagnetChassis.value;
   quote.value.magnetAccesorials = magnetAccesorialValues.value;
@@ -203,7 +205,7 @@ const validateForm = () => {
 
   if (
     !inptCarrierEmail.value.trim() ||
-    !inptCarrierFee.value ||
+    !inptBuyDrayageUnitRate.value ||
     !inptMagnetFee.value
   ) {
     isLoading2.value = false;
@@ -217,24 +219,25 @@ const validateForm = () => {
 const saveFee = async () => {
   if (validateForm()) {
     saveFormInfo();
-    postApi(
-      `${import.meta.env.VITE_APP_API}/post/save-fee`, quote.value)
-      .then((data) => {
-        if (data.message === "ok") {
-          quote.value = "";
-          inptId.value = "";
-          isLoading2.value = false;
-          showToast('Carrier(s) fee(s) added succesfully', 'success', 'green')
-        } else {
-          console.error(data);
-          showToast('Something went wrong, please, contact support', 'danger', 'red')
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        isLoading.value = false;
-        showToast('Contact IT', 'danger', 'red')
-      });
+    console.log(quote.value)
+    // postApi(
+    //   `${import.meta.env.VITE_APP_API}/post/save-fee`, quote.value)
+    //   .then((data) => {
+    //     if (data.message === "ok") {
+    //       quote.value = "";
+    //       inptId.value = "";
+    //       isLoading2.value = false;
+    //       showToast('Carrier(s) fee(s) added succesfully', 'success', 'green')
+    //     } else {
+    //       console.error(data);
+    //       showToast('Something went wrong, please, contact support', 'danger', 'red')
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //     isLoading.value = false;
+    //     showToast('Contact IT', 'danger', 'red')
+    //   });
   }
 };
 </script>

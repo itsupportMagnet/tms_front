@@ -857,9 +857,7 @@ const feedingOperationTableModal = (objOperation, e) => {
       getApi(`${import.meta.env.VITE_APP_API}/get/get-normal-quote/${operation.value.quoteID}`)
         .then(data => {
           sale.value = data;
-
           const { buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials } = sale.value;
-
           feedModalSummaryTable(buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials);
 
           feedModalAccesorial(buyAccesorials, sellAccesorials);
@@ -870,10 +868,16 @@ const feedingOperationTableModal = (objOperation, e) => {
     } else {
 
       getApi(`${import.meta.env.VITE_APP_API}/get/get-florida-quote/${operation.value.quoteID}`)
-      .then(data => {
-        sale.value = data;
-      })
-      .catch(error => console.log(error))
+        .then(data => {
+          sale.value = data;
+          
+          const { buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials } = sale.value;
+
+          feedModalSummaryTable(buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials);
+
+          feedModalAccesorial(buyAccesorials, sellAccesorials);
+        })
+        .catch(error => console.log(error))
     }
 
 
@@ -1116,6 +1120,12 @@ const handleContinueToChargesTable = async () => {
     postApi(`${import.meta.env.VITE_APP_API}/post/updateSaleGross`, sale.value)
       .then(() => console.log("Se updateo correctamente"))
       .catch(error => console.log(error))
+  }else{
+    console.log('console.log mientras creo el endpoint')
+    console.log(sale.value)
+    // postApi(`${import.meta.env.VITE_APP_API}/post/newOperationSaleGross`, sale.value)
+    //   .then(() => console.log("Se Creo una nueva operacion en salegross"))
+    //   .catch(error => console.log(error)) 
   }
 
 
@@ -1288,10 +1298,10 @@ const resetAtDismissModal = () => {
   isTableSummaryModal.value = true;
   isAccesorialModal.value = false;
   isAccesorialModal3.value = false;
-  // accesorialSelected.value = {};
-  // carrierAccesorialValues.value = {};
-  // magnetAccesorialValues.value = {};
-  // totalAccesorialValues.value = {};
+  accesorialSelected.value = {};
+  carrierAccesorialValues.value = {};
+  magnetAccesorialValues.value = {};
+  totalAccesorialValues.value = {};
   // /* First Modal Reset Values */
   // buySummaryDrayage.value = "";
   // chassisBuyRate.value = "";
