@@ -407,10 +407,12 @@
                         style="text-align: center" />
                     </td>
                     <td>Per container</td>
-                    <td>${{ quote.magnetFee }}</td>
+                    <td>${{ quote.sellDrayageUnitRate }}</td>
                     <td>${{ totalDrayageToSend }}</td>
                   </tr>
-                  <!-- CHASIS -->
+
+
+                  <!-- CHASSIS -->
                   <tr class="chassisConcept" style="text-align: center; font-size: 13px">
                     <td class="tdChassis">
                       <input v-model="inptChassisType" type="text" style="text-align: center" />
@@ -421,7 +423,7 @@
                         style="text-align: center" />
                     </td>
                     <td>Per day</td>
-                    <td>${{ quote.magnetChassis }}</td>
+                    <td>${{ quote.sellChassisUnitRate }}</td>
                     <td>${{ totalChassisToSend }}</td>
                   </tr>
                 </tbody>
@@ -478,11 +480,11 @@
                   background-color: #1d4ed8;
                   color: white;
                   border: 1px solid white;
-                " v-if="Object.keys(quote.carrierAccesorials).length > 0">
+                " v-if="Object.keys(quote.sellAccesorials).length > 0">
                 ACCESORIAL CHARGES THAT WILL APPLY
               </h1>
 
-              <div v-if="Object.keys(quote.carrierAccesorials).length > 0" class="accesorialContainer" style="
+              <div v-if="Object.keys(quote.buyAccesorials).length > 0" class="accesorialContainer" style="
                     display: flex;
                     flex-wrap: wrap;
                     margin-top: 0.3rem;
@@ -612,33 +614,33 @@ import { getApi } from '../../../services/apiServices';
 import ButtonSubmit from '../../../components/Buttons/ButtonSubmit/ButtonSubmit.vue'
 import html2pdf from 'html2pdf.js'
 
-const inptId = ref('')
-const quote = ref('')
-const allAccesorials = ref('')
-const clientEmailsList = ref([])
-const userName = ref(localStorage.getItem('userName'))
-const customer = ref('')
-const miles = ref(0)
-const inptChassisType = ref('Chassis')
-const drayageQuantity = ref(1)
-const chassisQuantity = ref(1)
+const inptId = ref('');
+const quote = ref('');
+const allAccesorials = ref('');
+const clientEmailsList = ref([]);
+const userName = ref(localStorage.getItem('userName'));
+const customer = ref('');
+const miles = ref(0);
+const inptChassisType = ref('Chassis');
+const drayageQuantity = ref(1);
+const chassisQuantity = ref(1);
 // const inptSubjectEmail = ref('');
-const totalDrayage = ref()
-const totalChassis = ref()
-const totalDrayageToSend = ref()
-const totalChassisToSend = ref()
-const totalAccesorials = ref({})
-const totalFeeToSent = ref()
-const isLoading1 = ref(false)
-const isLoading2 = ref(false)
-const hasError = ref(false)
+const totalDrayage = ref();
+const totalChassis = ref();
+const totalDrayageToSend = ref();
+const totalChassisToSend = ref();
+const totalAccesorials = ref({});
+const totalFeeToSent = ref();
+const isLoading1 = ref(false);
+const isLoading2 = ref(false);
+const hasError = ref(false);
 // const isAnyEmailEmpty = ref(false);
-const showError = ref(false)
-const showMessage = ref('')
-const showColor = ref('')
-const customers = ref('')
+const showError = ref(false);
+const showMessage = ref('');
+const showColor = ref('');
+const customers = ref('');
 // const slctCustomerEmails = ref('')
-const pdfContent = ref(null)
+const pdfContent = ref(null);
 
 onMounted(async () => {
   getApi(`${import.meta.env.VITE_APP_API}/get/clients`)
@@ -674,7 +676,7 @@ const handleIdSubmit = async (e) => {
         .catch((error) => console.log(error))
       isLoading1.value = false
       
-      quote.value = getCheapestFee(data)
+      quote.value = getCheapestFee(data);
 
       // totalChassis.value = (
       //   parseFloat(quote.value.magnetChassis) +
@@ -682,11 +684,12 @@ const handleIdSubmit = async (e) => {
       // ).toFixed(2)
 
 
-      totalDrayage.value = parseFloat(quote.value.magnetFee).toFixed(2);
-      totalChassis.value = parseFloat(quote.value.magnetChassis).toFixed(2);
+      totalDrayage.value = parseFloat(quote.value.buyDrayageUnitRate).toFixed(2);
+      totalChassis.value = parseFloat(quote.value.buyAccesorials).toFixed(2);
       
-      totalDrayageToSend.value = parseFloat(quote.value.magnetFee).toFixed(2)
-      totalChassisToSend.value = parseFloat(quote.value.magnetChassis).toFixed(2)
+      totalDrayageToSend.value = parseFloat(quote.value.sellDrayageUnitRate).toFixed(2)
+      totalChassisToSend.value = parseFloat(quote.value.sellAccesorials).toFixed(2)
+      totalChassisToSend.value = parseFloat(quote.value.sellChassisUnitRate).toFixed(2)
       // totalChassisToSend.value = (
       //   parseFloat(quote.value.magnetChassis) +
       //   parseFloat(quote.value.carrierChassis)
@@ -695,9 +698,9 @@ const handleIdSubmit = async (e) => {
       totalFeeToSent.value = (
         parseFloat(totalDrayageToSend.value) +
         parseFloat(totalChassisToSend.value)
-      ).toFixed(2)
+      ).toFixed(2);
 
-      totalAccesorials.value = quote.value.magnetAccesorials
+      totalAccesorials.value = quote.value.sellAccesorials;
 
       // for (const item in quote.value.carrierAccesorials) {
       //   if (quote.value.carrierAccesorials.hasOwnProperty(item)) {
@@ -728,15 +731,17 @@ const drayageQuantityOnChange = () => {
   totalDrayageToSend.value = (
     parseFloat(totalDrayage.value) * drayageQuantity.value
   ).toFixed(2)
-  totalFeeToSent.value = (
-    parseFloat(totalDrayageToSend.value) + parseFloat(totalChassisToSend.value)
+  
+  totalChassisToSend.value = (
+    parseFloat(totalDrayageToSend.value) + parseFloat(sellChassisUnitRate.value)
   ).toFixed(2)
 }
 
 const chassisQuantityOnChange = () => {
   totalChassisToSend.value = (
-    parseFloat(totalChassis.value) * chassisQuantity.value
+    parseFloat(totalChassisToSend.value) * chassisQuantity.value
   ).toFixed(2)
+
   totalFeeToSent.value = (
     parseFloat(totalDrayageToSend.value) + parseFloat(totalChassisToSend.value)
   ).toFixed(2)
@@ -746,7 +751,7 @@ const getCheapestFee = (carriersArray) => {
   if (carriersArray.length === 0)
     return null
   const lowestFee = carriersArray.reduce((el, acc) => {
-    return el.carrierFee > acc.carrierFee ? acc : el
+    return el.buyDrayageUnitRate > acc.buyDrayageUnitRate ? acc : el
   })
   return lowestFee
 }

@@ -43,11 +43,13 @@
                 <label for="carrierEmail"> Buy Fee </label>
                 <input placeholder="Write down the answer here.." id="carrierEmail" type="number"
                   v-model="inptBuyDrayageUnitRate" />
+                  v-model="inptBuyDrayageUnitRate" />
               </div>
 
               <div class="inpt-col">
                 <label for="carrierChassis">Chassis Value </label>
                 <input placeholder="Chassis value per day.." id="carrierChassis" type="number"
+                  v-model="inptBuyChassisUnitRate" />
                   v-model="inptBuyChassisUnitRate" />
               </div>
             </div>
@@ -62,7 +64,7 @@
                   {{ item.accesorial }}
                 </label>
                 <input v-if="accesorialSelected[item.accesorial]" class="accesorialValue" type="number"
-                  v-model="buyAccesorial[item.accesorial]" @input="accesorialValuesOnChange" />
+                  v-model="buyAccesorialValues[item.accesorial]" @input="accesorialValuesOnChange" />
               </div>
             </div>
           </div>
@@ -76,13 +78,13 @@
             <div class="inpt-row">
               <div class="inpt-col">
                 <label for="fee-label">Sell Fee</label>
-                <input id="fee-label" type="number" placeholder="Write down the answer here.." v-model="inptMagnetFee" />
+                <input id="fee-label" type="number" placeholder="Write down the answer here.." v-model="inptSellDrayageUniteRate" />
               </div>
 
               <div class="inpt-col">
                 <label for="chassis-label">Chassis Value</label>
                 <input placeholder="Write down the answer here.." id="chassis-label" type="number"
-                  v-model="inptMagnetChassis" />
+                  v-model="inptSellChassisUnitRate" />
               </div>
             </div>
             <!-- ACCESORIAL -->
@@ -92,7 +94,7 @@
                 :key="index">
                 <label v-if="value">
                   {{ name }}
-                  <input v-model="magnetAccesorialValues[name]" type="number" />
+                  <input v-model="sellAccesorialValues[name]" type="number" />
                 </label>
               </div>
             </div>
@@ -121,6 +123,7 @@ import { getApi, postApi } from '@/services/apiServices';
 import { formatColumnName } from '@/utils/utils.js'
 import ButtonSubmit from '@/components/Buttons/ButtonSubmit/ButtonSubmit.vue'
 import { showToast } from '@/helpers/helpers.js'
+import Spinner from '@/components/Spinner/Spinner.vue';
 
 const inptId = ref("");
 const quote = ref("");
@@ -129,14 +132,14 @@ const formatDate = ref("");
 const inptCarrierEmail = ref("");
 const inptBuyDrayageUnitRate = ref(0);
 const inptBuyChassisUnitRate = ref(0);
-const inptMagnetFee = ref(0);
-const inptMagnetChassis = ref(0);
+const inptSellDrayageUniteRate = ref(0);
+const inptSellChassisUnitRate = ref(0);
 const inptNotes = ref();
 const isLoading = ref(false);
 const isLoading2 = ref(false);
 const accesorialSelected = ref({});
-const buyAccesorial = ref({});
-const magnetAccesorialValues = ref({});
+const buyAccesorialValues = ref({});
+const sellAccesorialValues = ref({});
 
 const handleGetQuote = async (e) => {
   e.preventDefault();
@@ -158,26 +161,24 @@ const handleGetQuote = async (e) => {
         isLoading.value = false;
         return;
       }
+
       isLoading.value = false;
       quote.value = data.message;
       formatDate.value = data.message.date;
-      console.log(quote)
-      console.log(quote.value)
-      getApi(`${import.meta.env.VITE_APP_API}/get/accesorials`).then(
-        (data) => (accesorials.value = data)
-      );
+      getApi(`${import.meta.env.VITE_APP_API}/get/accesorials`)
+      .then(data => accesorials.value = data);
     })
     .catch((error) => console.log(error));
 };
 
 const accesorialOnChange = (e) => {
   const value = e.target.value;
-  if (value in buyAccesorial.value) {
-    delete buyAccesorial.value[value];
-    delete magnetAccesorialValues.value[value];
+  if (value in buyAccesorialValues.value) {
+    delete buyAccesorialValues.value[value];
+    delete sellAccesorialValues.value[value];
     return;
   }
-  buyAccesorial.value[value] = null;
+  buyAccesorialValues.value[value] = null;
 };
 
 const saveFormInfo = () => {
@@ -186,34 +187,11 @@ const saveFormInfo = () => {
   quote.value.carrierEmail = inptCarrierEmail.value;
   quote.value.buyDrayageUnitRate = inptBuyDrayageUnitRate.value;
   quote.value.buyChassisUnitRate = inptBuyChassisUnitRate.value;
-  quote.value.buyAccesorial = buyAccesorial.value;
-  quote.value.magnetFee = inptMagnetFee.value;
-  quote.value.magnetChassis = inptMagnetChassis.value;
-  quote.value.magnetAccesorials = magnetAccesorialValues.value;
+  quote.value.buyAccesorials = buyAccesorialValues.value;
+  quote.value.sellDrayageUniteRate = inptSellDrayageUniteRate.value;
+  quote.value.sellChassisUnitRate = inptSellChassisUnitRate.value;
+  quote.value.sellAccesorials = sellAccesorialValues.value;
   quote.value.notes = inptNotes.value;
-}
-
-const validateForm = () => {
-  isLoading2.value = true;
-
-  const emailRegex = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
-  if (!emailRegex.test(inptCarrierEmail.value.trim())) {
-    showToast('Please enter a valid Email', 'danger', 'red')
-    isLoading2.value = false;
-    return false;
-  }
-
-  if (
-    !inptCarrierEmail.value.trim() ||
-    !inptBuyDrayageUnitRate.value ||
-    !inptMagnetFee.value
-  ) {
-    isLoading2.value = false;
-    showToast('Please, fill out all the inputs', 'danger', 'red')
-    return false;;
-  }
-
-  return true;
 }
 
 const saveFee = async () => {
@@ -240,6 +218,29 @@ const saveFee = async () => {
     //   });
   }
 };
+
+const validateForm = () => {
+  isLoading2.value = true;
+
+  const emailRegex = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
+  if (!emailRegex.test(inptCarrierEmail.value.trim())) {
+    showToast('Please enter a valid Email', 'danger', 'red')
+    isLoading2.value = false;
+    return false;
+  }
+
+  if (
+    !inptCarrierEmail.value.trim() ||
+    !inptBuyDrayageUnitRate.value ||
+    !inptSellDrayageUniteRate.value
+  ) {
+    isLoading2.value = false;
+    showToast('Please, fill out all the inputs', 'danger', 'red')
+    return false;;
+  }
+
+  return true;
+}
 </script>
 
 <style lang="scss" scoped>
