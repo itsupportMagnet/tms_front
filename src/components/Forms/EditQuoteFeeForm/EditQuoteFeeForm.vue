@@ -47,13 +47,13 @@
                 <div class="inpt-col">
                   <label for="carrierEmail"> Buy Fee </label>
                   <input placeholder="Write down the answer here.." id="carrierEmail" type="number"
-                    v-model="inptCarrierFee" />
+                    v-model="inptBuyDrayageUnitRate" />
                 </div>
 
                 <div class="inpt-col">
                   <label for="carrierChassis">Chassis Value </label>
                   <input placeholder="Chassis value per day.." id="carrierChassis" type="number"
-                    v-model="inptCarrierChassis" />
+                    v-model="inptBuyChassisUnitRate" />
                 </div>
               </div>
 
@@ -68,7 +68,7 @@
                   </label>
 
                   <input v-if="accesorialSelected[item.accesorial]" class="accesorialValue" type="number"
-                    v-model="carrierAccesorialValues[item.accesorial]" @input="accesorialValuesOnChange" />
+                    v-model="buyAccesorialValues[item.accesorial]" @input="accesorialValuesOnChange" />
                 </div>
               </div>
             </div>
@@ -83,13 +83,13 @@
                 <div class="inpt-col">
                   <label for="fee-label">Sell Fee</label>
                   <input id="fee-label" type="number" placeholder="Write down the answer here.."
-                    v-model="inptMagnetFee" />
+                    v-model="inptSellDrayageUniteRate" />
                 </div>
 
                 <div class="inpt-col">
                   <label for="chassis-label">Chassis Value</label>
                   <input placeholder="Write down the answer here.." id="chassis-label" type="number"
-                    v-model="inptMagnetChassis" />
+                    v-model="inptSellChassisUnitRate" />
                 </div>
               </div>
               <!-- ACCESORIAL -->
@@ -99,7 +99,7 @@
                   :key="index">
                   <label v-if="value">
                     {{ name }}
-                    <input v-model="magnetAccesorialValues[name]" type="number" />
+                    <input v-model="sellAccesorialValues[name]" type="number" />
                   </label>
                 </div>
               </div>
@@ -137,16 +137,16 @@ const quote = ref("");
 const accesorials = ref([]);
 const formatDate = ref("");
 const inptCarrierEmail = ref("");
-const inptCarrierFee = ref(0);
-const inptCarrierChassis = ref(0);
-const inptMagnetFee = ref(0);
-const inptMagnetChassis = ref(0);
+const inptBuyDrayageUnitRate = ref(0);
+const inptBuyChassisUnitRate = ref(0);
+const inptSellDrayageUniteRate = ref(0);
+const inptSellChassisUnitRate = ref(0);
 const inptNotes = ref();
 const isLoading = ref(false);
 const isLoading2 = ref(false);
 const accesorialSelected = ref({});
-const carrierAccesorialValues = ref({});
-const magnetAccesorialValues = ref({});
+const buyAccesorialValues = ref({});
+const sellAccesorialValues = ref({});
 const quoteEdited = ref({});
 
 
@@ -154,11 +154,13 @@ const handleGetQuote = async e => {
   e.preventDefault();
   isLoading.value = true;
   quote.value = "";
+
   if (inptId.value.trim() === "") {
     showToast('Please, fill out all the inputs', 'danger', 'red')
     isLoading.value = false;
     return;
   }
+
   const idValue = inptId.value.toUpperCase();
   getApi(`${import.meta.env.VITE_APP_API}/get/carriers-fees/${idValue}`)
     .then((data) => {
@@ -167,39 +169,44 @@ const handleGetQuote = async e => {
         isLoading.value = false;
         return;
       }
+
       isLoading.value = false;
       quote.value = data;
       formatDate.value = data.date;
-      fillForm(quote.value[0])
+
       getApi(`${import.meta.env.VITE_APP_API}/get/accesorials`).then(
         (data) => (accesorials.value = data)
       );
+
+      fillForm(quote.value[0])
     })
     .catch((error) => console.log(error));
 };
 
 const accesorialOnChange = (e) => {
   const value = e.target.value;
-  if (value in carrierAccesorialValues.value) {
-    delete carrierAccesorialValues.value[value];
-    delete magnetAccesorialValues.value[value];
+  if (value in buyAccesorialValues.value) {
+    delete buyAccesorialValues.value[value];
+    delete sellAccesorialValues.value[value];
     return;
   }
-  carrierAccesorialValues.value[value] = null;
+  buyAccesorialValues.value[value] = null;
 };
 
 const fillForm = (quote) => {
-  const { carrierEmail, carrierFee, carrierChassis, carrierAccesorials, magnetFee, magnetChassis, magnetAccesorials, notes } = quote
-  inptCarrierEmail.value = carrierEmail;
-  inptCarrierFee.value = carrierFee;
-  inptCarrierChassis.value = carrierChassis;
-  inptMagnetFee.value = magnetFee;
-  inptMagnetChassis.value = magnetChassis;
-  inptNotes.value = notes;
-  carrierAccesorialValues.value = carrierAccesorials;
-  magnetAccesorialValues.value = magnetAccesorials;
+  const { carrierEmail, buyDrayageUnitRate, buyChassisUnitRate, buyAccesorials, sellDrayageUnitRate, sellChassisUnitRate, sellAccesorials, notes } = quote
 
-  const propertyNames = Object.keys(magnetAccesorialValues.value);
+  inptCarrierEmail.value = carrierEmail;
+  inptBuyDrayageUnitRate.value = buyDrayageUnitRate;
+  inptBuyChassisUnitRate.value = buyChassisUnitRate;
+  buyAccesorialValues.value = buyAccesorials;
+
+  inptSellDrayageUniteRate.value = sellDrayageUnitRate;
+  inptSellChassisUnitRate.value = sellChassisUnitRate;
+  sellAccesorialValues.value = sellAccesorials;
+  inptNotes.value = notes;
+  
+  const propertyNames = Object.keys(sellAccesorialValues.value);
   propertyNames.forEach(name => {
     accesorialSelected.value[name] = true;
   })
@@ -217,8 +224,8 @@ const validateForm = () => {
 
   if (
     !inptCarrierEmail.value.trim() ||
-    !inptCarrierFee.value ||
-    !inptMagnetFee.value
+    !inptBuyDrayageUnitRate.value ||
+    !inptSellDrayageUniteRate.value
   ) {
     isLoading2.value = false;
     showToast('Please, fill out all the inputs', 'danger', 'red')
@@ -232,12 +239,12 @@ const saveFormInfo = () => {
   isLoading2.value = false;
   quoteEdited.value.id = quote.value[0].id
   quoteEdited.value.carrierEmail = inptCarrierEmail.value;
-  quoteEdited.value.carrierFee = inptCarrierFee.value;
-  quoteEdited.value.carrierChassis = inptCarrierChassis.value;
-  quoteEdited.value.carrierAccesorials = carrierAccesorialValues.value;
-  quoteEdited.value.magnetFee = inptMagnetFee.value;
-  quoteEdited.value.magnetChassis = inptMagnetChassis.value;
-  quoteEdited.value.magnetAccesorials = magnetAccesorialValues.value;
+  quoteEdited.value.buyDrayageUnitRate = inptBuyDrayageUnitRate.value;
+  quoteEdited.value.buyChassisUnitRate = inptBuyChassisUnitRate.value;
+  quoteEdited.value.buyAccesorials = buyAccesorialValues.value;
+  quoteEdited.value.sellDrayageUnitRate = inptSellDrayageUniteRate.value;
+  quoteEdited.value. sellChassisUnitRate  = inptSellChassisUnitRate.value;
+  quoteEdited.value. sellAccesorials  = sellAccesorialValues.value;
   quoteEdited.value.notes = inptNotes.value;
 }
 
@@ -257,7 +264,7 @@ if (validateForm()) {
         showToast('Carrier(s) fee(s) edited succesfully', 'success', 'green')
       } else {
         console.error(data);
-        showToast('Something went wrong, please, contact support', 'danger', 'red')
+        showToast('Something went wrong, please, contact IT support', 'danger', 'red')
       }
     })
     .catch((error) => {
