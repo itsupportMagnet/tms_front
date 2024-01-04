@@ -856,10 +856,10 @@ const feedingOperationTableModal = (objOperation, e) => {
         .then(data => {
           sale.value = data;
           const { buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials } = sale.value;
-          const { idOperation, bookingBl, containerId, provider } = operation.value;
+          const { idOperation, bookingBl, customer, containerId, provider } = operation.value;
           feedModalSummaryTable(buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials);
 
-          feedingSaleWithOperationData(idOperation, bookingBl, containerId, provider);
+          feedingSaleWithOperationData(idOperation, bookingBl, customer, containerId, provider);
          
           feedModalAccesorial(buyAccesorials, sellAccesorials);
         })
@@ -872,9 +872,9 @@ const feedingOperationTableModal = (objOperation, e) => {
         .then(data => {
           sale.value = data;
           const { buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials } = sale.value;
-          const { idOperation, bookingBl, containerId, provider } = operation.value;    
+          const { idOperation, bookingBl, customer ,containerId, provider } = operation.value;    
           feedModalSummaryTable(buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials);
-          feedingSaleWithOperationData(idOperation, bookingBl, containerId, provider);
+          feedingSaleWithOperationData(idOperation, bookingBl, customer, containerId, provider);
 
         })
         .catch(error => console.log(error))
@@ -1045,8 +1045,6 @@ const handleContinueToChargesTable = async () => {
 
   feedingSaleValuesData(inptBuySummaryDrayage, inptTotalBuyChassisAmount, inptSellSummaryDrayage, inptTotalSellChassisAmount, carrierAccesorialValues, magnetAccesorialValues, inptChassisBuyQuantity, inptChassisSellQuantity, totalBuyAccesorialCharges, totalSellAccesorialCharges);
 
-  console.log(sale.value)
-
   if (isDoneOperationUpdate.value) {
     postApi(`${import.meta.env.VITE_APP_API}/post/updateSaleGross`, sale.value)
       .then()
@@ -1138,14 +1136,14 @@ const chckIsAnOpenOperation = (quoteID) => {
   return quoteID.includes('MGT')
 }
 
-const feedModalSummaryTable = (drayageBuyUnit, chassisBuyQty, chassisBuyUnit, drayageSellUnit, chassisSellQty, chassisSellUnit, chassisSellTotal) => {
+const feedModalSummaryTable = (drayageBuyUnit, chassisBuyQty, chassisBuyUnit, drayageSellUnit, chassisSellQty, chassisSellUnit) => {
   inptDrayageBuyQuantity.value = 1;
   inptChassisBuyQuantity.value = chassisBuyQty || 1;
   inptChassisBuyRate.value = chassisBuyUnit;
   inptTotalBuyChassisAmount.value = inptChassisBuyQuantity.value * inptChassisBuyRate.value;
   inptDrayageSellQuantity.value = 1;
   inptChassisSellQuantity.value = chassisSellQty || 1;
-  inptTotalSellChassisAmount.value = inptChassisSellQuantity.value * inptChassisSellRate.value;//Hay que tener cuidado como traemos los datos
+  inptTotalSellChassisAmount.value = inptChassisSellQuantity.value * inptChassisSellRate.value;
   inptBuySummaryDrayage.value = drayageBuyUnit;
   inptSellSummaryDrayage.value = drayageSellUnit;
   inptChassisSellRate.value = chassisSellUnit;
@@ -1162,9 +1160,10 @@ const feedModalAccesorial = (buyAccesorials, sellAccesorials) => {
   }
 }
 
-const feedingSaleWithOperationData = (idOperation, bookingBl, containerId, provider) => {
+const feedingSaleWithOperationData = (idOperation, bookingBl, customer, containerId, provider) => {
   sale.value.operation_id = idOperation;
   sale.value.booking_bl = bookingBl;
+  sale.value.customer = customer;
   sale.value.container_id = containerId;
   sale.value.provider = provider;
 }

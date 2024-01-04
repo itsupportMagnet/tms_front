@@ -132,10 +132,10 @@
                   </span>
 
                   <input type="number" v-else-if="key === 'buy'" @blur="validateInputBuy(objSalesGross, key)"
-                    v-model="objSalesGross[key]" min="0" />
+                    v-model="objSalesGross[key]" min="0" disabled />
 
                   <input type="number" v-else-if="key === 'sell'" @blur="validateInputSell(objSalesGross, key)"
-                    v-model="objSalesGross[key]" min="0" />
+                    v-model="objSalesGross[key]" min="0" disabled />
 
                   <input v-else-if="key === 'profit'" v-model="objSalesGross[key]" disabled />
 
@@ -273,53 +273,53 @@ const confirmDelete = async () => {
 
 }
 
-const validateInputBuy = (objSalesGross, key) => {
-  if (key === 'buy') {
-    const numberValue = objSalesGross[key]
-    objSalesGross[key] = Math.max(0, numberValue)
-    const updateBuy = {
-      idSalesGross: objSalesGross.id,
-      buySalesGross: objSalesGross[key],
-    }
+// const validateInputBuy = (objSalesGross, key) => {
+//   if (key === 'buy') {
+//     const numberValue = objSalesGross[key]
+//     objSalesGross[key] = Math.max(0, numberValue)
+//     const updateBuy = {
+//       idSalesGross: objSalesGross.id,
+//       buySalesGross: objSalesGross[key],
+//     }
 
-    postApi(`${import.meta.env.VITE_APP_API}/post/updateBuySalesGross`, updateBuy)
-      .then()
-      .catch((error) => console.log(error))
+//     postApi(`${import.meta.env.VITE_APP_API}/post/updateBuySalesGross`, updateBuy)
+//       .then()
+//       .catch((error) => console.log(error))
 
-    objSalesGross.profit = objSalesGross.sell - objSalesGross.buy;
+//     objSalesGross.profit = objSalesGross.sell - objSalesGross.buy;
 
-    const updateProfit = {
-      idSalesGross: objSalesGross.id,
-      profitSalesGross: objSalesGross.profit
-    }
-    postApi(`${import.meta.env.VITE_APP_API}/post/updateProfitSalesGross`, updateProfit)
-      .then()
-      .catch((error) => console.log(error))
-  }
-}
+//     const updateProfit = {
+//       idSalesGross: objSalesGross.id,
+//       profitSalesGross: objSalesGross.profit
+//     }
+//     postApi(`${import.meta.env.VITE_APP_API}/post/updateProfitSalesGross`, updateProfit)
+//       .then()
+//       .catch((error) => console.log(error))
+//   }
+// }
 
-const validateInputSell = (objSalesGross, key) => {
-  if (key === 'sell') {
-    const numberValue = objSalesGross[key]
-    objSalesGross[key] = Math.max(0, numberValue)
+// const validateInputSell = (objSalesGross, key) => {
+//   if (key === 'sell') {
+//     const numberValue = objSalesGross[key]
+//     objSalesGross[key] = Math.max(0, numberValue)
 
-    const updateSell = {
-      idSalesGross: objSalesGross.id,
-      sellSalesGross: objSalesGross[key]
-    }
-    postApi(`${import.meta.env.VITE_APP_API}/post/updateSellSalesGross`, updateSell)
-      .then()
-      .catch((error) => console.log(error))
-  }
-  objSalesGross.profit = objSalesGross.sell - objSalesGross.buy
-  const updateProfit = {
-    idSalesGross: objSalesGross.id,
-    profitSalesGross: objSalesGross.profit
-  }
-  postApi(`${import.meta.env.VITE_APP_API}/post/updateProfitSalesGross`, updateProfit)
-    .then()
-    .catch((error) => console.log(error))
-}
+//     const updateSell = {
+//       idSalesGross: objSalesGross.id,
+//       sellSalesGross: objSalesGross[key]
+//     }
+//     postApi(`${import.meta.env.VITE_APP_API}/post/updateSellSalesGross`, updateSell)
+//       .then()
+//       .catch((error) => console.log(error))
+//   }
+//   objSalesGross.profit = objSalesGross.sell - objSalesGross.buy
+//   const updateProfit = {
+//     idSalesGross: objSalesGross.id,
+//     profitSalesGross: objSalesGross.profit
+//   }
+//   postApi(`${import.meta.env.VITE_APP_API}/post/updateProfitSalesGross`, updateProfit)
+//     .then()
+//     .catch((error) => console.log(error))
+// }
 
 const filterProvider = (salesFromApi) => {
   if (filterOpt.value.srtProvider) {
