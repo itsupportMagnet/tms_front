@@ -871,7 +871,6 @@ const feedingOperationTableModal = (objOperation, e) => {
         .then(data => {
           sale.value = data;
           const { buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials } = sale.value;
-          console.log(sale.value)
           const { idOperation, bookingBl, containerId, provider } = operation.value;
           feedModalSummaryTable(buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials);
 
@@ -888,10 +887,8 @@ const feedingOperationTableModal = (objOperation, e) => {
         .then(data => {
           sale.value = data;
           const { buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials } = sale.value;
-          console.log(sale.value)
-          const { idOperation, bookingBl, containerId, provider } = operation.value;
+          const { idOperation, bookingBl, containerId, provider } = operation.value;    
           feedModalSummaryTable(buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials);
-
           feedingSaleWithOperationData(idOperation, bookingBl, containerId, provider);
 
         })
@@ -1116,28 +1113,22 @@ const handleContinueToChargesTable = async () => {
   isTableSummaryModal.value = false;
   isAccesorialModal.value = false;
   isAccesorialModal3.value = true;
+  sale.value.date = currentDate;
   const totalAccesorialCharges = calculateTotalAccesorialCharges(magnetAccesorialValues.value)
+  let totalBuyAccesorialCharges = sumBuyAccesorialValues()
+  let totalSellAccesorialCharges = sumSellAccesorialValues()
   totalChargesDisplayed = `Drayage: $${parseFloat(sale.value.sellDrayageUnitRate)} + Chassis: $${parseFloat(inptTotalSellChassisAmount.value)} ${printTotalCharges(magnetAccesorialValues.value)}`
   totalAmountDisplayed = `$${parseFloat(sale.value.sellDrayageUnitRate) + parseFloat(totalAccesorialCharges) + parseFloat(inptTotalSellChassisAmount.value) }` //falta total chassisAmount
-  sale.value.date = currentDate;
-  sale.value.buy = parseFloat(inptBuySummaryDrayage.value) + parseFloat(inptTotalBuyChassisAmount.value) // Falta sumar los accesorials de buy
-  sale.value.sell = parseFloat(inptSellSummaryDrayage.value) + parseFloat(inptTotalSellChassisAmount.value) //Falta sumar los accesorials de sell
-  sale.value.profit = parseFloat(sale.value.sell) - parseFloat(sale.value.buy)
-  sale.value.buyAccesorials = carrierAccesorialValues
-  sale.value.sellAccesorials = magnetAccesorialValues
-  sale.value.buyQtyChassis = inptChassisBuyQuantity
-  sale.value.sellQtyChassis = inptChassisSellQuantity
-  console.log(sale.value)
+
+  feedingSaleValuesData(inptBuySummaryDrayage, inptTotalBuyChassisAmount, inptSellSummaryDrayage, inptTotalSellChassisAmount, carrierAccesorialValues, magnetAccesorialValues, inptChassisBuyQuantity, inptChassisSellQuantity, totalBuyAccesorialCharges, totalSellAccesorialCharges);
 
   if (isDoneOperationUpdate.value) {
     postApi(`${import.meta.env.VITE_APP_API}/post/updateSaleGross`, sale.value)
-      .then(() => console.log(sale.value))
+      .then()
       .catch(error => console.log(error))
   } else {
-    console.log('console.log mientras creo el endpoint')
-    console.log(sale.value)
     postApi(`${import.meta.env.VITE_APP_API}/post/newOperationSaleGross`, sale.value)
-      .then(() => console.log("Se Creo una nueva operacion en salegross"))
+      .then()
       .catch(error => console.log(error))
   }
 
@@ -1250,7 +1241,7 @@ const handleGoBackToAccesorialModal = () => {
   loadAllOperations()
 }
 
-const sumCarrierAccesorialValues = () => {
+const sumBuyAccesorialValues = () => {
   let total = 0;
   for (const value of Object.values(carrierAccesorialValues.value)) {
     total += parseFloat(value) || 0 // Para convertir cada valor a numero
@@ -1258,7 +1249,7 @@ const sumCarrierAccesorialValues = () => {
   return total
 }
 
-const sumMagnetAccesorialValues = () => {
+const sumSellAccesorialValues = () => {
   let total = 0;
   for (const value of Object.values(magnetAccesorialValues.value)) {
     total += parseFloat(value) || 0
@@ -1280,7 +1271,6 @@ const sumAccesorialValues = () => {
   // Dejo la funcion en caso de volver a utilizarla a futuro, esta suma los valores de buy y sell
 
   for (const key in magnetAccesorialValues.value) {
-    console.log(key);
     if (Object.prototype.hasOwnProperty.call(magnetAccesorialValues.value, key)) {
       totalAccesorialValues.value[key] = magnetAccesorialValues.value[key] || 0
     }
@@ -1317,8 +1307,6 @@ const resetAtDismissModal = () => {
   carrierAccesorialValues.value = {};
   magnetAccesorialValues.value = {};
   totalAccesorialValues.value = {};
-
-
   sale.value = ''; //Resetear el valor de sale al salir del modal.
   // /* First Modal Reset Values */
   // buySummaryDrayage.value = "";
@@ -1375,8 +1363,6 @@ const feedModalSummaryTable = (drayageBuyUnit, chassisBuyQty, chassisBuyUnit, dr
 const feedModalAccesorial = (buyAccesorials, sellAccesorials) => {
   carrierAccesorialValues.value = buyAccesorials;
   magnetAccesorialValues.value = sellAccesorials;
-  console.log(carrierAccesorialValues.value)
-  console.log(magnetAccesorialValues.value)
   for (let key in buyAccesorials) {
     accesorialSelected.value[key] = true;
   }
@@ -1390,7 +1376,16 @@ const feedingSaleWithOperationData = (idOperation, bookingBl, containerId, provi
   sale.value.booking_bl = bookingBl;
   sale.value.contaier_id = containerId;
   sale.value.provider = provider;
-  console.log(sale.value)
+}
+
+const feedingSaleValuesData = (inptBuySummaryDrayage, inptTotalBuyChassisAmount, inptSellSummaryDrayage, inptTotalSellChassisAmount, carrierAccesorialValues, magnetAccesorialValues, inptChassisBuyQuantity, inptChassisSellQuantity, totalBuyAccesorialCharges, totalSellAccesorialCharges) => {
+  sale.value.buy = parseFloat(inptBuySummaryDrayage.value) + parseFloat(inptTotalBuyChassisAmount.value) + parseFloat(totalBuyAccesorialCharges) // Falta sumar los accesorials de buy
+  sale.value.sell = parseFloat(inptSellSummaryDrayage.value) + parseFloat(inptTotalSellChassisAmount.value) + parseFloat(totalSellAccesorialCharges) //Falta sumar los accesorials de sell
+  sale.value.profit = parseFloat(sale.value.sell) - parseFloat(sale.value.buy)
+  sale.value.buyAccesorials = carrierAccesorialValues
+  sale.value.sellAccesorials = magnetAccesorialValues
+  sale.value.buyQtyChassis = inptChassisBuyQuantity
+  sale.value.sellQtyChassis = inptChassisSellQuantity
 }
 
 watch([inptChassisBuyRate, inptChassisBuyQuantity], () => calculateTotalChassis(inptChassisBuyRate, inptChassisBuyQuantity, inptTotalBuyChassisAmount));
