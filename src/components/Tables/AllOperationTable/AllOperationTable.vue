@@ -158,12 +158,6 @@
         <!-- Third Modal After Continue Button -->
         <div class="modal-body modal-done-status" v-if="isAccesorialModal3">
           <table>
-            <!-- <tr v-for="(item, index) in modalInfo" style="border: 1px solid #000" :key="index">
-              <th style="background-color: #1d4ed8; color: #fff; padding: 0 10px">
-                {{ formatAndCapitalize(index) }}
-              </th>
-              <td style="padding: 0 10px">{{ item }}</td>
-            </tr> -->
             <tr style="border: 1px solid #000">
               <th style="background-color: #1d4ed8; color: #fff; padding: 0 10px">
                 ID Operation
@@ -479,8 +473,6 @@
                       v-else-if="key === 'containerId'" v-model="objOperation[key]" @blur="(e) =>
                         inputBlurHandlerContainer(objOperation.idOperation, e)
                         " />
-                    <!-- <input v-else-if="key == 'weight'" type="number" class="allOperations__inptBookingBl"
-                    v-model="objOperation[key]" @blur="(e) => inputBlurHandlerWeight(objOperation.idOperation, e)" /> -->
                     <span v-else>
                       {{ objOperation[key] }}
                     </span>
@@ -531,7 +523,6 @@ const containerStatus = ref()
 const inpt_date = ref('')
 const isEmptyOperationsFromApi = ref(false)
 const modalInfo = ref()
-const modalInfoExtra = ref()
 const modalInfoContainer = ref()
 const modalRef = ref(null)
 const modalRefContainer = ref(null)
@@ -558,7 +549,7 @@ const slctContainerStatus = ref()
 const message = ref()
 const idOperation = ref()
 const idOperationValue = ref()
-const idQuoteModal = ref()
+
 const newOperationRef = ref(null)
 const OperationIdToDelete = ref(null)
 const carriers = ref();
@@ -568,22 +559,18 @@ let newDoneModalKey = ref(0)
 const isTableSummaryModal = ref(true)
 const isAccesorialModal = ref(false)
 const isAccesorialModal3 = ref(false)
-const isOpenQuote = ref(false)
-const openQuoteInfo = ref();
-const closedQuoteInfo = ref();
+
 const salesGrossInfo = ref();
 const accesorialSelected = ref({});
 const carrierAccesorialValues = ref({}); //Se deben borrar al cerrar el modal
 const magnetAccesorialValues = ref({}); //Se deben borrar al cerrar el modal
 const totalAccesorialValues = ref({}) //Se deben borrar al cerrar el modal
-const closedQuoteBuyChassis = ref();
-const closedQuoteSellChassis = ref();
+
 let totalChargesDisplayed = ref();
 let totalAmountDisplayed = ref();
 
 const sale = ref();
 const isDoneOperationUpdate = ref(false);
-const doneModalInfo = ref();
 const filterObj = ref({
   date: '',
   status: '',
@@ -740,7 +727,7 @@ const filterContainerStatus = operation => {
   }
   return operation;
 }
-//Fin de funciones de filtros
+//End of Filter Functions
 
 const sendIdOperation = (id) => {
   idOperationValue.value = id
@@ -855,8 +842,6 @@ const feedingOperationTableModal = (objOperation, e) => {
       e.target.setAttribute('data-bs-target', '#accesorialModalDone')
       slctStatus.value = e.target
     }
-
-    // idQuoteModal.value = objOperation.quoteID;
 
     if (doesOperationExist(operation.value.idOperation)) {
       const { buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials } = sale.value;
@@ -980,21 +965,10 @@ const copyHtmlBtnContainerStatus = () => {
   }
 }
 
-const getMonthName = (monthNumber) => {
-  const months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY",
-    "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"]
-  return months[monthNumber]
-}
-
 const closeModal = () => {
   slctStatus.value.removeAttribute('data-bs-toggle')
   slctStatus.value.removeAttribute('data-bs-target')
 }
-
-const formatAndCapitalize = (value) => {
-  const formattedKey = value.replace(/([a-z])([A-Z])/g, "$1 $2");
-  return formattedKey.charAt(0).toUpperCase() + formattedKey.slice(1);
-};
 
 const feedingContainerModal = (objOperation, e) => {
   modalInfoContainer.value = {
@@ -1048,58 +1022,7 @@ const handleContinueToAccesorials = () => {
   isTableSummaryModal.value = false;
   isAccesorialModal.value = true;
   isAccesorialModal3.value = false;
-
   sale.value.buyChassis = inptTotalSellChassisAmount.value;
-
-
-  // if (idQuoteModal.value.includes('MGT')) {
-  //   console.log('Estoy con la quote Abierta')
-  //   console.log('Primer Console Log TotalAmount: ' + totalSellChassisAmount.value)
-
-  //   // const toSalesGrossFromOpenSummary = {
-  //   //   operationId: modalInfo.value['ID Operation'],
-  //   //   chassisBuyQuantity: chassisBuyQuantity.value,
-  //   //   chassisBuySummary: chassisBuyRate.value,
-  //   //   totalBuyChassisAmount: totalBuyChassisAmount.value,
-  //   //   chassisSellQuantity: chassisSellQuantity.value,
-  //   //   chassisSellSummary: chassisSellRate.value,
-  //   //   totalSellChassisAmount: totalSellChassisAmount.value
-  //   // }
-
-  //   if (salesGrossInfo.value.some(item => item.operation_id === modalInfo.value['ID Operation'])) {
-  //     postApi(`${import.meta.env.VITE_APP_API}/post/updateSummarySalesGross`, toSalesGrossFromOpenSummary)
-  //       .then(loadAllOperations())
-  //       .catch((error) => console.log(error))
-  //   } else {
-  //     postApi(`${import.meta.env.VITE_APP_API}/post/newSummarySalesGross`, toSalesGrossFromOpenSummary)
-  //       .then(loadAllOperations())
-  //       .catch((error) => console.log(error))
-  //   }
-  //   console.log(toSalesGrossFromOpenSummary)
-  // } else {
-  //   console.log('Estoy con la quote Cerrada')
-  //   console.log('Primer Log' + totalSellChassisAmount.value)
-  //   const toSalesGrossFromClosedSummary = {
-  //     operationId: modalInfo.value['ID Operation'],
-  //     chassisBuyQuantity: chassisBuyQuantity.value,
-  //     chassisBuySummary: chassisBuyRate.value,
-  //     totalBuyChassisAmount: totalBuyChassisAmount.value,
-  //     chassisSellQuantity: chassisSellQuantity.value,
-  //     chassisSellSummary: chassisSellRate.value,
-  //     totalSellChassisAmount: totalSellChassisAmount.value
-  //   }
-
-  //   if (salesGrossInfo.value.some(item => item.operation_id === modalInfo.value['ID Operation'])) {
-  //     postApi(`${import.meta.env.VITE_APP_API}/post/updateSummarySalesGross`, toSalesGrossFromClosedSummary)
-  //       .then(loadAllOperations())
-  //       .catch((error) => console.log(error))
-  //   } else {
-  //     postApi(`${import.meta.env.VITE_APP_API}/post/newSummarySalesGross`, toSalesGrossFromClosedSummary)
-  //       .then(loadAllOperations())
-  //       .catch((error) => console.log(error))
-  //   }
-  //   console.log(toSalesGrossFromClosedSummary)
-  // }
 }
 
 const handleGoBackToSummaryTableModal = () => {
@@ -1122,6 +1045,8 @@ const handleContinueToChargesTable = async () => {
 
   feedingSaleValuesData(inptBuySummaryDrayage, inptTotalBuyChassisAmount, inptSellSummaryDrayage, inptTotalSellChassisAmount, carrierAccesorialValues, magnetAccesorialValues, inptChassisBuyQuantity, inptChassisSellQuantity, totalBuyAccesorialCharges, totalSellAccesorialCharges);
 
+  console.log(sale.value)
+
   if (isDoneOperationUpdate.value) {
     postApi(`${import.meta.env.VITE_APP_API}/post/updateSaleGross`, sale.value)
       .then()
@@ -1131,107 +1056,6 @@ const handleContinueToChargesTable = async () => {
       .then()
       .catch(error => console.log(error))
   }
-
-
-
-
-
-  // saveAccesorials();
-
-  loadAllOperations();
-  // if (idQuoteModal.value.includes('MGT')) {
-  //   sumAccesorialValues()
-  //   const customerDrayageNumber = parseFloat(openQuoteInfo.value.magnetFee)
-  //   const carrierDrayageNumber = parseFloat(openQuoteInfo.value.carrierFee)
-  //   const carrierChassisNumber = parseFloat(openQuoteInfo.value.carrierChassis)
-  //   const magnetChassisNumber = parseFloat(openQuoteInfo.value.magnetChassis)
-  //   const totalAccesorialCharges = calculateTotalAccesorialCharges(magnetAccesorialValues.value)
-  //   const totalCarrierAccesorialCharges = sumCarrierAccesorialValues();
-  //   const totalMagnetAccesorialCharges = sumMagnetAccesorialValues();
-  //   const totalChassisCharges = parseFloat(totalSellChassisAmount.value)
-  //   const buyCalculatedNumber = carrierDrayageNumber + totalCarrierAccesorialCharges + convertToNumber(totalBuyChassisAmount.value)
-  //   const sellCalculatedNumber = customerDrayageNumber + totalMagnetAccesorialCharges + convertToNumber(totalSellChassisAmount.value)
-  //   const profitCalculatedNumber = sellCalculatedNumber - buyCalculatedNumber
-  //   modalInfo.value.totalCharges = `Drayage: $${openQuoteInfo.value.magnetFee} + Chassis: $${totalChassisCharges} ${printTotalCharges(magnetAccesorialValues.value)}`
-  //   modalInfo.value.totalAmount = `$${customerDrayageNumber + totalAccesorialCharges + totalChassisCharges}`
-
-  //   const toSalesGrossFromNormalQuotes = {
-  //     operationId: modalInfo.value['ID Operation'],
-  //     bookingBl: modalInfo.value['Booking/BL'],
-  //     containerId: modalInfo.value['Container ID'],
-  //     provider: modalInfoExtra.value['Provider'],
-  //     customer: modalInfo.value.Customer,
-  //     buy: buyCalculatedNumber,
-  //     sell: sellCalculatedNumber,
-  //     profit: profitCalculatedNumber,
-  //     date: getMonthName(currentDate.getMonth()),
-  //     carrierAccesorials: JSON.stringify(carrierAccesorialValues.value),
-  //     magnetAccesorials: JSON.stringify(magnetAccesorialValues.value),
-  //     buyChassis: totalBuyChassisAmount.value,
-  //     sellChassis: totalSellChassisAmount.value
-  //   }
-
-  //   if (salesGrossInfo.value.some(item => item.operation_id === modalInfo.value['ID Operation'])) {
-  //     postApi(`${import.meta.env.VITE_APP_API}/post/updateSaleGrossFromFloridaQuotes`, toSalesGrossFromNormalQuotes)
-  //       .then(loadAllOperations())
-  //       .catch((error) => console.log(error))
-  //   } else {
-  //     postApi(`${import.meta.env.VITE_APP_API}/post/newSaleGrossFromFloridaQuotes`, toSalesGrossFromNormalQuotes)
-  //       .then(loadAllOperations())
-  //       .catch((error) => console.log(error))
-  //   }
-
-  // } else {
-  //   // if (!closedQuoteBuyChassis.value || closedQuoteBuyChassis.value === '0') {
-  //   //   showToast('Please Add Buy Chassis Value', 'danger', 'red')
-  //   //   return
-  //   // }
-  //   // if (!closedQuoteSellChassis.value || closedQuoteSellChassis.value === '0') {
-  //   //   showToast('Please add Sell Chassis Value', 'danger', 'red')
-  //   //   return
-  //   // }
-  //   sumAccesorialValues();
-  //   console.log(closedQuoteInfo.value.customerDrayage)
-  //   console.log(closedQuoteInfo.value.carrierDrayage)
-  //   console.log(totalSellChassisAmount.value)
-  //   const customerDrayageNumber = convertToNumber(closedQuoteInfo.value.customerDrayage)
-  //   const carrierDrayageNumber = convertToNumber(closedQuoteInfo.value.carrierDrayage)
-  //   const closedChassisNumber = convertToNumber(totalSellChassisAmount.value)
-  //   const totalAccesorialCharges = calculateTotalAccesorialCharges(magnetAccesorialValues.value)
-  //   const totalCarrierCharges = sumCarrierAccesorialValues();
-  //   const totalMagnetCharges = sumMagnetAccesorialValues();
-  //   const buyCalculatedNumber = carrierDrayageNumber + totalCarrierCharges + convertToNumber(totalBuyChassisAmount.value)
-  //   const sellCalculatedNumber = customerDrayageNumber + totalMagnetCharges + convertToNumber(totalSellChassisAmount.value)
-  //   const profitCalculatedNumber = sellCalculatedNumber - buyCalculatedNumber
-  //   modalInfo.value.totalCharges = `Drayage: ${closedQuoteInfo.value.customerDrayage} + Chassis: $${totalSellChassisAmount.value} ${printTotalCharges(magnetAccesorialValues.value)}`
-  //   modalInfo.value.totalAmount = `$${customerDrayageNumber + totalAccesorialCharges + closedChassisNumber}`
-  //   const toSalesGrossFromFloridaQuotes = {
-  //     operationId: modalInfo.value['ID Operation'],
-  //     bookingBl: modalInfo.value['Booking/BL'],
-  //     containerId: modalInfo.value['Container ID'],
-  //     provider: modalInfoExtra.value['Provider'],
-  //     customer: modalInfo.value.Customer,
-  //     buy: buyCalculatedNumber,
-  //     sell: sellCalculatedNumber,
-  //     profit: profitCalculatedNumber,
-  //     date: getMonthName(currentDate.getMonth()),
-  //     carrierAccesorials: JSON.stringify(carrierAccesorialValues.value),
-  //     magnetAccesorials: JSON.stringify(magnetAccesorialValues.value),
-  //     buyChassis: totalBuyChassisAmount.value,
-  //     sellChassis: totalSellChassisAmount.value
-  //   }
-
-  //   if (salesGrossInfo.value.some(item => item.operation_id === modalInfo.value['ID Operation'])) {
-  //     postApi(`${import.meta.env.VITE_APP_API}/post/updateSaleGrossFromFloridaQuotes/`, toSalesGrossFromFloridaQuotes)
-  //       .then(loadAllOperations())
-  //       .catch((error) => console.log(error))
-  //   } else {
-  //     postApi(`${import.meta.env.VITE_APP_API}/post/newSaleGrossFromFloridaQuotes`, toSalesGrossFromFloridaQuotes)
-  //       .then(loadAllOperations())
-  //       .catch((error) => console.log(error))
-  //   }
-  // }
-
 }
 
 const handleGoBackToAccesorialModal = () => {
@@ -1257,27 +1081,6 @@ const sumSellAccesorialValues = () => {
   return total
 }
 
-const sumAccesorialValues = () => {
-  // for (const key in carrierAccesorialValues.value) {
-  //   if (Object.prototype.hasOwnProperty.call(carrierAccesorialValues.value, key)) {
-  //     let sum = carrierAccesorialValues.value[key] || 0;
-  //     if (magnetAccesorialValues.value[key]) {
-  //       sum += magnetAccesorialValues.value[key] || 0;
-  //     }
-  //     totalAccesorialValues.value[key] = sum;
-  //   }
-  // }
-  // return totalAccesorialValues;
-  // Dejo la funcion en caso de volver a utilizarla a futuro, esta suma los valores de buy y sell
-
-  for (const key in magnetAccesorialValues.value) {
-    if (Object.prototype.hasOwnProperty.call(magnetAccesorialValues.value, key)) {
-      totalAccesorialValues.value[key] = magnetAccesorialValues.value[key] || 0
-    }
-  }
-  return totalAccesorialValues;
-}
-
 const printTotalCharges = (accesorialList) => {
   let formattedString = '';
   Object.entries(accesorialList).forEach(([key, value]) => {
@@ -1285,10 +1088,6 @@ const printTotalCharges = (accesorialList) => {
   });
 
   return formattedString;
-}
-
-const convertToNumber = (str) => {
-  return parseInt(str.replace('$', ''), 10) || 0; //Funcion para remover el $ que llega desde BD
 }
 
 const calculateTotalAccesorialCharges = (accesorialList) => {
@@ -1308,14 +1107,6 @@ const resetAtDismissModal = () => {
   magnetAccesorialValues.value = {};
   totalAccesorialValues.value = {};
   sale.value = ''; //Resetear el valor de sale al salir del modal.
-  // /* First Modal Reset Values */
-  // buySummaryDrayage.value = "";
-  // chassisBuyRate.value = "";
-  // chassisBuyQuantity.value = 1;
-  // sellSummaryDrayage.value = "";
-  // chassisSellRate.value = "";
-  // chassisSellQuantity.value = 1;
-
 }
 
 const calculateTotalChassis = (summary, quantity, total) => {
@@ -1374,13 +1165,13 @@ const feedModalAccesorial = (buyAccesorials, sellAccesorials) => {
 const feedingSaleWithOperationData = (idOperation, bookingBl, containerId, provider) => {
   sale.value.operation_id = idOperation;
   sale.value.booking_bl = bookingBl;
-  sale.value.contaier_id = containerId;
+  sale.value.container_id = containerId;
   sale.value.provider = provider;
 }
 
 const feedingSaleValuesData = (inptBuySummaryDrayage, inptTotalBuyChassisAmount, inptSellSummaryDrayage, inptTotalSellChassisAmount, carrierAccesorialValues, magnetAccesorialValues, inptChassisBuyQuantity, inptChassisSellQuantity, totalBuyAccesorialCharges, totalSellAccesorialCharges) => {
-  sale.value.buy = parseFloat(inptBuySummaryDrayage.value) + parseFloat(inptTotalBuyChassisAmount.value) + parseFloat(totalBuyAccesorialCharges) // Falta sumar los accesorials de buy
-  sale.value.sell = parseFloat(inptSellSummaryDrayage.value) + parseFloat(inptTotalSellChassisAmount.value) + parseFloat(totalSellAccesorialCharges) //Falta sumar los accesorials de sell
+  sale.value.buy = parseFloat(inptBuySummaryDrayage.value) + parseFloat(inptTotalBuyChassisAmount.value) + parseFloat(totalBuyAccesorialCharges) 
+  sale.value.sell = parseFloat(inptSellSummaryDrayage.value) + parseFloat(inptTotalSellChassisAmount.value) + parseFloat(totalSellAccesorialCharges)
   sale.value.profit = parseFloat(sale.value.sell) - parseFloat(sale.value.buy)
   sale.value.buyAccesorials = carrierAccesorialValues
   sale.value.sellAccesorials = magnetAccesorialValues
