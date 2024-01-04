@@ -400,11 +400,11 @@
                       text-align: center;
                       font-size: 13px;
                     ">
-                    <td>Drayage</td>
+                    <td style="text-align: center;">Drayage</td>
                     <td>
-                      <input type="number" v-model="drayageQuantity" @change="drayageQuantityOnChange" min="0"
+                      <!-- <input type="number" v-model="drayageQuantity" @change="drayageQuantityOnChange" min="0"
                         inputmode="numeric" pattern="[0-9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-                        style="text-align: center" />
+                        style="text-align: center" /> -->1
                     </td>
                     <td>Per container</td>
                     <td>${{ quote.sellDrayageUnitRate }}</td>
@@ -414,11 +414,11 @@
 
                   <!-- CHASSIS -->
                   <tr class="chassisConcept" style="text-align: center; font-size: 13px">
-                    <td class="tdChassis">
-                      <input v-model="inptChassisType" type="text" style="text-align: center" />
+                    <td class="tdChassis"> Chassis
+                      <!-- <input v-model="inptChassisType" type="text" style="text-align: center" /> -->
                     </td>
                     <td>
-                      <input type="number" v-model="chassisQuantity" @change="chassisQuantityOnChange" min="0"
+                      <input type="number" v-model="chassisQuantity" @change="" min="0"
                         inputmode="numeric" pattern="[0-9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
                         style="text-align: center" />
                     </td>
@@ -606,7 +606,7 @@
 
 <script setup>
 
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import Spin from '../../Spinner/Spinner.vue';
 import 'mosha-vue-toastify/dist/style.css'
 import { showToast } from '@/helpers/helpers.js'
@@ -677,6 +677,7 @@ const handleIdSubmit = async (e) => {
       isLoading1.value = false
       
       quote.value = getCheapestFee(data);
+      console.log(quote)
 
       // totalChassis.value = (
       //   parseFloat(quote.value.magnetChassis) +
@@ -738,9 +739,9 @@ const drayageQuantityOnChange = () => {
 }
 
 const chassisQuantityOnChange = () => {
-  totalChassisToSend.value = (
-    parseFloat(totalChassisToSend.value) * chassisQuantity.value
-  ).toFixed(2)
+  // totalChassisToSend.value = (
+  //   parseFloat(totalChassisToSend.value) * chassisQuantity.value
+  // ).toFixed(2)
 
   totalFeeToSent.value = (
     parseFloat(totalDrayageToSend.value) + parseFloat(totalChassisToSend.value)
@@ -884,6 +885,26 @@ const getDateOneMonthLater = (date) => {
   const newYear = currentDate.getFullYear()
   return `${newMonth}/${newDay}/${newYear}`
 }
+
+const calculateTotalChassis = () => {
+  console.log(quote.value)
+  console.log(typeof chassisQuantity.value)
+  console.log(typeof totalChassisToSend)
+  console.log(typeof quote.sellChassisUnitRate)
+  console.log(totalChassisToSend.value)
+  totalChassisToSend.value = parseFloat(quote.sellChassisUnitRate * chassisQuantity.value).toFixed(2);
+  totalChassisToSend.value = parseFloat(totalChassisToSend.value)
+  console.log(totalChassisToSend.value)
+};
+
+// watch([inptChassisBuyRate, inptChassisBuyQuantity], () => calculateTotalChassis(inptChassisBuyRate, inptChassisBuyQuantity, inptTotalBuyChassisAmount));
+
+// watch([inptChassisSellRate, inptChassisSellQuantity], () => calculateTotalChassis(inptChassisSellRate, inptChassisSellQuantity, inptTotalSellChassisAmount));
+
+// watch(inptChassisBuyQuantity, () => buyChassisQtyOnChange());
+// watch(inptChassisSellQuantity, () => sellChassisQtyOnChange());
+
+watch([chassisQuantity, () => quote.sellChassisUnitRate], calculateTotalChassis);
 
 </script>
 
