@@ -445,7 +445,7 @@
                 <tr v-for="(objOperation, rowIndex) in operations" :key="rowIndex">
                   <td v-for="(key, cellIndex) in Object.keys(objOperation).slice(0, 26)" :key="cellIndex">
                     <span v-if="key == 'operationDate'">
-                      {{ americanFormatDate(objOperation[key]) }}
+                      {{ formatDate(objOperation[key]) }}
                     </span>
                     <select class="select" v-else-if="key === 'status'" v-model="objOperation[key]"
                       @change="(e) => statusOnChange(objOperation, e)" :class="rowClass(objOperation[key])">
@@ -496,11 +496,6 @@
 
             <div v-else class="d-flex justify-content-center my-3">
               <Spinner />
-              <!-- <div class="text-center my-3">
-                <div class="spinner-grow" style="width: 3rem; height: 3rem" role="status">
-                  <span class="visually-hidden">Loading...</span>
-                </div>
-              </div> -->
             </div>
           </div>
         </div>
@@ -510,8 +505,10 @@
 </template>
 
 <script setup>
+;
 import { onMounted, ref, watch } from 'vue'
-import { getApi, postApi, deleteApi } from '@/services/apiServices'
+import { getApi, postApi, deleteApi } from '@/services/apiServices';
+import { formatDate } from '../../../utils/utils';
 import { showToast } from '@/helpers/helpers.js'
 import NewOperationForm from '@/components/Forms/NewOperationForm/NewOperationForm.vue';
 import PrimaryButton from '@/components/Buttons/PrimaryButton/PrimaryButton.vue';
@@ -660,7 +657,6 @@ const loadAllOperations = async () => {
 }
 
 //Filter Functions
-
 const sortByDate = e => {
   filterObj.value.date = e.target.value;
   filterOperations();
@@ -733,16 +729,6 @@ const filterContainerStatus = operation => {
 
 const sendIdOperation = (id) => {
   idOperationValue.value = id
-}
-
-const americanFormatDate = (dateString) => {
-  let dateParts = dateString.split('-');
-  let americanDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
-  let americanMonth = americanDate.getMonth() + 1;
-  let americanDay = americanDate.getDate();
-  let americanYear = americanDate.getFullYear();
-  let formattedDate = americanMonth + '-' + americanDay + '-' + americanYear;
-  return formattedDate;
 }
 
 const changeQuoteId = async (quote, objOperation) => {
@@ -831,11 +817,10 @@ const feedingOperationTableModal = (objOperation, e) => {
     e.target.setAttribute('data-bs-target', '#accesorialModalDone');
     slctStatus.value = e.target;
 
-    loadAllOperations()
+    loadAllOperations();
 
-    getApi(`${import.meta.env.VITE_APP_API}/get/accesorials`).then(
-      (data) => (accesorials.value = data)
-    );
+    getApi(`${import.meta.env.VITE_APP_API}/get/accesorials`)
+    .then(data => accesorials.value = data);
 
     if (operation.value.quoteID.includes("I'll define it later")) {
       showToast('El Quote ID no esta definido', 'danger', 'red')
@@ -853,31 +838,26 @@ const feedingOperationTableModal = (objOperation, e) => {
     }
 
     if (chckIsAnOpenOperation(operation.value.quoteID)) {
-
       getApi(`${import.meta.env.VITE_APP_API}/get/get-normal-quote/${operation.value.quoteID}`)
         .then(data => {
           sale.value = data;
           const { buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials } = sale.value;
           const { idOperation, bookingBl, customer, containerId, provider } = operation.value;
-          feedModalSummaryTable(buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials);
-
+          feedModalSummaryTable(buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis);
           feedingSaleWithOperationData(idOperation, bookingBl, customer, containerId, provider);
-         
           feedModalAccesorial(buyAccesorials, sellAccesorials);
         })
         .catch(error => console.log(error))
-      return;
 
     } else {
 
       getApi(`${import.meta.env.VITE_APP_API}/get/get-florida-quote/${operation.value.quoteID}`)
         .then(data => {
           sale.value = data;
-          const { buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials } = sale.value;
-          const { idOperation, bookingBl, customer ,containerId, provider } = operation.value;    
-          feedModalSummaryTable(buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis, buyAccesorials, sellAccesorials);
+          const { buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis } = sale.value;
+          const { idOperation, bookingBl, customer, containerId, provider } = operation.value;
+          feedModalSummaryTable(buyDrayageUnitRate, buyQtyChassis, buyChassisUnitRate, sellDrayageUnitRate, sellQtyChassis, sellChassisUnitRate, sellChassis );
           feedingSaleWithOperationData(idOperation, bookingBl, customer, containerId, provider);
-
         })
         .catch(error => console.log(error))
     }
@@ -1043,7 +1023,7 @@ const handleContinueToChargesTable = async () => {
   let totalBuyAccesorialCharges = sumBuyAccesorialValues()
   let totalSellAccesorialCharges = sumSellAccesorialValues()
   totalChargesDisplayed = `Drayage: $${parseFloat(sale.value.sellDrayageUnitRate)} + Chassis: $${parseFloat(inptTotalSellChassisAmount.value)} ${printTotalCharges(magnetAccesorialValues.value)}`
-  totalAmountDisplayed = `$${parseFloat(sale.value.sellDrayageUnitRate) + parseFloat(totalAccesorialCharges) + parseFloat(inptTotalSellChassisAmount.value) }` //falta total chassisAmount
+  totalAmountDisplayed = `$${parseFloat(sale.value.sellDrayageUnitRate) + parseFloat(totalAccesorialCharges) + parseFloat(inptTotalSellChassisAmount.value)}` //falta total chassisAmount
 
   feedingSaleValuesData(inptBuySummaryDrayage, inptTotalBuyChassisAmount, inptSellSummaryDrayage, inptTotalSellChassisAmount, carrierAccesorialValues, magnetAccesorialValues, inptChassisBuyQuantity, inptChassisSellQuantity, totalBuyAccesorialCharges, totalSellAccesorialCharges);
 
@@ -1171,7 +1151,7 @@ const feedingSaleWithOperationData = (idOperation, bookingBl, customer, containe
 }
 
 const feedingSaleValuesData = (inptBuySummaryDrayage, inptTotalBuyChassisAmount, inptSellSummaryDrayage, inptTotalSellChassisAmount, carrierAccesorialValues, magnetAccesorialValues, inptChassisBuyQuantity, inptChassisSellQuantity, totalBuyAccesorialCharges, totalSellAccesorialCharges) => {
-  sale.value.buy = parseFloat(inptBuySummaryDrayage.value) + parseFloat(inptTotalBuyChassisAmount.value) + parseFloat(totalBuyAccesorialCharges) 
+  sale.value.buy = parseFloat(inptBuySummaryDrayage.value) + parseFloat(inptTotalBuyChassisAmount.value) + parseFloat(totalBuyAccesorialCharges)
   sale.value.sell = parseFloat(inptSellSummaryDrayage.value) + parseFloat(inptTotalSellChassisAmount.value) + parseFloat(totalSellAccesorialCharges)
   sale.value.profit = parseFloat(sale.value.sell) - parseFloat(sale.value.buy)
   sale.value.buyAccesorials = carrierAccesorialValues
