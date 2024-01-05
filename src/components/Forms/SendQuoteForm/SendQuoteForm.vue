@@ -618,7 +618,6 @@ const clientEmailsList = ref([]);
 const userName = ref(localStorage.getItem('userName'));
 const customer = ref('');
 const miles = ref(0);
-const inptChassisType = ref('Chassis');
 const drayageQuantity = ref(1);
 const chassisQuantity = ref(1);
 const totalDrayage = ref();
@@ -631,13 +630,10 @@ const isLoading1 = ref(false);
 const isLoading2 = ref(false);
 const hasError = ref(false);
 const showError = ref(false);
-const showMessage = ref('');
-const showColor = ref('');
 const customers = ref('');
 const pdfContent = ref(null);
 let sellDrayageUnitRate = ref(0);
 let sellChassisUnitRate = ref(0);
-
 
 onMounted(async () => {
   getApi(`${import.meta.env.VITE_APP_API}/get/clients`)
