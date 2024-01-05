@@ -27,7 +27,9 @@
       </div>
 
       <div v-else class="main-section__loading">
-        <Spinner />
+        <div class="d-flex justify-content-center my-3">
+          <Spinner />
+        </div>
       </div>
     </Card>
   </div>

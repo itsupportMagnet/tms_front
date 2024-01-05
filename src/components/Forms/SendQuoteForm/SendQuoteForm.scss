@@ -7,9 +7,11 @@
 
 .main {
   padding: 20px;
+
   @media (min-width: 1200px) {
     margin-bottom: 30rem !important;
   }
+
   @media (min-width: 1920px) {
     margin-bottom: 28rem !important;
   }
@@ -36,11 +38,18 @@
         margin-top: 0.75rem;
       }
 
-      .spinner-container{
+      .spinner-container {
         display: flex;
         justify-content: center;
       }
     }
+  }
+
+  .emailInputContainer {
+    .btnSubmit {
+      @include btnSubmitPdf;
+    }
+
   }
 }
 

@@ -1,5 +1,5 @@
 <template>
-  <GenericTable :tableData="slicedApiData" :columnNames="slicedColumnNames" :spinnerLoad="spinnerLoad" />
+  <GenericTable :tableData="slicedApiData" :columnNames="slicedColumnNames" :isLoading="isLoading" />
 </template>
 
 <script setup>
@@ -12,7 +12,7 @@ const apiData = ref([])
 const slicedApiData = ref([])
 const slicedColumnNames = ref([])
 const formattedColumnNames = ref([])
-const spinnerLoad = ref(true)
+const isLoading = ref(true)
 
 onMounted(() => {
   getApi(`${import.meta.env.VITE_APP_API}/get/allFloridaQuotes`)
@@ -25,7 +25,7 @@ onMounted(() => {
         })
       formattedColumnNames.value = Object.keys(data[0]).map(formatColumnName)
       slicedColumnNames.value = formattedColumnNames.value.slice(1)
-      spinnerLoad.value = false;
+      isLoading.value = false;
     })
     .catch((error) => console.log(error))
 })

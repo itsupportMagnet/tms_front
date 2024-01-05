@@ -57,7 +57,7 @@
                       <select class="form-select form-select-sm" id="slct_Customer" v-model="slctCustomer"
                         @blur="(e) => checkInpt(e)">
                         <option selected disabled value="">
-                          Select a Customer
+                          Select a Client
                         </option>
                         <template v-if="customers">
                           <option v-for="item in customers" :key="item.id">

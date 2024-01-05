@@ -2,16 +2,16 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-4">
-        <label for="customerId" class="form-label">Customer ID</label>
+        <label for="customerId" class="form-label">Client ID</label>
         <input type="text" class="form-control" id="customerId" v-model="getIdUltimate" disabled>
       </div>
       <div class="col-4">
-        <label for="customerName" class="form-label">Customer Name</label>
+        <label for="customerName" class="form-label">Client Name</label>
         <input v-model="inptName" type="text" class="form-control" id="customerName"
           placeholder="Write down the answer here...">
       </div>
       <div class="col-4">
-        <label for="customerNumber" class="form-label">Customer Address</label>
+        <label for="customerNumber" class="form-label">Client Address</label>
         <input v-model="inptAddress" type="text" class="form-control" id="customerNumber"
           placeholder="Write down the answer here...">
       </div>
@@ -19,7 +19,7 @@
 
     <div class="row">
       <div class="col-4">
-        <label for="customerContact" class="form-label">Customer Contact</label>
+        <label for="customerContact" class="form-label">Client Contact</label>
         <input v-model="inptContact" type="text" class="form-control" id="customerContact"
           placeholder="Ex: Luisa Fernada">
       </div>
@@ -31,7 +31,7 @@
         </select>
       </div>
       <div class="col-4">
-        <label class="form-label">Customer Type</label>
+        <label class="form-label">Client Type</label>
         <select class="form-select" v-model="slctCustomerType">
           <option selected disabled>Select an option</option>
           <option>FW</option>
@@ -42,7 +42,7 @@
     <div class="row">
       <div class="col-6">
         <div class="inptBox">
-          <label for="customerPhone" class="form-label">Customer Phone</label>
+          <label for="customerPhone" class="form-label">Client Phone</label>
           <div v-if="isUpdateForm" class="phone-box" :class="{ 'edit-phone-box': isUpdateForm }">
             <input v-for="(value, index) in phoneNumbers" :key="index" v-model="phoneNumbers[index]" type="text"
               class="form-control" :value="value" placeholder="Write down phone here" />
@@ -60,7 +60,7 @@
 
       <div class="col-6">
         <div class="inptBox inptEmailBox">
-          <label for="customerEmail" class="form-label">Customer Email</label>
+          <label for="customerEmail" class="form-label">Client Email</label>
           <div v-if="isUpdateForm" class="email-box" :class="{ 'edit-email-box': isUpdateForm }">
             <input v-for="(value, index) in custmoreEmails" :key="index" v-model="custmoreEmails[index]" type="text"
               class="form-control" :value="value" placeholder="Write down email here" />

@@ -43,13 +43,11 @@
                 <label for="carrierEmail"> Buy Fee </label>
                 <input placeholder="Write down the answer here.." id="carrierEmail" type="number"
                   v-model="inptBuyDrayageUnitRate" />
-                  v-model="inptBuyDrayageUnitRate" />
               </div>
 
               <div class="inpt-col">
                 <label for="carrierChassis">Chassis Value </label>
                 <input placeholder="Chassis value per day.." id="carrierChassis" type="number"
-                  v-model="inptBuyChassisUnitRate" />
                   v-model="inptBuyChassisUnitRate" />
               </div>
             </div>

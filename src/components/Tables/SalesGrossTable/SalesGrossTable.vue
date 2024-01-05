@@ -102,7 +102,7 @@
                 <th>BUY</th>
                 <th>SELL</th>
                 <th>PROFIT</th>
-                <th>CUSTOMER</th>
+                <th>CLIENT</th>
                 <th>INVOICE</th>
                 <th>MONTH OF INVOICE</th>
                 <th>ACTION</th>

@@ -402,9 +402,9 @@
                     ">
                     <td style="text-align: center;">Drayage</td>
                     <td>
-                      <!-- <input type="number" v-model="drayageQuantity" @change="drayageQuantityOnChange" min="0"
+                      <input type="number" v-model="drayageQuantity" @change="" min="0"
                         inputmode="numeric" pattern="[0-9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-                        style="text-align: center" /> -->1
+                        style="text-align: center" />
                     </td>
                     <td>Per container</td>
                     <td>${{ quote.sellDrayageUnitRate }}</td>
@@ -641,6 +641,9 @@ const showColor = ref('');
 const customers = ref('');
 // const slctCustomerEmails = ref('')
 const pdfContent = ref(null);
+let sellDrayageUnitRate = ref(0);
+let sellChassisUnitRate = ref(0);
+
 
 onMounted(async () => {
   getApi(`${import.meta.env.VITE_APP_API}/get/clients`)
@@ -677,6 +680,10 @@ const handleIdSubmit = async (e) => {
       isLoading1.value = false
       
       quote.value = getCheapestFee(data);
+      sellDrayageUnitRate.value = quote.value.sellDrayageUnitRate
+      sellChassisUnitRate.value = quote.value.sellChassisUnitRate
+      console.log('probando info' + sellChassisUnitRate.value)
+
       console.log(quote)
 
       // totalChassis.value = (
@@ -852,6 +859,21 @@ const checkEmptyInputs = () => {
 const generatePdf = () => {
   if (checkEmptyInputs()) {
     const elementToConvert = document.getElementById('to-convert')
+    const inputStyles = [];
+    const inputFields = elementToConvert.querySelectorAll('input');
+    inputFields.forEach(input => {
+      inputStyles.push({ element: input, originalBorderStyle: input.style.border });
+      // Oculta el borde de los campos de entrada para la creación del PDF
+      input.style.border = 'none';
+    });
+
+    const selectStyles = [];
+    const selectFields = elementToConvert.querySelectorAll('select');
+    selectFields.forEach(select => {
+      selectStyles.push({ element: select, originalBorderStyle: select.style.border });
+      // Oculta el borde de los campos de selección (select) para la creación del PDF
+      select.style.border = 'none';
+    });
     const options = {
       margin: 10,
       filename: 'New-quotation.pdf',
@@ -861,7 +883,20 @@ const generatePdf = () => {
       pagebreak: { mode: 'avoid-all' },
     }
     options.jsPDF.format = [210, 600]
-    html2pdf().from(elementToConvert).set(options).save()
+    const pdfInstance = html2pdf().from(elementToConvert).set(options);
+
+    // Restaura los estilos originales después de generar el PDF
+    pdfInstance.save().then(() => {
+      inputStyles.forEach(inputStyle => {
+        // Restaura el estilo del borde a su valor original
+        inputStyle.element.style.border = inputStyle.originalBorderStyle;
+      });
+
+      selectStyles.forEach(selectStyle => {
+        // Restaura el estilo del borde a su valor original
+        selectStyle.element.style.border = selectStyle.originalBorderStyle;
+      });
+    });
   }
 }
 
@@ -887,24 +922,21 @@ const getDateOneMonthLater = (date) => {
 }
 
 const calculateTotalChassis = () => {
-  console.log(quote.value)
-  console.log(typeof chassisQuantity.value)
-  console.log(typeof totalChassisToSend)
-  console.log(typeof quote.sellChassisUnitRate)
-  console.log(totalChassisToSend.value)
-  totalChassisToSend.value = parseFloat(quote.sellChassisUnitRate * chassisQuantity.value).toFixed(2);
-  totalChassisToSend.value = parseFloat(totalChassisToSend.value)
-  console.log(totalChassisToSend.value)
+  totalChassisToSend.value = (parseFloat(sellChassisUnitRate.value * chassisQuantity.value)).toFixed(2);
+  totalFeeToSent.value = (
+    parseFloat(totalDrayageToSend.value) + parseFloat(totalChassisToSend.value)
+  ).toFixed(2)
 };
 
-// watch([inptChassisBuyRate, inptChassisBuyQuantity], () => calculateTotalChassis(inptChassisBuyRate, inptChassisBuyQuantity, inptTotalBuyChassisAmount));
+const calculateTotalDrayage = () => {
+  totalDrayageToSend.value = (parseFloat(sellDrayageUnitRate.value * drayageQuantity.value)).toFixed(2)
+  totalFeeToSent.value = (
+    parseFloat(totalDrayageToSend.value) + parseFloat(totalChassisToSend.value)
+  ).toFixed(2)
+}
 
-// watch([inptChassisSellRate, inptChassisSellQuantity], () => calculateTotalChassis(inptChassisSellRate, inptChassisSellQuantity, inptTotalSellChassisAmount));
-
-// watch(inptChassisBuyQuantity, () => buyChassisQtyOnChange());
-// watch(inptChassisSellQuantity, () => sellChassisQtyOnChange());
-
-watch([chassisQuantity, () => quote.sellChassisUnitRate], calculateTotalChassis);
+watch(chassisQuantity, () => calculateTotalChassis());
+watch(drayageQuantity, () => calculateTotalDrayage())
 
 </script>
 

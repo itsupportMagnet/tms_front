@@ -418,7 +418,7 @@
                   <th class="table__cell" scope="col">CONTAINER ID</th>
                   <th class="table__cell" scope="col">CONTAINER STATUS</th>
                   <th class="table__cell" scope="col">BOOKING /BL</th>
-                  <th class="table__cell" scope="col">CUSTOMER</th>
+                  <th class="table__cell" scope="col">CLIENT</th>
                   <th class="table__cell" scope="col">PROVIDER</th>
                   <th class="table__cell" scope="col">WAREHOUSE LOCATION</th>
                   <th class="table__cell" scope="col">TERMINAL</th>
@@ -494,12 +494,13 @@
               </tbody>
             </table>
 
-            <div v-else>
-              <div class="text-center my-3">
+            <div v-else class="d-flex justify-content-center my-3">
+              <Spinner />
+              <!-- <div class="text-center my-3">
                 <div class="spinner-grow" style="width: 3rem; height: 3rem" role="status">
                   <span class="visually-hidden">Loading...</span>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -515,6 +516,7 @@ import { showToast } from '@/helpers/helpers.js'
 import NewOperationForm from '@/components/Forms/NewOperationForm/NewOperationForm.vue';
 import PrimaryButton from '@/components/Buttons/PrimaryButton/PrimaryButton.vue';
 import Card from '../../Card/Card.vue';
+import Spinner from '../../Spinner/Spinner.vue'
 
 const operations = ref()
 const operation = ref();

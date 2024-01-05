@@ -108,17 +108,16 @@
           </table>
 
           <div class="sectionQuotes__spin" v-else>
-            <Spin />
+            <div class="d-flex justify-content-center my-3">
+             <Spinner /> 
+            </div>
           </div>
-
-
           <div class="error-message-box" v-if="isQuotesEmpty">
             <i class="bi bi-exclamation-triangle"></i>
             <span> Nothing was found!</span> Try using
             different options.
           </div>
         </div>
-
       </div>
     </Card>
   </main>
@@ -129,6 +128,7 @@ import { onMounted, ref, watch } from 'vue'
 import { getApi, postApi } from '../../../services/apiServices'
 import { formatDate } from '../../../utils/utils';
 import Card from '../../Card/Card.vue';
+import Spinner from '../../Spinner/Spinner.vue';
 
 const isQuotesEmpty = ref(false);
 const quotes = ref();
