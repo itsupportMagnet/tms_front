@@ -50,9 +50,6 @@
                   </select>
                 </div>
               </div>
-              <!-- <img class="drayage__image img-fluid" width="400"
-                  src="http://www.magnetlogisticscorp.com/wp-content/uploads/2023/08/port-1845350_1280.jpg"
-                  alt="Port of Loading Image" /> -->
             </div>
 
             <div class="drayage__flex--address">
@@ -62,13 +59,6 @@
 
               <input class="drayage__input" placeholder="Ex: 173-133 Edgewater St, Staten Island" type="text"
                 name="address" v-model="inptAddress" />
-
-              <!-- <img
-          class="drayage__image img-fluid"
-          width="400"
-          src="../../../public/carrier.jpg"
-          alt="Delivery Image"
-        /> -->
             </div>
           </div>
 
@@ -230,8 +220,6 @@ import { showToast } from '@/helpers/helpers.js'
 import Spinner from '@/components/Spinner/Spinner.vue'
 import { getApi, postApi } from '@/services/apiServices';
 import SendButton from '@/components/Buttons/SendButton/SendButton.vue';
-// import ButtonSubmit from '@/views/pricingTool/ButtonSubmit.vue';
-// import router from '@/router';
 const isEmptyPort = ref(true);
 const isEmptyCarrier = ref(true);
 const inptCordinator = localStorage.getItem('userName');
@@ -363,7 +351,7 @@ const handleSubmit = async (e) => {
     loadType: slctLoadType.value,
     isExport: isExport.value,
     quoteStatus: slctQuoteStatus.value,
-    cordinator: 'Testeando'        //localStorage.getItem('userName')
+    cordinator: localStorage.getItem('userName')
   }
 
   postApi(`${import.meta.env.VITE_APP_API}/createQuote`, quoteInfo)

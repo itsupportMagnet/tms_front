@@ -394,8 +394,6 @@
 import { ref, onMounted, watch, defineExpose } from 'vue'
 import { getApi, postApi } from '@/services/ApiServices'
 import { showToast } from '@/helpers/helpers.js'
-// import Spinner from '@/components/Spinner.vue'
-// import ButtonSubmit from '@/components/ButtonSubmit.vue'
 import 'mosha-vue-toastify/dist/style.css'
 
 const props = defineProps(['idOperation'])
@@ -403,7 +401,7 @@ let slctQuoteId = ref('')
 let slctCustomer = ref('')
 let slctStatus = ref('')
 let slctModeOfOperation = ref('IMPORT')
-let slctBusinessLine = ref('DRAYAGE') //revisar en conjunto con el input de date // Se trae por Defecto el valor de Drayage
+let slctBusinessLine = ref('DRAYAGE')
 let slctOperationDate = ref('')
 let slctIdCoordinator = ref('')
 let inptBookingBL = ref('')
@@ -801,14 +799,14 @@ const handleSubmit = async (e) => {
       status: slctStatus.value, //
       containerStatus: slctContainerStatus.value, //
       modeOfOperation: slctModeOfOperation.value, //
-      businessLine: slctBusinessLine.value, // por interno
+      businessLine: slctBusinessLine.value, // 
       operationDate: slctOperationDate.value, //
-      coordinator: userName, // por interno
+      coordinator: userName, // 
       bookingBl: inptBookingBL.value, //
       containerId: inptContainerId.value, //
       provider: slctProvider.value,
       emptyLocation: inptEmptyLocation.value,
-      fullLocation: inptFullLocation.value, //inptFullLocation.value
+      fullLocation: inptFullLocation.value, 
       warehouseLocation: inptWarehouseLocation.value, //
       port: slctPort.value, //
       terminal: slctTerminal.value, //

@@ -29,7 +29,6 @@
             </tr>
           </table>
 
-          <!-- <div class="inputContainer"></div> -->
           <!-- CARRRIERS FEE -->
           <div :if="accesorials">
             <div class="buy-rates-section">

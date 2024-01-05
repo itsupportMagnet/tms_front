@@ -237,13 +237,6 @@
         margin-bottom: 1, 5rem;
         justify-content: center;
 
-        &--submit {
-          // @include submit;
-        }
-
-        &--buttonCancel {
-          // @include buttonCancel;
-        }
       }
 
       &__bottom {
@@ -286,10 +279,6 @@ input:focus {
 
 .alert {
   transition: opacity 1s ease;
-}
-
-option {
-  // @include option;
 }
 
 .hidden {

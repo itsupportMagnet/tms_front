@@ -195,31 +195,11 @@ const saveFormInfo = () => {
 const saveFee = async () => {
   if (validateForm()) {
     saveFormInfo();
-    console.log(quote.value)
-    // postApi(
-    //   `${import.meta.env.VITE_APP_API}/post/save-fee`, quote.value)
-    //   .then((data) => {
-    //     if (data.message === "ok") {
-    //       quote.value = "";
-    //       inptId.value = "";
-    //       isLoading2.value = false;
-    //       showToast('Carrier(s) fee(s) added succesfully', 'success', 'green')
-    //     } else {
-    //       console.error(data);
-    //       showToast('Something went wrong, please, contact support', 'danger', 'red')
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //     isLoading.value = false;
-    //     showToast('Contact IT', 'danger', 'red')
-    //   });
   }
 };
 
 const validateForm = () => {
   isLoading2.value = true;
-
   const emailRegex = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
   if (!emailRegex.test(inptCarrierEmail.value.trim())) {
     showToast('Please enter a valid Email', 'danger', 'red')

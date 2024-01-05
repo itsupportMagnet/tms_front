@@ -93,7 +93,6 @@
             </div>
           </div>
 
-
           <!-- TERMINADO -->
           <div style="width: 100%; justify-content: center; !important; border-top: 1px solid black; border-right: 1px solid black">
             <div>
@@ -114,7 +113,6 @@
                     <th style="
                         background-color: rgb(238, 232, 232);
                         color: black;
-                        /* border: 1px solid black; */
                         text-align: center;
                         align-items: center;
                         flex-basis: 50%;
