@@ -624,7 +624,6 @@ const miles = ref(0);
 const inptChassisType = ref('Chassis');
 const drayageQuantity = ref(1);
 const chassisQuantity = ref(1);
-// const inptSubjectEmail = ref('');
 const totalDrayage = ref();
 const totalChassis = ref();
 const totalDrayageToSend = ref();
@@ -634,12 +633,10 @@ const totalFeeToSent = ref();
 const isLoading1 = ref(false);
 const isLoading2 = ref(false);
 const hasError = ref(false);
-// const isAnyEmailEmpty = ref(false);
 const showError = ref(false);
 const showMessage = ref('');
 const showColor = ref('');
 const customers = ref('');
-// const slctCustomerEmails = ref('')
 const pdfContent = ref(null);
 let sellDrayageUnitRate = ref(0);
 let sellChassisUnitRate = ref(0);
@@ -682,15 +679,6 @@ const handleIdSubmit = async (e) => {
       quote.value = getCheapestFee(data);
       sellDrayageUnitRate.value = quote.value.sellDrayageUnitRate
       sellChassisUnitRate.value = quote.value.sellChassisUnitRate
-      console.log('probando info' + sellChassisUnitRate.value)
-
-      console.log(quote)
-
-      // totalChassis.value = (
-      //   parseFloat(quote.value.magnetChassis) +
-      //   parseFloat(quote.value.carrierChassis)
-      // ).toFixed(2)
-
 
       totalDrayage.value = parseFloat(quote.value.buyDrayageUnitRate).toFixed(2);
       totalChassis.value = parseFloat(quote.value.buyAccesorials).toFixed(2);
@@ -698,10 +686,7 @@ const handleIdSubmit = async (e) => {
       totalDrayageToSend.value = parseFloat(quote.value.sellDrayageUnitRate).toFixed(2)
       totalChassisToSend.value = parseFloat(quote.value.sellAccesorials).toFixed(2)
       totalChassisToSend.value = parseFloat(quote.value.sellChassisUnitRate).toFixed(2)
-      // totalChassisToSend.value = (
-      //   parseFloat(quote.value.magnetChassis) +
-      //   parseFloat(quote.value.carrierChassis)
-      // ).toFixed(2)
+
 
       totalFeeToSent.value = (
         parseFloat(totalDrayageToSend.value) +
