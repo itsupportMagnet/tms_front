@@ -162,10 +162,6 @@ const isToolsDropdownClicked = ref(false);
     height: 7%;
     background-color: #303c54;
     padding-top: 10px;
-
-    // position: relative;
-    // top: 50%;
-    // width: 100%;
   }
 
 }
