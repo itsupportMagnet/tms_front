@@ -12,7 +12,7 @@
         <ButtonSubmit class="sendQuote__form--btnSubmit" @click="handleIdSubmit" name="Get Quote" />
         <div v-if="isLoading1">
           <div class="spinner-container">
-            <Spin />
+            <Spinner />
           </div>
         </div>
       </form>
@@ -595,9 +595,6 @@
           </div>
         </div>
 
-        <!-- <button class="btnSubmit" @click="sendQuoteFee">
-            Send Quote Fee
-          </button> -->
         <button class="btnSubmit" @click="generatePdf">Download PDF</button>
       </div>
     </div>
@@ -607,7 +604,7 @@
 <script setup>
 
 import { ref, onMounted, watch } from 'vue'
-import Spin from '../../Spinner/Spinner.vue';
+import Spinner from '../../Spinner/Spinner.vue';
 import 'mosha-vue-toastify/dist/style.css'
 import { showToast } from '@/helpers/helpers.js'
 import { getApi } from '../../../services/apiServices';
