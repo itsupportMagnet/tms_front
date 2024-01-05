@@ -27,7 +27,6 @@ const isActive = computed(() => route.path === props.to);
   position: relative;
   font-weight: 400;
   user-select: none;
-  // margin: .1rem 0;
   padding: 1.5rem 1rem;
   height: 1rem;
   color: #fff;

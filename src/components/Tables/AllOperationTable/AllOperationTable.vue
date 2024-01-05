@@ -338,7 +338,6 @@
     </div>
   </div>
 
-
   <div class="container-fluid">
     <div class="header">
       <div class="add-operation-btn">
@@ -496,11 +495,6 @@
 
             <div v-else class="d-flex justify-content-center my-3">
               <Spinner />
-              <!-- <div class="text-center my-3">
-                <div class="spinner-grow" style="width: 3rem; height: 3rem" role="status">
-                  <span class="visually-hidden">Loading...</span>
-                </div>
-              </div> -->
             </div>
           </div>
         </div>
@@ -1193,3 +1187,4 @@ watch(inptChassisSellQuantity, () => sellChassisQtyOnChange());
 @import '../../Forms/AddQuoteFeeForm/AddQuoteFeeForm.scss';
 @import '../../../styles/mixin.scss';
 </style>
+ 

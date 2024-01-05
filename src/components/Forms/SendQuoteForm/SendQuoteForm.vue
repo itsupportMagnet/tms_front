@@ -679,29 +679,16 @@ const handleIdSubmit = async (e) => {
       quote.value = getCheapestFee(data);
       sellDrayageUnitRate.value = quote.value.sellDrayageUnitRate
       sellChassisUnitRate.value = quote.value.sellChassisUnitRate
-
       totalDrayage.value = parseFloat(quote.value.buyDrayageUnitRate).toFixed(2);
       totalChassis.value = parseFloat(quote.value.buyAccesorials).toFixed(2);
-      
       totalDrayageToSend.value = parseFloat(quote.value.sellDrayageUnitRate).toFixed(2)
       totalChassisToSend.value = parseFloat(quote.value.sellAccesorials).toFixed(2)
       totalChassisToSend.value = parseFloat(quote.value.sellChassisUnitRate).toFixed(2)
-
-
       totalFeeToSent.value = (
         parseFloat(totalDrayageToSend.value) +
         parseFloat(totalChassisToSend.value)
       ).toFixed(2);
-
       totalAccesorials.value = quote.value.sellAccesorials;
-
-      // for (const item in quote.value.carrierAccesorials) {
-      //   if (quote.value.carrierAccesorials.hasOwnProperty(item)) {
-      //     totalAccesorials.value[item] =
-      //       (quote.value.carrierAccesorials[item] || 0) +
-      //       (quote.value.magnetAccesorials[item] || 0)
-      //   }
-      // }
     })
     .catch((error) => {
       console.log(error)
@@ -718,26 +705,6 @@ const customerOnChange = (e) => {
     (i) => i.customer_name === e.target.value,
   )
   clientEmailsList.value = customerEmails[0].customer_email
-}
-
-const drayageQuantityOnChange = () => {
-  totalDrayageToSend.value = (
-    parseFloat(totalDrayage.value) * drayageQuantity.value
-  ).toFixed(2)
-  
-  totalChassisToSend.value = (
-    parseFloat(totalDrayageToSend.value) + parseFloat(sellChassisUnitRate.value)
-  ).toFixed(2)
-}
-
-const chassisQuantityOnChange = () => {
-  // totalChassisToSend.value = (
-  //   parseFloat(totalChassisToSend.value) * chassisQuantity.value
-  // ).toFixed(2)
-
-  totalFeeToSent.value = (
-    parseFloat(totalDrayageToSend.value) + parseFloat(totalChassisToSend.value)
-  ).toFixed(2)
 }
 
 const getCheapestFee = (carriersArray) => {
