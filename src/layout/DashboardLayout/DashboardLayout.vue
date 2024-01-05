@@ -17,9 +17,9 @@ import { RouterView } from 'vue-router';
 
 <style scoped>
 .body{
-    background-color: #f6f6f6;
+    background-color: #f5f5fc;
     min-height: 93vh;
-    color: #383838;
+    color: #101111;
     overflow-x: hidden;
   }
 </style>

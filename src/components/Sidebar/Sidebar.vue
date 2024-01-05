@@ -1,8 +1,7 @@
 <template>
   <aside class="sidebar" :style="{ width: sidebarWidth }">
     <figure>
-      <img :src="collapsed ? '/logo-compact.svg' : '/logo-white.svg'" :class="collapsed ? 'logo-compacted' : 'logo'"
-        alt="logo">
+      <img :src="collapsed ? '/logo-compact.svg' : '/logo.svg'" :class="collapsed ? 'logo-compacted' : 'logo'" alt="logo">
     </figure>
 
     <div class="clickElements">
@@ -62,7 +61,7 @@
     </div>
 
     <span class="collapse-icon" @click="toggleSidebar">
-      <i :class="collapsed ? 'bi bi-arrows' : 'bi bi-arrows-collapse-vertical'"></i>
+      <i :class="collapsed ? 'bi bi-caret-right' : 'bi bi-caret-left'"></i>
     </span>
   </aside>
 </template>
@@ -83,8 +82,7 @@ const isToolsDropdownClicked = ref(false);
 @import '../../styles/variables.scss';
 
 .sidebar {
-  color: white;
-  background-color: #3c4b64;
+  background-color: #fff;
   float: left;
   position: fixed;
   z-index: 1;
@@ -100,11 +98,22 @@ const isToolsDropdownClicked = ref(false);
     display: flex;
     justify-content: center;
     height: 10%;
-    background-color: #303c54;
+    // background-color: #303c54;
+    position: relative;
+
+    &::after {
+      position: absolute;
+      content: '';
+      width: 88%;
+      height: 2px;
+      background-color: $gray_200;
+      bottom: 0;
+    }
 
     .logo {
+      position: relative;
       width: 100%;
-      padding: 0 10px;
+      padding: 0 20px;
     }
 
     .logo-compacted {
@@ -119,6 +128,7 @@ const isToolsDropdownClicked = ref(false);
     flex-direction: column;
     height: 81%;
 
+
     .dropdown-link {
       display: flex;
       align-items: center;
@@ -128,7 +138,7 @@ const isToolsDropdownClicked = ref(false);
       cursor: pointer;
 
       &:hover {
-        background-color: $primary_hover;
+        background-color: $active_link;
       }
 
       a {
@@ -160,12 +170,18 @@ const isToolsDropdownClicked = ref(false);
     font-size: 30px;
     cursor: pointer;
     height: 7%;
-    background-color: #303c54;
     padding-top: 10px;
 
-    // position: relative;
-    // top: 50%;
-    // width: 100%;
+    i{
+      border-radius: 5px;
+      padding: 1px 25%;
+      background-color: $gray_100;
+      transition: all .1s;
+
+      &:hover{
+        background-color: $gray_200;
+      }
+    }
   }
 
 }

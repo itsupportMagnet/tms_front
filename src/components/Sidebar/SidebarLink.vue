@@ -30,7 +30,7 @@ const isActive = computed(() => route.path === props.to);
   // margin: .1rem 0;
   padding: 1.5rem 1rem;
   height: 1rem;
-  color: #fff;
+  color: $secondaryTextColor;
   text-decoration: none;
   transition: background-color .3s;
 
@@ -39,12 +39,17 @@ const isActive = computed(() => route.path === props.to);
   }
 
   &:hover{
-    background-color: $primary_hover;
+    background-color: $active_link;
   }
 
   &.active{
     background-color: $active_link;
+    color: $primaryTextColor;
     position: relative;
+
+    i{
+      color: $primary;
+    }
 
     &::after{
       content: '';
