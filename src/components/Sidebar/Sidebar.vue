@@ -10,10 +10,10 @@
         <SidebarLink to="/" icon="bi bi-speedometer2">Dashboard</SidebarLink>
 
         <span class="dropdown-link" @click="() => isShipmentsDropdownClicked = !isShipmentsDropdownClicked">
-          <SidebarLink to="" icon="bi bi-truck">
+          <SidebarLink to="" icon="fa-solid fa-truck">
             Shipments
           </SidebarLink>
-          <i :class="isShipmentsDropdownClicked ? 'bi bi-caret-up-fill' : 'bi bi-caret-down-fill'"></i>
+          <i v-if="!collapsed" :class="isShipmentsDropdownClicked ? 'bi bi-caret-up-fill' : 'bi bi-caret-down-fill'"></i>
         </span>
         <div class="dropdown" :class="{ 'active-dropdown': isShipmentsDropdownClicked }"
           v-show="isShipmentsDropdownClicked">
@@ -26,7 +26,7 @@
         <span class="dropdown-link" @click="() => isPricingDropdownClicked = !isPricingDropdownClicked">
           <SidebarLink to="" icon="bi bi-tag-fill">
             Pricing</SidebarLink>
-          <i :class="isPricingDropdownClicked ? 'bi bi-caret-up-fill' : 'bi bi-caret-down-fill'"></i>
+          <i v-if="!collapsed" :class="isPricingDropdownClicked ? 'bi bi-caret-up-fill' : 'bi bi-caret-down-fill'"></i>
         </span>
         <div class="dropdown" :class="{ 'active-dropdown': isPricingDropdownClicked }" v-show="isPricingDropdownClicked">
           <SidebarLink to="/all-quotes" icon="bi bi-list-task" class="dropdown__item"
@@ -38,7 +38,7 @@
           <SidebarLink to="" icon="bi bi-calculator">
             Pricing Tools
           </SidebarLink>
-          <i :class="isToolsDropdownClicked ? 'bi bi-caret-up-fill' : 'bi bi-caret-down-fill'"></i>
+          <i v-if="!collapsed" :class="isToolsDropdownClicked ? 'bi bi-caret-up-fill' : 'bi bi-caret-down-fill'"></i>
         </span>
 
         <div class="dropdown" :class="{ 'active-dropdown': isToolsDropdownClicked }" v-show="isToolsDropdownClicked">
@@ -48,15 +48,15 @@
             :class="{ 'its-collapsed': collapsed }">Add Quote Fee</SidebarLink>
           <SidebarLink to="/edit-quote-fee" icon="bi bi-pencil-square" class="dropdown__item"
             :class="{ 'its-collapsed': collapsed }">Edit Quote Fee</SidebarLink>
-          <SidebarLink to="/send-quote" icon="bi bi-send-fill" class="dropdown__item"
+          <SidebarLink to="/send-quote" icon="fa-solid fa-pen-to-square" class="dropdown__item"
             :class="{ 'its-collapsed': collapsed }">Send Quote</SidebarLink>
-          <SidebarLink to="/florida-quotes" icon="bi bi-tsunami" class="dropdown__item"
+          <SidebarLink to="/florida-quotes" icon="fa-solid fa-umbrella-beach" class="dropdown__item"
             :class="{ 'its-collapsed': collapsed }">Florida Quotes</SidebarLink>
         </div>
 
-        <SidebarLink to="/clients" icon="bi bi-people-fill">Clients</SidebarLink>
+        <SidebarLink to="/clients" icon="fa-solid fa-users">Clients</SidebarLink>
         <SidebarLink to="/carriers" icon="bi bi-truck-flatbed">Carriers</SidebarLink>
-        <SidebarLink to="/sale-gross" icon="bi bi-cash-stack">Sales Gross</SidebarLink>
+        <SidebarLink to="/sale-gross" icon="fa-solid fa-money-bill-1-wave">Sales Gross</SidebarLink>
       </div>
     </div>
 
