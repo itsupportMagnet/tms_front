@@ -7,7 +7,7 @@
     <div class="clickElements">
       <div class="links-container">
 
-        <SidebarLink to="/" icon="bi bi-speedometer2">Dashboard</SidebarLink>
+        <SidebarLink to="/dashboard" icon="fa-solid fa-gauge-high">Dashboard</SidebarLink>
 
         <span class="dropdown-link" @click="() => isShipmentsDropdownClicked = !isShipmentsDropdownClicked">
           <SidebarLink to="" icon="fa-solid fa-truck">
