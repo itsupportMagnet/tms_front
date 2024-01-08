@@ -1,7 +1,7 @@
 <template>
   <aside class="sidebar" :style="{ width: sidebarWidth }">
     <figure>
-      <img :src="collapsed ? '/logo-compact.svg' : '/logo-white.svg'" :class="collapsed ? 'logo-compacted' : 'logo'"
+      <img :src="collapsed ? '/dashboard/logo-compact.svg' : '/dashboard/logo-white.svg'" :class="collapsed ? 'logo-compacted' : 'logo'"
         alt="logo">
     </figure>
 

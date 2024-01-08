@@ -21,7 +21,7 @@
         <div id="to-convert">
           <header class="quoteContainer__header">
             <div style="display: flex; justify-content: center" class="quoteContainer__header--imgContanier">
-              <img width="150" src="../../../../public/logo-black.png" alt="logo" />
+              <img width="150" src="/dashboard/logo-black.png" alt="logo" />
             </div>
             <div style="
                 margin-top: 40px;
@@ -93,7 +93,7 @@
               </div>
 
               <div class="locationSection">
-                <img class="locationSection--img" style="width: 120px" src="../../../../public/magnet-truck.png"
+                <img class="locationSection--img" style="width: 120px" src="/dashboard/magnet-truck.png"
                   alt="magnet truck" />
                 <h3 class="mt-2 locationsDetails__box--text" style="
                     font-size: 1.1rem;
