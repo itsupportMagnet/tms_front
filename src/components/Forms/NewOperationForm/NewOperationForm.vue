@@ -84,7 +84,7 @@
 
                     <div class="col-12 col-md-3 col">
                       <label>State</label>
-                      <select v-model="slctState" @change="statesOnChange" size="sm" @blur="(e) => checkInpt(e)"
+                      <select v-model="slctState" @change="e => statesOnChange(e.target.value)" size="sm" @blur="(e) => checkInpt(e)"
                         class="form-select">
                         <option selected disabled value="">
                           Select a State
@@ -97,11 +97,11 @@
                       </select>
                     </div>
 
-                    <div class="col-12 col col-md-4" v-if="!isCityEmpty">
+                    <div class="col-12 col col-md-4">
                       <label class="label_city" for="slct_city">Choose your city</label>
                       <select v-model="slctCity" @change="$emit('cityName', $event.target.value)" name="City"
                         class="form-select">
-                        <option selected disabled>Select a City</option>
+                        <option selected disabled value="">Select a City</option>
                         <option v-for="item in cities" :key="item.index">
                           {{ item.cityName }}
                         </option>
@@ -654,8 +654,9 @@ const portOnChange = (e) => {
 }
 
 const statesOnChange = (e) => {
+  console.log(e);
   const selectedState = states.value.find(
-    (state) => state.stateName === e.target.value,
+    (state) => state.stateName === e,
   )
 
   getApi(`${import.meta.env.VITE_APP_API}/get/cities/${selectedState.stateId}`).then((data) => {
@@ -713,7 +714,7 @@ const fillOutForm = (floridaQuote) => {
   slctCustomer.value = customer.trim();
   slctProvider.value = carrier;
   slctState.value = state;
-  slctCity.value = city;
+  statesOnChange(state);
   inptWarehouseLocation.value = wareHouse;
   slctPort.value = pol;
   slctCommodity.value = commodity;
