@@ -6,7 +6,7 @@
         <div style="display: flex; justify-content: center;">
           <div style="width: 100%; height: 30rem !important;border: 1px solid black; font-size: 15px;">
             <div style="display: flex; justify-content: center;">
-              <img src="/dashboard/logo-black.png" height="100" alt="Magnet Logistics Logo" />
+              <img src="/logo-black.png" height="100" alt="Magnet Logistics Logo" />
             </div>
 
             <div style="text-align: center;">
