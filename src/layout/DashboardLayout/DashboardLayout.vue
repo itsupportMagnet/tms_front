@@ -15,11 +15,19 @@ import { RouterView } from 'vue-router';
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+
+@import "../../styles/mixin.scss";
+@import "../../styles/variables.scss";
 .body{
     background-color: #f5f5fc;
     min-height: 93vh;
     color: #101111;
     overflow-x: hidden;
+    
+    select{
+      color: red;
+    }
   }
+
 </style>
