@@ -338,7 +338,6 @@
     </div>
   </div>
 
-
   <div class="container-fluid">
     <div class="header">
       <div class="add-operation-btn">
@@ -1173,3 +1172,4 @@ watch(inptChassisSellQuantity, () => sellChassisQtyOnChange());
 @import '../../Forms/AddQuoteFeeForm/AddQuoteFeeForm.scss';
 @import '../../../styles/mixin.scss';
 </style>
+ 

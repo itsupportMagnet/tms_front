@@ -709,10 +709,11 @@ const getQuoteInfo = (e) => {
 }
 
 const fillOutForm = (floridaQuote) => {
-  const {customer, carrier, state, wareHouse, pol, commodity, weight, equipment, hazardous, bonded} = floridaQuote;
+  const {customer, carrier, state, city, wareHouse, pol, commodity, weight, equipment, hazardous, bonded} = floridaQuote;
   slctCustomer.value = customer.trim();
   slctProvider.value = carrier;
   slctState.value = state;
+  slctCity.value = city;
   inptWarehouseLocation.value = wareHouse;
   slctPort.value = pol;
   slctCommodity.value = commodity;
@@ -720,6 +721,8 @@ const fillOutForm = (floridaQuote) => {
   slctEquipment.value = equipment;
   chckHazardous.value = hazardous;
   chckBonded.value = bonded;
+
+  isCityEmpty.value = false;
 }
 
 const handleSubmit = async (e) => {

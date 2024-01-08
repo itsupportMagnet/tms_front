@@ -273,54 +273,6 @@ const confirmDelete = async () => {
 
 }
 
-// const validateInputBuy = (objSalesGross, key) => {
-//   if (key === 'buy') {
-//     const numberValue = objSalesGross[key]
-//     objSalesGross[key] = Math.max(0, numberValue)
-//     const updateBuy = {
-//       idSalesGross: objSalesGross.id,
-//       buySalesGross: objSalesGross[key],
-//     }
-
-//     postApi(`${import.meta.env.VITE_APP_API}/post/updateBuySalesGross`, updateBuy)
-//       .then()
-//       .catch((error) => console.log(error))
-
-//     objSalesGross.profit = objSalesGross.sell - objSalesGross.buy;
-
-//     const updateProfit = {
-//       idSalesGross: objSalesGross.id,
-//       profitSalesGross: objSalesGross.profit
-//     }
-//     postApi(`${import.meta.env.VITE_APP_API}/post/updateProfitSalesGross`, updateProfit)
-//       .then()
-//       .catch((error) => console.log(error))
-//   }
-// }
-
-// const validateInputSell = (objSalesGross, key) => {
-//   if (key === 'sell') {
-//     const numberValue = objSalesGross[key]
-//     objSalesGross[key] = Math.max(0, numberValue)
-
-//     const updateSell = {
-//       idSalesGross: objSalesGross.id,
-//       sellSalesGross: objSalesGross[key]
-//     }
-//     postApi(`${import.meta.env.VITE_APP_API}/post/updateSellSalesGross`, updateSell)
-//       .then()
-//       .catch((error) => console.log(error))
-//   }
-//   objSalesGross.profit = objSalesGross.sell - objSalesGross.buy
-//   const updateProfit = {
-//     idSalesGross: objSalesGross.id,
-//     profitSalesGross: objSalesGross.profit
-//   }
-//   postApi(`${import.meta.env.VITE_APP_API}/post/updateProfitSalesGross`, updateProfit)
-//     .then()
-//     .catch((error) => console.log(error))
-// }
-
 const filterProvider = (salesFromApi) => {
   if (filterOpt.value.srtProvider) {
     return salesFromApi.provider === filterOpt.value.srtProvider
