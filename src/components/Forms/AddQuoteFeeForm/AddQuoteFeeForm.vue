@@ -195,6 +195,24 @@ const saveFormInfo = () => {
 const saveFee = async () => {
   if (validateForm()) {
     saveFormInfo();
+     postApi(
+      `${import.meta.env.VITE_APP_API}/post/save-fee`, quote.value)
+      .then((data) => {
+        if (data.message === "ok") {
+          quote.value = "";
+          inptId.value = "";
+          isLoading2.value = false;
+          showToast('Carrier(s) fee(s) added succesfully', 'success', 'green')
+        } else {
+          console.error(data);
+          showToast('Something went wrong, please, contact support', 'danger', 'red')
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        isLoading.value = false;
+        showToast('Contact IT', 'danger', 'red')
+      });
   }
 };
 
