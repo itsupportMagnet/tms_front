@@ -22,14 +22,14 @@
     .drayage {
     
       &__input {
-        @include input;
+        /**/
       }
       &__label {
         @include label;
       }
 
       &__select {
-        @include select;
+        /**/
         margin-top: 0.5rem;
       }
 
@@ -66,7 +66,7 @@
           }
 
           .drayage__select {
-            @include select;
+            /**/
           }
 
           .drayage__image {
@@ -91,7 +91,7 @@
           }
 
           .drayage__select {
-            @include select;
+            /**/
           }
 
           .drayage__image {
@@ -111,7 +111,7 @@
         }
 
         &--select {
-          @include select;
+          /**/
           margin-top: 0.5rem;
         }
       }
@@ -129,7 +129,7 @@
           }
 
           .drayage__select {
-            @include select;
+            /**/
           }
         }
       }
@@ -147,7 +147,7 @@
           }
 
           .drayage__select {
-            @include select;
+            /**/
           }
 
           .otherCommodity_box {
@@ -227,7 +227,7 @@
           }
 
           .drayage__select {
-            @include select;
+            /**/
           }
         }
       }
@@ -253,7 +253,7 @@
         }
 
         &--select {
-          @include select;
+          /**/
         }
       }
 

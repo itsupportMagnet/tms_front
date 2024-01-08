@@ -88,14 +88,13 @@
 }
 
 @mixin select {
-  padding: 0.5rem;
-  border-radius: 0.25rem;
-  border-width: 1px;
+  padding: .4rem .5rem;
+  border-radius: 0.45rem;
   width: 100%;
+  color: #595b62;
+  border: 1px solid #dbdde4;
+  background-color: #fff;
   transition: transform 0.5s;
-  color: black;
-  border-color: rgb(235, 235, 235);
-  background-color: rgb(235, 235, 235);
 
   &:hover {
     transform: translateY(-2px);
@@ -103,11 +102,17 @@
 }
 
 @mixin input {
-  padding: 0.5rem;
-  border-radius: 0.25rem;
-  border-width: 1px;
+  padding: .4rem .5rem;
+  border-radius: 0.45rem;
   width: 100%;
-  border: 1px solid $gray_200;
+  color: #595b62;
+  border: 1px solid #dbdde4;
+  background-color: #fff;
+  transition: transform 0.5s;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
 }
 
 @mixin label {
