@@ -48,7 +48,7 @@
     }
 
     .input-search {
-      @include input;
+      /**/
       margin-bottom: 0.75rem;
     }
   }
@@ -125,11 +125,11 @@
           }
 
           input {
-            @include input;
+            /**/
           }
 
           select {
-            @include select;
+            /**/
           }
         }
       }
@@ -157,7 +157,7 @@
 
           input[type="number"] {
             margin-top: 0.7rem;
-            @include input;
+            /**/
           }
         }
         @media (min-width: 768px) {
@@ -168,7 +168,7 @@
 
             input[type="number"] {
               margin-top: 0.7rem;
-              @include input;
+              /**/
             }
           }
         }
@@ -201,11 +201,11 @@
           }
 
           input {
-            @include input;
+            /**/
           }
 
           select {
-            @include select;
+            /**/
           }
         }
       }
@@ -230,7 +230,7 @@
           input[type="number"] {
             margin-top: 0.7rem;
 
-            @include input;
+            /**/
             width: 100% !important;
           }
         }
@@ -243,7 +243,7 @@
 
             input[type="number"] {
               margin-top: 0.7rem;
-              @include input;
+              /**/
             }
           }
         }
