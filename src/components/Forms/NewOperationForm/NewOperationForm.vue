@@ -845,19 +845,6 @@ const handleSubmit = async (e) => {
         showToast('Contact IT', 'danger', 'red')
         isLoading2.value = false
       })
-
-    postApi(`${import.meta.env.VITE_APP_API}/post/updateOperation`, newOperationInfo)
-      .then((data) => {
-        if (data.message == 'ok') {
-          isLoading2.value = false
-          showToast('Operation Updated successfully', 'success', 'green')
-        }
-      })
-      .catch((error) => {
-        console.log(error)
-        showToast('Contact IT', 'danger', 'red')
-        isLoading2.value = false
-      })
   } else {
     const updateOperation = {
       quoteID: slctQuoteId.value,
@@ -903,6 +890,8 @@ const handleSubmit = async (e) => {
       })
       .catch((error) => {
         console.log(error)
+        showToast('Contact IT', 'danger', 'red')
+        isLoading2.value = false
       })
   }
 }
